@@ -25,8 +25,8 @@ const envChecklistData = JSON.parse(fs.readFileSync(`${__dirname}/data/environme
 
 const seedDB = async () =>{
   try{
-    await User.create(users);
-    await Staff.create(staff);
+    await User.create(users, { validateBeforeSave: false });
+    await Staff.create(staff, { validateBeforeSave: false });
 
     console.log('Data successfully loaded');
     process.exit();
