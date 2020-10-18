@@ -1,0 +1,70 @@
+<%- include('../../partials/header'); -%>
+
+<%- include('../../partials/sidebar'); -%>
+
+
+<div class="main-panel">
+  <!-- Navbar area -->
+  <%- include('../../partials/navbar'); -%>
+
+  <div class="content">
+
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title ">All Appointments</h4>
+                  <p class="card-category">Lists all completed forms appointments</p>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead class="text-primary">
+                        <th class="text-bold">
+                          Form/Appointment Name
+                        </th>
+                        <th class="text-bold">
+                          Consumer Name
+                        </th>
+                        <th class="text-bold">
+                          Date of Appointment
+                        </th>
+                      </thead>
+                      <tbody>
+                        <% for(appointment of appointments){ %>
+                          <tr>
+                            <td>
+                              <%= appointment.appointment_name %>
+                            </td>
+                            <td>
+                              <%= appointment.consumer_name %>
+                            </td>
+                            <td>
+                              <%= appointment.dateOfAppointment %>
+                            </td>
+                          </tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+      </div>
+    
+    </div>
+  
+  
+  </div>
+
+
+
+  <!-- Bottom footer -->
+  <%- include('../../partials/bottombar'); -%>
+</div>
+
+<!-- page footer -->
+<%- include('../../partials/footer'); -%>

@@ -1,0 +1,94 @@
+<%- include('../../../partials/header'); -%>
+
+<%- include('../../../partials/sidebar'); -%>
+
+
+<div class="main-panel">
+  <!-- Navbar area -->
+  <%- include('../../../partials/navbar'); -%>
+
+  <div class="content">
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+              <div class="card">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title ">All Consumer Forms</h4>
+                  <p class="card-category">Lists all completed forms</p>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead class="text-primary">
+                        <th class="text-bold">
+                          Form Name
+                        </th>
+                        <th class="text-bold">
+                          Consumer Name
+                        </th>
+                        <th class="text-bold">
+                          Appointment Date
+                        </th>
+                        <th class="text-bold">
+                          Local Case Number
+                        </th>
+                        <th class="text-bold">
+                          Signatory
+                        </th>
+                        <th class="text-bold">
+                          Date
+                        </th>
+                        <th class="text-bold text-right">
+                          Actions
+                        </th>
+                      </thead>
+                      <tbody>
+                        <% for(form of forms){ %>
+                          <tr>
+                            <td>
+                              <%= form.form_name %>
+                            </td>
+                            <td>
+                              <%= form.consumer_name %>
+                            </td>
+                            <td class="formatted-date">
+                              <%= form.dateOfAppointment %>
+                            </td>
+                            <td>
+                              <%= form.lc_num %>
+                            </td>
+                            <td>
+                              <%= form.signatory %>
+                            </td>
+                            <td class="formatted-date">
+                              <%= form.date %>
+                            </td>
+                            <td class="text-right">
+                              <a href="/dashboard/applications" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons">description</i></a>
+                              <a href="#" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a>
+                            </td>
+                          </tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+      </div>
+    
+    </div>
+  
+  
+  </div>
+
+
+
+  <!-- Bottom footer -->
+  <%- include('../../../partials/bottombar'); -%>
+</div>
+
+<!-- page footer -->
+<%- include('../../../partials/footer'); -%>
