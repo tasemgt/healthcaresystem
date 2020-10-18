@@ -148,7 +148,7 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
         return md.showNotification('An Approved Application is required before registering a user!', 'danger', 'error_outline'); 
       }
 
-      doAction(payload, `${baseURLAPI}/users`, 'User created successfully', '/dashboard/users');
+      doAction(payload, `/users`, 'User created successfully', '/dashboard/users');
     });
   }
 })(createResource);
@@ -164,7 +164,7 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
   if(searchApplicationBtn){
     searchApplicationBtn.addEventListener('click', async () =>{
 
-    const response = await doAction(`${baseURL}/employment/${applicationId.value}?approved=true`, 'Data obtained...');
+    const response = await doAction(`/employment/${applicationId.value}?approved=true`, 'Data obtained...');
     console.log(response);
     
     if(response){
@@ -204,7 +204,7 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
         approved : approvedCheck.checked
       }
 
-      doAction(payload, `${baseURL}/employment/${applicationId}`, 'Successfully Updated', '/dashboard/users/add');
+      doAction(payload, `/employment/${applicationId}`, 'Successfully Updated', '/dashboard/users/add');
     });
   }
 })(updateResource);
@@ -237,7 +237,7 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
 
       console.log(payload);
       doAction(payload, 
-        `${baseURLAPI}/consumer-forms/dental-exam`, 
+        `/consumer-forms/dental-exam`, 
         'Dental Examination Form Created Successfully!',
         '/dashboard/consumer-forms'
         );
@@ -274,7 +274,7 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
         payload.questions.push({question, answer});
       }
       doAction(payload, 
-        `${baseURLAPI}/consumer-forms/hot-water-fire-form`, 
+        `/consumer-forms/hot-water-fire-form`, 
         'Form Submitted Successfully!',
         '/dashboard/consumer-forms'
         );
@@ -304,7 +304,7 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
       console.log(payload);
 
       doAction(payload, 
-        `${baseURLAPI}/consumer-forms/fire-emergency-form`, 
+        `/consumer-forms/fire-emergency-form`, 
         'Form Submitted Successfully!',
         '/dashboard/consumer-forms'
         );
@@ -348,7 +348,7 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
       console.log(payload);
 
       doAction(payload, 
-        `${baseURLAPI}/consumer-forms/environmental-checklist-form`, 
+        `/consumer-forms/environmental-checklist-form`, 
         'Form Submitted Successfully!',
         '/dashboard/consumer-forms'
         );
