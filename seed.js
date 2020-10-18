@@ -8,7 +8,7 @@ const Staff = require('./models/user/staff');
 //Consumer Forms Data
 const EnvChecklistData = require('./models/data/environmental-checklist-data');
 
-const DB = process.env.DATABASE_LOCAL;
+const DB = process.env.DATABASE;
 
 mongoose
   .connect(DB, {
