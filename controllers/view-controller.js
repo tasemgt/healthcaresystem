@@ -22,6 +22,16 @@ const getUsers = async (req, res, next) =>{
   }
 }
 
+const getConsumerForms = async (req, res, next) =>{
+  try {
+    const forms = await ConsumerForm.find({});
+    return forms;
+
+  } catch (err) {
+    return next(new AppError(err, 404));
+  }
+}
+
 //Handler functions
 
 //-- Auth Pages Handlers --//
@@ -39,9 +49,11 @@ exports.root = (req, res) =>{
 //-- Dashboard Page Handlers --//
 exports.dashboardPage = async(req, res) =>{
   const users = await getUsers();
+  const consumerForms = await getConsumerForms();
   res.status(200).render('dashboard/dashboard', {
     title: 'Dashboard',
-    totalUsers: users.length
+    totalUsers: users.length,
+    totalConsumerForms: consumerForms.length
   });
 };
 
@@ -193,7 +205,7 @@ exports.addUserPage = (req, res) =>{
 //-- Consumer Forms Pages Handlers --//
 exports.getAllConsumerForms = async(req, res, next) =>{
   try {
-    const forms = await ConsumerForm.find({});
+    const forms = await getConsumerForms();
     console.log(forms);
     res.status(200).render('dashboard/consumers/completed-forms/all-completed-forms', {
       title: 'All Consumer Forms',

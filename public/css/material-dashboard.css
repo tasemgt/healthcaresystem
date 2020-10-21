@@ -20031,6 +20031,16 @@ h5.section-header{
 }
 
 
+/* MODALS */
+.modal-headings{
+  margin-bottom: 0;
+  font-weight: bold;
+  font-size: .8rem;
+}
+
+.modal-items{
+  
+}
 
 
 /* Date Picker */

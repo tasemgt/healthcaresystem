@@ -4,6 +4,7 @@ const baseURL = '';
 const baseURLAPI = '/api/v1';
 
 
+//INITIALIZE DATATABLES
 $(document).ready( function () {
   $('.table').DataTable({
     columnDefs: [
@@ -18,6 +19,38 @@ $(document).ready( function () {
   });
 });
 
+//Modals for forms
+$(document).on("click", ".like", function (e) {
+  e.preventDefault();
+
+	const _self = $(this);
+  const formData = _self.data('id');
+  console.log(formData);
+
+  //Populate common fields
+  $("#modal-title").html(formData.form_name);
+  $("#mod-cons-name ").html(formData.consumer_name);
+  $("#mod-app-date").html(moment(formData.dateOfAppointment).format('Do MMMM YYYY'));
+  $("#mod-lc-num").html(formData.lc_num);
+  $("#mod-signatory").html(formData.signatory);
+  $("#mod-sign-date").html(moment(formData.date).format('Do MMMM YYYY'));
+
+
+  if(formData.recordType === 'DentalExam'){
+    $("#mod-examiner").html(formData.examiner);
+    $("#mod-diagnosis").html(formData.diagnosis);
+    $("#mod-prescription").html(formData.prescription);
+  }
+
+  
+
+  formData.recordType === 'DentalExam' ? $(".dental-exam").css('display', 'block'): $(".dental-exam").css('display', 'none');
+
+});
+
+// $('#myModal').on('shown.bs.modal', function () {
+//   $('#myInput').trigger('focus')
+// })
 
 
 // HANDLES DATE FORMATTING ON TABLES
@@ -27,9 +60,7 @@ if(formatedDate && formatedDate.length > 0){
   formatedDate = Array.from(formatedDate);
 
   for(let i=0; i< formatedDate.length; i++){
-    console.log(formatedDate[i].innerHTML);
     formatedDate[i].innerHTML = moment(formatedDate[i].innerHTML).format('Do MMMM YYYY');
-    console.log(formatedDate);
   }
 }
 
@@ -234,8 +265,6 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
         diagnosis: document.getElementById('diagnosis').value,
         prescription: document.getElementById('prescription').value
       }
-
-      console.log(payload);
       doAction(payload, 
         `${baseURLAPI}/consumer-forms/dental-exam`, 
         'Dental Examination Form Created Successfully!',

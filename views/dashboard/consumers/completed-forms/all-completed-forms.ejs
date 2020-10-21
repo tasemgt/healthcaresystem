@@ -65,7 +65,7 @@
                               <%= form.date %>
                             </td>
                             <td class="text-right">
-                              <a href="/dashboard/applications" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons">description</i></a>
+                              <a href="/dashboard/applications" data-id="<%= JSON.stringify(form) %>" data-toggle="modal" data-target="#myModal" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons">description</i></a>
                               <a href="#" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a>
                             </td>
                           </tr>
@@ -89,6 +89,57 @@
   <!-- Bottom footer -->
   <%- include('../../../partials/bottombar'); -%>
 </div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Dental Examination Form</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body dental-exam" style="display: none">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-3">
+              <h5 class="text-primary modal-headings">Consumer Name</h5>
+              <p class="text-success modal-items" id="mod-cons-name"></p>
+            </div>
+            <div class="col-md-3">
+              <h5 class="text-primary modal-headings">Appointment Date</h5>
+              <p class="text-success modal-items" id="mod-app-date"></p>
+            </div>
+            <div class="col-md-3">
+              <h5 class="text-primary modal-headings">Local Case Number</h5>
+              <p class="text-success modal-items" id="mod-lc-num"></p>
+            </div>
+            <div class="col-md-3">
+              <h5 class="text-primary modal-headings">Examiner</h5>
+              <p class="text-success modal-items" id="mod-examiner"></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <h5 class="text-primary modal-headings">Diagnosis</h5>
+              <p class="text-success modal-items" id="mod-diagnosis"></p>
+            </div>
+            <div class="col-md-6">
+              <h5 class="text-primary modal-headings">Prescription</h5>
+              <p class="text-success modal-items" id="mod-prescription"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <h5 class="tim-typo modal-headings pull-left">Signed. | <span class="text-primary" id="mod-signatory"></span></h5>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- page footer -->
 <%- include('../../../partials/footer'); -%>
