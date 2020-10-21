@@ -18,12 +18,11 @@
               </a>
             </div>
             <div class="card-body">
-              <h6 class="card-category text-gray">CEO / Co-Founder</h6>
+              <h6 class="card-category text-gray"><%= user.role %></h6>
               <h4 class="card-title"><%= user.firstName + " " + user.lastName %></h4>
-              <p class="card-description">
-                <%= user.bio %>
-              </p>
-              <a href="javascript:;" class="btn btn-primary btn-round">Follow</a>
+              <p class="text-info"><%= user.email %></p>
+              <p class="card-description"> <%= user.bio %></p>
+              <a href="javascript:;" class="btn btn-danger btn-round">Deactivate</a>
             </div>
           </div>
         </div>
