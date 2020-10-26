@@ -148,5 +148,14 @@ if(employmentFormSubmit){
 }
 
 if(logOutBtn){
-  logOutBtn.addEventListener('click', logout);
+
+  //For mobile phones
+  $(document).on("touchstart", "#logout_btn", function() {
+    logout();
+  });
+
+  //For desktop browsers
+  logOutBtn.addEventListener('click', () =>{
+    logout();
+  });
 }
