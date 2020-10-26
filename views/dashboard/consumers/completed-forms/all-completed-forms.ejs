@@ -95,25 +95,26 @@
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Dental Examination Form</h5>
+        <h5 class="modal-title"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <!-- Dental Exam -->
       <div class="modal-body dental-exam" style="display: none">
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-3">
               <h5 class="text-primary modal-headings">Consumer Name</h5>
-              <p class="text-success modal-items" id="mod-cons-name"></p>
+              <p class="text-success modal-items mod-cons-name"></p>
             </div>
             <div class="col-md-3">
               <h5 class="text-primary modal-headings">Appointment Date</h5>
-              <p class="text-success modal-items" id="mod-app-date"></p>
+              <p class="text-success modal-items mod-app-date"></p>
             </div>
             <div class="col-md-3">
               <h5 class="text-primary modal-headings">Local Case Number</h5>
-              <p class="text-success modal-items" id="mod-lc-num"></p>
+              <p class="text-success modal-items mod-lc-num"></p>
             </div>
             <div class="col-md-3">
               <h5 class="text-primary modal-headings">Examiner</h5>
@@ -132,8 +133,71 @@
           </div>
         </div>
       </div>
+
+      <!-- Fire/Emergency Drill -->
+      <div class="modal-body fire-drill" style="display: none">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-3">
+              <h5 class="text-primary modal-headings">Consumer Name</h5>
+              <p class="text-success modal-items mod-cons-name"></p>
+            </div>
+            <div class="col-md-3">
+              <h5 class="text-primary modal-headings">Residential Type</h5>
+              <p class="text-success modal-items" id="mod-res-type"></p>
+            </div>
+            <div class="col-md-3">
+              <h5 class="text-primary modal-headings">Local Case Number</h5>
+              <p class="text-success modal-items mod-lc-num"></p>
+            </div>
+            <div class="col-md-3">
+              <h5 class="text-primary modal-headings">Drill Oficial</h5>
+              <p class="text-success modal-items" id="mod-official"></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <h5 class="text-primary modal-headings">Address</h5>
+              <p class="text-success modal-items" id="mod-address"></p>
+            </div>
+            <div class="col-md-6">
+              <h5 class="text-primary modal-headings">Fire Location</h5>
+              <p class="text-success modal-items" id="mod-fire-location"></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <h5 class="text-primary modal-headings">Date of Drill</h5>
+              <p class="text-success modal-items mod-app-date"></p>
+            </div>
+            <div class="col-md-3">
+              <h5 class="text-primary modal-headings">Begin Time</h5>
+              <p class="text-success modal-items" id="mod-begin-time"></p>
+            </div>
+            <div class="col-md-3">
+              <h5 class="text-primary modal-headings">End Time</h5>
+              <p class="text-success modal-items" id="mod-end-time"></p>
+            </div>
+            <div class="col-md-3">
+              <h5 class="text-primary modal-headings">Total Time</h5>
+              <p class="text-success modal-items" id="mod-total-time"></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <h5 class="text-primary modal-headings">Num of Persons Evacuated</h5>
+              <p class="text-success modal-items" id="mod-persons-evacuated"></p>
+            </div>
+            <div class="col-md-6">
+              <h5 class="text-primary modal-headings">Follow up on</h5>
+              <p class="text-success modal-items" id="mod-follow-up"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="modal-footer">
-        <h5 class="tim-typo modal-headings pull-left">Signed. | <span class="text-primary" id="mod-signatory"></span></h5>
+        <h5 class="tim-typo modal-headings pull-left">Signed. | <span class="text-primary mod-signatory"></span></h5>
         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>

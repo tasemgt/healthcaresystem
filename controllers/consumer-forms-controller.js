@@ -73,6 +73,7 @@ exports.createFireEmergencyForm = async (req, res) =>{
       lc_num: req.body.lcNum,
       address: req.body.address,
       res_type: req.body.resType,
+      official_name: req.body.official,
       begin_time: req.body.beginTime,
       end_time: req.body.endTime,
       follow_up: req.body.followUp,

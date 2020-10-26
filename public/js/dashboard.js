@@ -28,12 +28,12 @@ $(document).on("click", ".show-details", function (e) {
   console.log(formData);
 
   //Populate common fields
-  $("#modal-title").html(formData.form_name);
-  $("#mod-cons-name ").html(formData.consumer_name);
-  $("#mod-app-date").html(moment(formData.dateOfAppointment).format('Do MMMM YYYY'));
-  $("#mod-lc-num").html(formData.lc_num);
-  $("#mod-signatory").html(formData.signatory);
-  $("#mod-sign-date").html(moment(formData.date).format('Do MMMM YYYY'));
+  $(".modal-title").html(formData.form_name);
+  $(".mod-cons-name ").html(formData.consumer_name);
+  $(".mod-app-date").html(moment(formData.dateOfAppointment).format('Do MMMM YYYY'));
+  $(".mod-lc-num").html(formData.lc_num);
+  $(".mod-signatory").html(formData.signatory);
+  $(".mod-sign-date").html(moment(formData.date).format('Do MMMM YYYY'));
 
 
   if(formData.recordType === 'DentalExam'){
@@ -42,9 +42,22 @@ $(document).on("click", ".show-details", function (e) {
     $("#mod-prescription").html(formData.prescription);
   }
 
+  if(formData.recordType === 'FireEmergencyForm'){
+    $("#mod-official").html(formData.official_name);
+    $("#mod-address").html(formData.address);
+    $("#mod-fire-location").html(formData.fire_location);
+    $("#mod-persons-evacuated").html(formData.persons_evacuated);
+    $("#mod-res-type").html(formData.res_type);
+    $("#mod-begin-time").html(formData.begin_time);
+    $("#mod-end-time").html(formData.end_time);
+    $("#mod-total-time").html(formData.total_time + ' mins');
+    $("#mod-follow-up").html(formData.follow_up);
+  }
+
   
 
   formData.recordType === 'DentalExam' ? $(".dental-exam").css('display', 'block'): $(".dental-exam").css('display', 'none');
+  formData.recordType === 'FireEmergencyForm' ? $(".fire-drill").css('display', 'block'): $(".fire-drill").css('display', 'none');
 
 });
 
