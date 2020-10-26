@@ -20,7 +20,7 @@ $(document).ready( function () {
 });
 
 //Modals for forms
-$(document).on("click", ".like", function (e) {
+$(document).on("click", ".show-details", function (e) {
   e.preventDefault();
 
 	const _self = $(this);

@@ -78,44 +78,74 @@ const logout = async() =>{
 const loginForm = document.querySelector('.form');
 const logOutBtn = document.querySelector('#logout_btn');
 const employmentForm = document.querySelector('.employment_form');
+const employmentFormSubmit = document.getElementById('employment_form_submit');
 
-if(loginForm)
-  loginForm.addEventListener('submit', e =>{
+let payload = {};
+
+if(loginForm){
+    loginForm.addEventListener('submit', e =>{
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      login(email, password);
+  });
+}
+if(employmentForm){
+    const navReferences = document.getElementById('nav-references');
+
+    employmentForm.addEventListener('submit', e =>{
+      e.preventDefault();
+      
+      payload = {
+        firstName : document.getElementById('firstName').value,
+        lastName : document.getElementById('lastName').value,
+        address : document.getElementById('address').value,
+        email: document.getElementById('email').value,
+        ssn : document.getElementById('ssn').value,
+        high_school : document.getElementById('highSchool').value
+      }
+      navReferences.click();
+      console.log(payload);
+  });
+}
+
+if(employmentFormSubmit){
+  employmentFormSubmit.addEventListener('submit', e =>{
     e.preventDefault();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
 
-    login(email, password);
-});
+    if(
+      !payload.firstName 
+      || !payload.lastName 
+      || !payload.address 
+      || !payload.email 
+      || !payload.ssn 
+      || !payload.high_school
+      ){
+        return md.showNotification('Your basic info is incomplete, please check and fill in all required fields', 'danger', 'error_outline');
+      }
 
-if(employmentForm)
-  employmentForm.addEventListener('submit', e =>{
-    e.preventDefault();
-    const payload = {
-      firstName : document.getElementById('firstName').value,
-      lastName : document.getElementById('lastName').value,
-      address : document.getElementById('address').value,
-      email: document.getElementById('email').value,
-      ssn : document.getElementById('ssn').value,
-      high_school : document.getElementById('highSchool').value,
-      references: [
-        { 
-          name: document.getElementById('ref1_name').value,
-          phone: document.getElementById('ref1_phone').value 
-        },
-        { 
-          name: document.getElementById('ref2_name').value,
-          phone: document.getElementById('ref2_phone').value 
-        },
-        { 
-          name: document.getElementById('ref3_name').value,
-          phone: document.getElementById('ref3_phone').value 
-        }
-      ]
-    }
+    const references = [
+      { 
+        name: document.getElementById('ref1_name').value,
+        phone: document.getElementById('ref1_phone').value 
+      },
+      { 
+        name: document.getElementById('ref2_name').value,
+        phone: document.getElementById('ref2_phone').value 
+      },
+      { 
+        name: document.getElementById('ref3_name').value,
+        phone: document.getElementById('ref3_phone').value 
+      }
+    ];
+
+    payload.references = references;
+    console.log(payload);
 
     submitEmploymentForm(payload);
-});
+  });
+}
 
 if(logOutBtn){
   logOutBtn.addEventListener('click', logout);

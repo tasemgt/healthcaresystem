@@ -1,112 +1,143 @@
 <%- include('./intro_header'); -%>
 
-<div class="page-header header-filter" style="background-image: url('/img/bg1.jpg'); background-size: cover; background-position: top center;">
+<div class="page-header header-filter">
   <div class="container">
     <div class="row">
-      <div class="col-lg-12 ml-auto mr-auto">
-        <div class="card card-login" style="margin-top: 120px">
-          <form class="employment_form">
-            <div class="card-header card-header-text card-header-primary text-center">
-              <div class="card-text">
-                <h4 class="card-title">Employment Form</h4>
+      <div class="col-lg-12">
+        <div class="card card-employment">
+          <div class="card-header card-header-tabs card-header-primary">
+            <div class="nav-tabs-navigation">
+              <div class="nav-tabs-wrapper">
+                <span class="nav-tabs-title">Employment Form</span>
+                <ul class="nav nav-tabs" data-tabs="tabs">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#profile" data-toggle="tab">
+                      <i class="material-icons">info</i> Basic Info
+                      <div class="ripple-container"></div>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="nav-references" href="#references" data-toggle="tab">
+                      <i class="material-icons">description</i> References and Documents
+                      <div class="ripple-container"></div>
+                    </a>
+                  </li>
+                </ul>
               </div>
             </div>
-            <div class="card-body large_form">
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label class="bmd-label-floating">First Name *</label>
-                    <input type="text" class="form-control" id="firstName" required>
-                  </div>
+          </div>
+          <div class="card-body" style="padding: 2rem;">
+            <div class="tab-content">
+                <div class="tab-pane active" id="profile">
+                  <form class="employment_form">
+                    <div class="row">
+                      <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">First Name *</label>
+                          <input type="text" class="form-control" id="firstName" required>
+                        </div>
+                      </div>
+                      <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Last Name *</label>
+                          <input type="text" class="form-control" id="lastName" required>
+                        </div>
+                      </div>
+                      <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Social Security Number *</label>
+                          <input type="text" class="form-control" id="ssn" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-9 col-sm-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Home Address *</label>
+                          <input type="text" class="form-control" id="address" required>
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Email Address *</label>
+                          <input type="text" class="form-control" id="email" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">High School *</label>
+                          <input type="text" class="form-control" id="highSchool" required>
+                        </div>
+                      </div>
+                    </div>
+                    <button id="btn-next" type="submit" class="btn btn-primary btn-wd btn-md pull-right"> Next</button>
+                  </form>
                 </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label class="bmd-label-floating">Last Name *</label>
-                    <input type="text" class="form-control" id="lastName" required>
-                  </div>
+                <div class="tab-pane" id="references">
+                  <form id="employment_form_submit">
+                    <div class="row">
+                      <div class="col-md-8 col-sm-12">
+                        <div class="row">
+                          <div class="col-md-4 col-sm-12">
+                            <div class="form-group">
+                              <label class="bmd-label-floating">Name *</label>
+                              <input type="text" class="form-control" id="ref1_name" required>
+                            </div>
+                          </div>
+                          <div class="col-md-4 col-sm-12">
+                            <div class="form-group">
+                              <label class="bmd-label-floating">Phone Number *</label>
+                              <input type="text" class="form-control" id="ref1_phone" required>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4 col-sm-12">
+                            <div class="form-group">
+                              <label class="bmd-label-floating">Name *</label>
+                              <input type="text" class="form-control" id="ref2_name" required>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="bmd-label-floating">Phone Number *</label>
+                              <input type="text" class="form-control" id="ref2_phone" required>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4 col-sm-12">
+                            <div class="form-group">
+                              <label class="bmd-label-floating">Name *</label>
+                              <input type="text" class="form-control" id="ref3_name" required>
+                            </div>
+                          </div>
+                          <div class="col-md-4 col-sm-12">
+                            <div class="form-group">
+                              <label class="bmd-label-floating">Phone Number *</label>
+                              <input type="text" class="form-control" id="ref3_phone" required>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-2 col-sm-12">
+                        
+                      </div>
+                    </div>
+                    
+                    <button class="btn btn-primary btn-wd btn-md pull-right"> Submit Application</button>
+                  </form>
                 </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label class="bmd-label-floating">Social Security Number *</label>
-                    <input type="text" class="form-control" id="ssn" required>
-                  </div>
-                </div>
+                
               </div>
-              <div class="row">
-                <div class="col-md-9">
-                  <div class="form-group">
-                    <label class="bmd-label-floating">Home Address *</label>
-                    <input type="text" class="form-control" id="address" required>
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <label class="bmd-label-floating">Email Address *</label>
-                    <input type="text" class="form-control" id="email" required>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="bmd-label-floating">High School *</label>
-                    <input type="text" class="form-control" id="highSchool" required>
-                  </div>
-                </div>
-              </div>
-              <h4><strong>References:</strong></h4>
-              <p>Please fill in 3 References</p>
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label class="bmd-label-floating">Name *</label>
-                    <input type="text" class="form-control" id="ref1_name" required>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label class="bmd-label-floating">Phone Number *</label>
-                    <input type="text" class="form-control" id="ref1_phone" required>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label class="bmd-label-floating">Name *</label>
-                    <input type="text" class="form-control" id="ref2_name" required>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label class="bmd-label-floating">Phone Number *</label>
-                    <input type="text" class="form-control" id="ref2_phone" required>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label class="bmd-label-floating">Name *</label>
-                    <input type="text" class="form-control" id="ref3_name" required>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label class="bmd-label-floating">Phone Number *</label>
-                    <input type="text" class="form-control" id="ref3_phone" required>
-                  </div>
-                </div>
-              </div>
+              
             </div>
-            <div class="footer text-center">
-              <button class="btn btn-primary btn-link btn-wd btn-lg">
-                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-                Submit Application
-              </button>
-            </div>
-          </form>
+          </div>
         </div>
+        
       </div>
     </div>
   </div>
