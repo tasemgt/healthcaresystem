@@ -44,20 +44,63 @@ $(document).on("click", ".show-details", function (e) {
 
   if(formData.recordType === 'FireEmergencyForm'){
     $("#mod-official").html(formData.official_name);
-    $("#mod-address").html(formData.address);
+    $(".mod-address").html(formData.address);
     $("#mod-fire-location").html(formData.fire_location);
     $("#mod-persons-evacuated").html(formData.persons_evacuated);
-    $("#mod-res-type").html(formData.res_type);
+    $(".mod-res-type").html(formData.res_type);
     $("#mod-begin-time").html(formData.begin_time);
     $("#mod-end-time").html(formData.end_time);
     $("#mod-total-time").html(formData.total_time + ' mins');
     $("#mod-follow-up").html(formData.follow_up);
   }
 
+  if(formData.recordType === 'HotWaterFireForm'){
+
+    $('.questions-section').empty();
+
+    $(".mod-address").html(formData.address);
+    $(".mod-needs").html(formData.needs);
+    $(".mod-strengths").html(formData.strengths);
+    $(".mod-recommendations").html(formData.recommendations);
+    $(".mod-res-type").html(formData.res_type);
+
+    for(question of formData.questions){
+      $('.questions-section').append(`
+        <div class="col-md-4">
+          <h5 class="text-primary modal-headings">${question.question}</h5>
+          <p class="text-muted modal-items mod-recommendations">${question.answer}</p>
+        </div> 
+      `)
+    }
+  }
+
+  if(formData.recordType === 'EnvChecklistForm'){
+
+    $('.questions-section').empty();
+
+    $(".mod-agency").html(formData.agency);
+    $(".mod-inspector").html(formData.inspector);
+    $(".mod-site").html(formData.site);
+    $(".mod-title").html(formData.title);
+
+    for(question of formData.questions){
+      $('.questions-section').append(`
+          <div class="col-md-4 q-title">
+            <h5 class="text-primary modal-headings">${question.title}</h5>
+          </div> 
+        `)
+      for(q of question.questions){
+        $('.q-title').append(`<p class="text-muted modal-items mod-recommendations">${q.question}: <strong>${q.answer}</strong></p>`)
+      }
+    }
+  }
   
 
+  //Side in the modal body for different forms
   formData.recordType === 'DentalExam' ? $(".dental-exam").css('display', 'block'): $(".dental-exam").css('display', 'none');
   formData.recordType === 'FireEmergencyForm' ? $(".fire-drill").css('display', 'block'): $(".fire-drill").css('display', 'none');
+  formData.recordType === 'HotWaterFireForm' ? $(".hot-water-fire").css('display', 'block'): $(".hot-water-fire").css('display', 'none');
+  formData.recordType === 'EnvChecklistForm' ? $(".environmental-check").css('display', 'block'): $(".environmental-check").css('display', 'none');
 
 });
 
