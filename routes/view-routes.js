@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', viewController.root);
 router.get('/login', viewController.loginPage);
 router.get('/employment', viewController.employmentFormPage);
-router.post('/employment', viewController.submitEmployment);
+router.post('/employment', viewController.uploadDocuments, viewController.setTempID, viewController.submitEmployment);
 router.get('/employment/:applicationId', auth.authenticate, auth.authorize('director'), viewController.getEmployment);
 router.patch('/employment/:id', auth.authenticate, auth.authorize('director'), viewController.updateEmployment);
 

@@ -1,15 +1,54 @@
 const async = require('async');
-
+const multer = require('multer');
+const {promisify} = require('util');
+const generatePassword  = require('password-generator');
 const User = require('../models/user/user');
 const Staff = require('../models/user/staff');
 const ConsumerForm = require('../models/form/consumer-form');
 const Employment = require('../models/employment');
-
-
 const EnvChecklistData = require('../models/data/environmental-checklist-data');
-
-
 const AppError  = require('../utils/app-error');
+const fileUpload = require('../utils/file_upload');
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) =>{
+    cb(null, `public/files`);
+  },
+  filename: (req, file, cb) =>{
+    req.tempFileID = `${generatePassword(12, false)}-${Date.now()}`;
+    cb(null, `${req.tempFileID}-${file.originalname}`);
+  }
+});
+
+// const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) =>{
+  if(file.mimetype.startsWith('application/pdf')){
+    cb(null, true);
+  }
+  else{
+    cb(new AppError('Not a pdf document! Please upload only pdfs', 400), false);
+  }
+}
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+});
+
+exports.uploadDocuments = upload.fields([
+  {name: 'id_card', maxCount: 1},
+  {name: 'ss_card', maxCount: 1},
+  {name: 'highSchool_cert', maxCount: 1}
+]);
+
+exports.setTempID = (req, res, next)=>{
+  req.body.id_card = req.files.id_card[0].filename;
+  req.body.ss_card = req.files.ss_card[0].filename;
+  req.body.highSchool_cert = req.files.highSchool_cert[0].filename;
+  console.log(req.body);
+  next();
+}
 
 
 const getUsers = async (req, res, next) =>{
@@ -68,9 +107,8 @@ exports.employmentFormPage = (req, res) =>{
 
 exports.submitEmployment = async(req, res) =>{
   try {
-    
+    req.body.references = JSON.parse(req.body.references); //Parse to js object after converting from formData
     const employment = await Employment.create(req.body);
-    console.log(employment);
 
     res.status(201).json({
       status: 'success',

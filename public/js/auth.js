@@ -3,7 +3,9 @@
 document.getElementById('copy_date').innerHTML = new Date().getFullYear();
 
 //Makes request to login user
-const login = async (email, password) =>{
+const login = async (email, password, btn) =>{
+  btn.textContent = 'Login in...';
+  btn.disabled = true;
   console.log(email, password);
   try {
     const res = await axios({
@@ -26,6 +28,8 @@ const login = async (email, password) =>{
   catch (err) {
     md.showNotification(err.response.data.message, 'danger', 'error_outline');
     console.log('error', err.response.data);
+    btn.textContent = 'Login';
+    btn.disabled = false;
   }
   
 };
@@ -35,7 +39,7 @@ const submitEmploymentForm = async (payload) =>{
   try {
     const res = await axios({
       method: 'POST',
-      url: '/employment',
+      url: `/employment`,
       data: payload
     });
 
@@ -77,6 +81,7 @@ const logout = async() =>{
 //Get Form Data
 const loginForm = document.querySelector('.form');
 const logOutBtn = document.querySelector('#logout_btn');
+const loginBtn = document.querySelector('#btn-login');
 const employmentForm = document.querySelector('.employment_form');
 const employmentFormSubmit = document.getElementById('employment_form_submit');
 
@@ -88,7 +93,7 @@ if(loginForm){
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      login(email, password);
+      login(email, password, loginBtn);
   });
 }
 if(employmentForm){
@@ -111,6 +116,24 @@ if(employmentForm){
 }
 
 if(employmentFormSubmit){
+
+  let idCard, ssCard, highSchoolCert;
+
+  $('#id_card').on('change', () =>{ 
+    idCard = document.getElementById('id_card').files[0];
+    idCard ? $('#lab_id_card').html(idCard.name).css('color', '#222f3e'): '';
+  });
+
+  $('#ss_card').on('change', () =>{ 
+    ssCard = document.getElementById('ss_card').files[0];
+    ssCard ? $('#lab_ss_card').html(ssCard.name).css('color', '#222f3e'): '';
+  });
+
+  $('#high_school_cert').on('change', () =>{ 
+    highSchoolCert = document.getElementById('high_school_cert').files[0];
+    highSchoolCert? $('#lab_high_school_cert').html(highSchoolCert.name).css('color', '#222f3e'): '';
+  });
+
   employmentFormSubmit.addEventListener('submit', e =>{
     e.preventDefault();
 
@@ -124,6 +147,10 @@ if(employmentFormSubmit){
       ){
         return md.showNotification('Your basic info is incomplete, please check and fill in all required fields', 'danger', 'error_outline');
       }
+
+    if(!idCard || !ssCard || !highSchoolCert){
+      return md.showNotification('One or more files have\'t been selected', 'danger', 'error_outline');
+    }
 
     const references = [
       { 
@@ -143,7 +170,16 @@ if(employmentFormSubmit){
     payload.references = references;
     console.log(payload);
 
-    submitEmploymentForm(payload);
+    const form = new FormData();
+
+    form.append('firstName', payload.firstName); form.append('lastName', payload.lastName);
+    form.append('address', payload.address); form.append('email', payload.email);
+    form.append('ssn', payload.ssn); form.append('high_school', payload.high_school);
+    form.append('references', JSON.stringify(payload.references)); form.append('id_card', idCard);
+    form.append('ss_card', ssCard); form.append('highSchool_cert', highSchoolCert);
+
+    console.log(Array.from(form.values()));
+    submitEmploymentForm(form);
   });
 }
 

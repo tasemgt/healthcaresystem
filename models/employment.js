@@ -33,14 +33,11 @@ const employmentFormSchema = new mongoose.Schema({
       phone: { type: String, required: [true, 'A referee must have a phone number']}
     }
   ],
-  documents:[
-    {
-      id_card: String,
-      ss_card: String,
-      diploma_cert: String,
-      auto_insurance: String
-    }
-  ],
+  tempFileID: String,
+  id_card: String,
+  ss_card: String,
+  highSchool_cert: String,
+  auto_insurance: String,
   approved: {
     type: Boolean,
     default: false

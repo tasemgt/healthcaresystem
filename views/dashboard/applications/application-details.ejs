@@ -20,29 +20,30 @@
                 <p class="card-category">Kindly review application before approving</p>
               </div>
             </div>
+            <br/>
             <div class="card-body">
               <div class="row">
                 <div class="col-md-5">
                   <div class="card-header">
-                    <h4 class="card-title">Email Address</h4>
+                    <h4 class="card-title" style="font-weight:bold">Email Address</h4>
                     <p class="card-category">
                       <%= application.email %>
                     </p>
                   </div>
                   <div class="card-header">
-                  <h4 class="card-title">Social Security Number</h4>
+                  <h4 class="card-title" style="font-weight:bold">Social Security Number</h4>
                   <p class="card-category">
                     <%= application.ssn %>
                   </p>
                 </div>
                 <div class="card-header">
-                  <h4 class="card-title">High School</h4>
+                  <h4 class="card-title" style="font-weight:bold">High School</h4>
                   <p class="card-category">
                     <%= application.high_school %>
                   </p>
                 </div>
                 <div class="card-header">
-                  <h4 class="card-title">Address</h4>
+                  <h4 class="card-title" style="font-weight:bold">Address</h4>
                   <p class="card-category">
                     <%= application.address %>
                   </p>
@@ -50,30 +51,104 @@
                 </div>
                 <div class="col-md-7">
                   <h4 class="card-title">References</h4>
-                  <div class="row">
-                    <div class="col-md-2">S/N</div>
-                    <div class="col-md-6">Name</div>
-                    <div class="col-md-4">Phone</div>
-                    <% for(const [index, referee] of application.references.entries()){ %>
-                      <div class="col-md-2"><%= index + 1 %>.</div>
-                      <div class="col-md-6"><%= referee.name %></div>
-                      <div class="col-md-4"><%= referee.phone %></div>
-                    <% } %>
+                  <div class="card-body" style="padding:0px">
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead class="">
+                          <th class="text-bold">
+                            S/N
+                          </th>
+                          <th class="text-bold">
+                            Name
+                          </th>
+                          <th class="text-bold">
+                            Phone
+                          </th>
+                        </thead>
+                        <tbody>
+                          <% for(const [index, referee] of application.references.entries()){ %>
+                            <tr>
+                              <td>
+                                <%= index + 1 %>.
+                              </td>
+                              <td>
+                                <%= referee.name %>
+                              </td>
+                              <td>
+                                <%= referee.phone %>
+                              </td>
+                            </tr>
+                          <% } %>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                   <br/>
                   <h4 class="card-title">Documents</h4>
-                  <div class="row">
-                    <div class="col-md-2">S/N</div>
-                    <div class="col-md-6">Document Name</div>
-                    <div class="col-md-4">View</div>
-                    <% for(const [index, referee] of application.references.entries()){ %>
-                      <div class="col-md-2"><%= index + 1 %>.</div>
-                      <div class="col-md-6"><%= referee.name %></div>
-                      <div class="col-md-4">
-                        <a href="#" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons icon-tiny">description</i></a>
+                    <div class="card-body" style="padding:0px">
+                      <div class="table-responsive">
+                        <table class="table table-hover">
+                          <thead class="">
+                            <th class="text-bold">
+                              S/N
+                            </th>
+                            <th class="text-bold">
+                              Document Category
+                            </th>
+                            <th class="text-bold">
+                              Document Name
+                            </th>
+                            <th class="text-bold">
+                              View
+                            </th>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                1.
+                              </td>
+                              <td>
+                                Driving License or state ID
+                              </td>
+                              <td>
+                                <%= application.id_card.split('-')[2] %>
+                              </td>
+                              <td>
+                                <a href="/files/<%= application.id_card %>" target="_blank" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons icon-tiny">description</i></a>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                2.
+                              </td>
+                              <td>
+                                Social Security Card
+                              </td>
+                              <td>
+                                <%= application.ss_card.split('-')[2] %>
+                              </td>
+                              <td>
+                                <a href="/files/<%= application.ss_card %>" target="_blank" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons icon-tiny">description</i></a>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                3.
+                              </td>
+                              <td>
+                                High School Diploma Certificate
+                              </td>
+                              <td>
+                                <%= application.highSchool_cert.split('-')[2] %>
+                              </td>
+                              <td>
+                                <a href="/files/<%= application.highSchool_cert %>" target="_blank" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons icon-tiny">description</i></a>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
-                    <% } %>
-                  </div>
+                    </div>
                 </div>
               </div>
               <br/>
@@ -81,24 +156,24 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="row">
-                      <label class="col-sm-1 col-form-label label-checkbox">Approve Application</label>
-                      <div class="col-sm-2 checkbox-radios" >
-                        <div class="form-check form-check-inline">
-                          <label class="form-check-label" for="approved">
-                            <% if(application.approved){ %>
-                              <input class="form-check-input" id="approved" type="checkbox" checked>
-                            <% } else { %>
-                              <input class="form-check-input" id="approved" type="checkbox">
-                            <% } %>
-                            <span class="form-check-sign">
-                              <span class="check"></span>
-                            </span>
-                          </label>
-                        </div>
+                    <div class="col-sm-2 checkbox-radios" >
+                      <div class="form-check form-check-inline">
+                        <label class="col-form-label label-checkbox">Approve Application</label>
+                        <label class="form-check-label" for="approved" style="position:absolute; right:-2rem; bottom:1.6rem">
+                          <% if(application.approved){ %>
+                            <input class="form-check-input" id="approved" type="checkbox" checked>
+                          <% } else { %>
+                            <input class="form-check-input" id="approved" type="checkbox">
+                          <% } %>
+                          <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                        </label>
                       </div>
-                      <div class="col-md-9">
-                        <button type="button" id="save_application_btn" class="btn btn-primary">Save Changes</button>
-                      </div>
+                    </div>
+                    <div class="col-md-8">
+                      <button type="button" id="save_application_btn" class="btn btn-primary">Save Changes</button>
+                    </div>
                   </div>
                 </div>
               </div>

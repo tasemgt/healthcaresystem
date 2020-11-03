@@ -46,7 +46,8 @@ const limiter = rateLimit({
 app.use('/api',limiter); //Apply limiter to all api routes
 
 // Body parser, reading data from body into req.body
-app.use(express.json({limit: '10kb'}));
+app.use(express.json({limit: '500kb'}));
+app.use(express.urlencoded({extended:true, limit: '500kb'}));
 
 //Parses the cookies from the request
 app.use(cookieParser());

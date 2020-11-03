@@ -6,7 +6,7 @@ const baseURLAPI = '/api/v1';
 
 //INITIALIZE DATATABLES
 $(document).ready( function () {
-  $('.table').DataTable({
+  $('.data-table').DataTable({
     columnDefs: [
       { orderable: false, targets: -1 },
       {

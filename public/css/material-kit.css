@@ -19103,7 +19103,7 @@ footer .pull-center {
 /* CUSTOM CSS FOR LOGIN PAGE */
 
 .nav-logo img{
-  width: 12rem;
+  width: 9rem;
 }
 
 .btn.btn-primary:focus, 
@@ -19126,11 +19126,11 @@ footer .pull-center {
   }
 
 .header-filter:before{
-  height: 120vh;
+  height: 125vh;
 }
 
   .nav-logo img{
-    width: 8rem;
+    width: 5rem;
   }
 
   .card-login{
@@ -19138,7 +19138,7 @@ footer .pull-center {
   }
 
   .card-employment{
-    margin-top: 15rem;
+    margin-top: 18rem;
   }
 
   footer .copyright, footer ul li a{
