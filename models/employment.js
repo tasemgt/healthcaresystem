@@ -12,8 +12,11 @@ const employmentFormSchema = new mongoose.Schema({
     required: [true, 'Last name is required']
   },
   email: {
+    type: String
+  },
+  phone:{
     type: String,
-    required: [true, 'Email Address is required']
+    required: [true, 'Phone number is required']
   },
   address: {
     type: String,

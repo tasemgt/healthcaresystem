@@ -29,7 +29,7 @@
         <li class="nav-item">
           <a class="nav-link collapsed" data-toggle="collapse" href="#nurses" aria-expanded="false">
             <i class="material-icons">people</i>
-            <p>User Management <b class="caret"></b></p>
+            <p>Manage all Users <b class="caret"></b></p>
           </a>
           <div class="collapse" id="nurses">
             <ul class="nav">
@@ -47,21 +47,21 @@
           </div>
         </li>
       <% } %>
-      <li class="nav-item ">
+      <li class="nav-item">
         <a class="nav-link collapsed" data-toggle="collapse" href="#consumer" aria-expanded="false">
           <i class="material-icons">description</i>
-          <p>Consumer Forms <b class="caret"></b></p>
+          <p>Manage Consumers<b class="caret"></b></p>
         </a>
         <div class="collapse" id="consumer">
           <ul class="nav">
             <li class="nav-item">
-              <a href="/dashboard/consumer-forms" class="nav-link">
-                <span class="sidebar-normal">All Forms</span>
+              <a href="/dashboard/consumers" class="nav-link">
+                <span class="sidebar-normal">All Consumers</span>
               </a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">
-                <span class="sidebar-normal">Submit a form</span>
+              <a href="/dashboard/consumers/add" class="nav-link">
+                <span class="sidebar-normal">Register a Consumer</span>
               </a>
             </li>
           </ul>
@@ -95,8 +95,8 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">
-                <span class="sidebar-normal">Schedule an appointment</span>
+              <a href="/dashboard/appointments/add" class="nav-link">
+                <span class="sidebar-normal">Book an appointment</span>
               </a>
             </li>
           </ul>

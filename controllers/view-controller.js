@@ -4,11 +4,23 @@ const {promisify} = require('util');
 const generatePassword  = require('password-generator');
 const User = require('../models/user/user');
 const Staff = require('../models/user/staff');
+const Consumer = require('../models/consumer');
 const ConsumerForm = require('../models/form/consumer-form');
 const Employment = require('../models/employment');
+const Appointment = require('../models/appointment');
+
+const RespiteServiceForm = require('../models/delivery-log/respite-service-form');
+const SupportedHomeLivingForm = require('../models/delivery-log/supported-home-living-form');
+const SupportedEmploymentForm = require('../models/delivery-log/supported-employment-form');
+
 const EnvChecklistData = require('../models/data/environmental-checklist-data');
+const respiteActivities = require('../models/data/respite-activities');
+
 const AppError  = require('../utils/app-error');
 const fileUpload = require('../utils/file_upload');
+const sms = require('../utils/sms');
+
+
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) =>{
@@ -50,28 +62,28 @@ exports.setTempID = (req, res, next)=>{
   next();
 }
 
-
-const getUsers = async (req, res, next) =>{
+const getDocuments = async Model =>{
   try {
-    const users = await User.find({})
-    return users;
+    const documents = await Model.find({})
+    return documents;
   } 
   catch (err) {
-    return next(new AppError(err, 404));
+    return new AppError(err, 404);
   }
 }
 
-const getConsumerForms = async (req, res, next) =>{
+const getOneDocument = async Model =>{
   try {
-    const forms = await ConsumerForm.find({});
-    return forms;
-
-  } catch (err) {
-    return next(new AppError(err, 404));
+    const document = await Model.find({})
+    return document;
+  } 
+  catch (err) {
+    return new AppError(err, 404);
   }
 }
 
-//Handler functions
+
+////////  Handler functions ////////////
 
 //-- Auth Pages Handlers --//
 exports.loginPage = (req, res) =>{
@@ -87,12 +99,14 @@ exports.root = (req, res) =>{
 
 //-- Dashboard Page Handlers --//
 exports.dashboardPage = async(req, res) =>{
-  const users = await getUsers();
-  const consumerForms = await getConsumerForms();
+  const users = await getDocuments(User);
+  const consumerForms = await getDocuments(ConsumerForm);
+  const appointments = await getDocuments(Appointment);
   res.status(200).render('dashboard/dashboard', {
     title: 'Dashboard',
     totalUsers: users.length,
-    totalConsumerForms: consumerForms.length
+    totalConsumerForms: consumerForms.length,
+    totalAppointments: appointments.length
   });
 };
 
@@ -109,6 +123,11 @@ exports.submitEmployment = async(req, res) =>{
   try {
     req.body.references = JSON.parse(req.body.references); //Parse to js object after converting from formData
     const employment = await Employment.create(req.body);
+    const phone = employment.phone.substring(1);
+
+    //Send sms
+    await sms.sendSMS(`+234${phone}`, process.env.TWILIO_PHONE, 
+    `Hello ${employment.firstName}, \nThanks for your application. Your application ID is '${employment.applicationId}'. Give this ID to your Program Director for your enrollment into the system. \nRegards.`)
 
     res.status(201).json({
       status: 'success',
@@ -205,6 +224,22 @@ exports.getApplicationDetailsPage = async(req, res, next) =>{
 }
 
 
+//-- Appointments Handlers --//
+exports.appointmentFormPage = (req, res) =>{
+  res.status(200).render('dashboard/appointments/add-appointment', {
+    title: 'Book an Appointment'
+  });
+}
+
+
+exports.getAllAppointmentsPage = async(req, res, next) =>{
+  const appointments = await getDocuments(Appointment);
+  res.status(200).render('dashboard/appointments/all-appointments', {
+    title: 'Appointment Bookings',
+    appointments
+  });
+}
+
 //-- Profile Page Handlers --//
 exports.profilePage = async (req, res) =>{
   const user = await User.findById(req.user._id);
@@ -240,10 +275,32 @@ exports.addUserPage = (req, res) =>{
 };
 
 
-//-- Consumer Forms Pages Handlers --//
+//-- Consumers and Consumer Forms Pages Handlers --//
+
+// Consumers Create Form
+exports.registerConsumerPage = (req, res) =>{
+  res.status(200).render('dashboard/consumers/add-consumer', {
+    title: 'Register a Consumer'
+  });
+}
+
+exports.getAllConsumers = async(req, res, next) =>{
+  try {
+    const consumers = await getDocuments(Consumer);
+    
+    res.status(200).render('dashboard/consumers/all-consumers', {
+      title: 'All Consumers',
+      consumers
+    });
+
+  } catch (err) {
+    return next(new AppError(err, 404));
+  }
+}
+
 exports.getAllConsumerForms = async(req, res, next) =>{
   try {
-    const forms = await getConsumerForms();
+    const forms = await getDocuments(ConsumerForm)
     console.log(forms);
     res.status(200).render('dashboard/consumers/completed-forms/all-completed-forms', {
       title: 'All Consumer Forms',
@@ -298,4 +355,77 @@ exports.environmentalChecklistFormPage = async (req, res, next) =>{
   } catch (err) {
     return next(new AppError(err, 404));
   }
+}
+
+// Toxic Poison Assessment Form
+exports.poisonAssessmentFormPage = (req, res) =>{
+  res.status(200).render('dashboard/consumers/form-views/poison-assessment-form', {
+    title: 'Toxic Poison Assessment Form'
+  });
+}
+
+// Legal Assessment Form
+exports.legalAssessmentFormPage = (req, res) =>{
+  res.status(200).render('dashboard/consumers/form-views/legal-assessment-form', {
+    title: 'Annual Assessment of Legal Status Form'
+  });
+}
+
+//--------------------------------------------------------//
+// Respite Service Delivery
+exports.respiteServiceDeliveryPage =  async (req, res) =>{
+  const title = 'Respite Service Delivery Log'
+  if(req.query.all){
+    const logs = await getDocuments(RespiteServiceForm);
+    console.log(logs);
+    return res.status(200).render('dashboard/consumers/delivery-logs-form-views/respite-service/respite-service-table', {
+      title,
+      logs
+    });
+  }
+  if(req.query.new){
+    return res.status(200).render('dashboard/consumers/delivery-logs-form-views/respite-service/respite-service-form', {
+      title,
+      sections: respiteActivities
+    });
+  }
+  //Fetch data to porpulate view
+}
+
+// Supported Home Living Service Delivery
+exports.supportedHomeLivingPage =  async (req, res) =>{
+  const title = 'Supported Home Living / CS / CFC-PAS / Habilitation Log'
+  if(req.query.all){
+    const forms = await getDocuments(SupportedHomeLivingForm);
+    console.log(forms);
+    return res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-home-living/supported-home-living-table', {
+      title,
+      forms
+    });
+  }
+  if(req.query.new){
+    return res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-home-living/supported-home-living-form', {
+      title
+    });
+  }
+  //Fetch data to porpulate view
+}
+
+// Supported Home Employment
+exports.supportedEmploymentPage =  async (req, res) =>{
+  const title = 'Supported Employment / Employment Assistance Delivery Log'
+  if(req.query.all){
+    const forms = await getDocuments(SupportedEmploymentForm);
+    console.log(forms);
+    return res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-employment/supported-employment-table', {
+      title,
+      forms
+    });
+  }
+  if(req.query.new){
+    return res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-employment/supported-employment-form', {
+      title
+    });
+  }
+  //Fetch data to porpulate view
 }

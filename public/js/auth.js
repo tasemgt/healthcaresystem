@@ -2,10 +2,23 @@
 
 document.getElementById('copy_date').innerHTML = new Date().getFullYear();
 
+function toggleSpinner(btn, text, show){
+  if(show){
+    btn.text(text.loading);
+    // btn.prepend('<div class="lds-dual-ring"></div>');
+    btn.attr('disabled', true);
+  }
+  else{
+    btn.empty();
+    btn.text(text.normal);
+    btn.attr('disabled', false);
+  }
+}
+
 //Makes request to login user
 const login = async (email, password, btn) =>{
-  btn.textContent = 'Login in...';
-  btn.disabled = true;
+  let text = {normal: 'Login', loading: 'Login in....'};
+  toggleSpinner(btn, text, true);
   console.log(email, password);
   try {
     const res = await axios({
@@ -28,14 +41,15 @@ const login = async (email, password, btn) =>{
   catch (err) {
     md.showNotification(err.response.data.message, 'danger', 'error_outline');
     console.log('error', err.response.data);
-    btn.textContent = 'Login';
-    btn.disabled = false;
+    toggleSpinner(btn, text, false);
   }
   
 };
 
 //Makes request to submit employment form
-const submitEmploymentForm = async (payload) =>{
+const submitEmploymentForm = async (payload, btn) =>{
+  let text = {normal: 'Submit Application', loading: 'Submitting Application...'};
+  toggleSpinner(btn, text, true);
   try {
     const res = await axios({
       method: 'POST',
@@ -54,6 +68,7 @@ const submitEmploymentForm = async (payload) =>{
   catch (err) {
     md.showNotification(err.response.data.message, 'danger', 'error_outline');
     console.log('error', err);
+    toggleSpinner(btn, text, false);
   }
   
 };
@@ -81,7 +96,7 @@ const logout = async() =>{
 //Get Form Data
 const loginForm = document.querySelector('.form');
 const logOutBtn = document.querySelector('#logout_btn');
-const loginBtn = document.querySelector('#btn-login');
+const loginBtn = $('#btn-login'); //document.querySelector('#btn-login');
 const employmentForm = document.querySelector('.employment_form');
 const employmentFormSubmit = document.getElementById('employment_form_submit');
 
@@ -107,6 +122,7 @@ if(employmentForm){
         lastName : document.getElementById('lastName').value,
         address : document.getElementById('address').value,
         email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
         ssn : document.getElementById('ssn').value,
         high_school : document.getElementById('highSchool').value
       }
@@ -116,6 +132,8 @@ if(employmentForm){
 }
 
 if(employmentFormSubmit){
+
+  const submitBtn = $('#btn-submit');
 
   let idCard, ssCard, highSchoolCert;
 
@@ -174,12 +192,13 @@ if(employmentFormSubmit){
 
     form.append('firstName', payload.firstName); form.append('lastName', payload.lastName);
     form.append('address', payload.address); form.append('email', payload.email);
+    form.append('phone', payload.phone);
     form.append('ssn', payload.ssn); form.append('high_school', payload.high_school);
     form.append('references', JSON.stringify(payload.references)); form.append('id_card', idCard);
     form.append('ss_card', ssCard); form.append('highSchool_cert', highSchoolCert);
 
     console.log(Array.from(form.values()));
-    submitEmploymentForm(form);
+    submitEmploymentForm(form, submitBtn);
   });
 }
 

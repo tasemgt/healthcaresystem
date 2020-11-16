@@ -15,52 +15,54 @@
         <div class="col-md-12">
               <div class="card">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title ">All Appointments</h4>
-                  <p class="card-category">Lists all appointment bookings</p>
+                  <h4 class="card-title ">All Consumers</h4>
+                  <p class="card-category">Lists all Registered Consumers</p>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table data-table">
+                    <table class="table data-table table-striped dataTable table-hover table-no-bordered">
                       <thead class="text-primary">
                         <th class="text-bold">
-                          Consumer Name
+                          First Name
                         </th>
                         <th class="text-bold">
-                          Consumer Age
+                          Last Name
                         </th>
                         <th class="text-bold">
-                          Date of Appointment
+                          Email Address
                         </th>
                         <th class="text-bold">
-                          Time of Appointment
+                          Phone Number
                         </th>
                         <th class="text-bold">
-                          Status
+                          Local Case Number
                         </th>
                         <th class="text-bold text-right">
                           Actions
                         </th>
                       </thead>
                       <tbody>
-                        <% for(appointment of appointments){ %>
+                        <% for(consumer of consumers){ %>
                           <tr>
                             <td>
-                              <%= appointment.consumerName %>
+                              <%= consumer.firstName %>
                             </td>
                             <td>
-                              <%= appointment.age %>
-                            </td>
-                            <td class="formatted-date">
-                              <%= appointment.dateOfAppointment %>
+                              <%= consumer.lastName %>
                             </td>
                             <td>
-                              <%= appointment.time %>
+                              <%= consumer.email %>
                             </td>
                             <td>
-                              <%= appointment.status %>
+                              <%= consumer.phone %>
+                            </td>
+                            <td class="text-primary">
+                              <%= consumer.lcNumber %>
                             </td>
                             <td class="text-right">
-                              <a href="/dashboard/appointments/<%= appointment._id %>" class="btn btn-link btn-info btn-just-icon like show-details"><i class="material-icons">description</i></a>
+                              <a href="#" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons">person</i></a>
+                              <a href="#" class="btn btn-link btn-warning btn-just-icon edit"><i class="material-icons">dvr</i></a>
+                              <a href="#" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a>
                             </td>
                           </tr>
                         <% } %>

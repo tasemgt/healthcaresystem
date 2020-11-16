@@ -8,7 +8,23 @@ router.post('/dental-exam', auth.authenticate, consumerFormsController.createDen
 router.post('/hot-water-fire-form', auth.authenticate, consumerFormsController.createHotWaterFireForm);
 router.post('/fire-emergency-form', auth.authenticate, consumerFormsController.createFireEmergencyForm);
 router.post('/environmental-checklist-form', auth.authenticate, consumerFormsController.createEnvironmentalForm);
+router.post('/poison-assessment-form', auth.authenticate, consumerFormsController.createPoisonAssessmentForm);
+router.post('/legal-assessment-form', auth.authenticate, consumerFormsController.createLegalAssessmentForm);
 
+// ....................................//
+router.post('/respite-service-forms', auth.authenticate, consumerFormsController.getConsumerFromLcNum, consumerFormsController.createRespiteServiceDeliveryForm);
+router.post(
+  '/supported-home-forms', 
+  auth.authenticate, 
+  consumerFormsController.getConsumerFromLcNum, 
+  consumerFormsController.createSupportedHomeRecord,
+  consumerFormsController.createSupportedHomeForm);
 
+router.post(
+  '/supported-employment-forms', 
+  auth.authenticate, 
+  consumerFormsController.getConsumerFromLcNum,
+  consumerFormsController.addStaffToRecords,
+  consumerFormsController.createSupportedEmploymentForm);
 
 module.exports = router;

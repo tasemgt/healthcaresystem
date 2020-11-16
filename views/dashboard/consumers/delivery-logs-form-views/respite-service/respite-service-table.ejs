@@ -1,22 +1,22 @@
-<%- include('../../partials/header'); -%>
+<%- include('../../../../partials/header'); -%>
 
-<%- include('../../partials/sidebar'); -%>
+<%- include('../../../../partials/sidebar'); -%>
 
 
 <div class="main-panel">
   <!-- Navbar area -->
-  <%- include('../../partials/navbar'); -%>
+  <%- include('../../../../partials/navbar'); -%>
 
   <div class="content">
 
     <div class="container-fluid">
-
       <div class="row">
         <div class="col-md-12">
               <div class="card">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title ">All Appointments</h4>
-                  <p class="card-category">Lists all appointment bookings</p>
+                  <h4 class="card-title ">Respite Delivery Service Forms</h4>
+                  <p class="card-category">Lists all forms</p>
+                  <a href="/dashboard/consumers/respite-service-delivery?new=true" type="button" id="add-btn" class="btn btn-light pull-right btn-sm">Add New Form</a>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
@@ -26,41 +26,43 @@
                           Consumer Name
                         </th>
                         <th class="text-bold">
-                          Consumer Age
+                          Appointment Date
                         </th>
                         <th class="text-bold">
-                          Date of Appointment
+                          Local Case Number
                         </th>
                         <th class="text-bold">
-                          Time of Appointment
+                          Place of Service(s)
                         </th>
                         <th class="text-bold">
-                          Status
+                          Signatory
                         </th>
                         <th class="text-bold text-right">
                           Actions
                         </th>
                       </thead>
                       <tbody>
-                        <% for(appointment of appointments){ %>
+                        <% for(log of logs){ %>
                           <tr>
                             <td>
-                              <%= appointment.consumerName %>
-                            </td>
-                            <td>
-                              <%= appointment.age %>
+                              <%= log.consumer.firstName +" "+ log.consumer.lastName %>
                             </td>
                             <td class="formatted-date">
-                              <%= appointment.dateOfAppointment %>
+                              <%= log.dateOfAppointment %>
                             </td>
                             <td>
-                              <%= appointment.time %>
+                              <%= log.lcNumber %>
                             </td>
                             <td>
-                              <%= appointment.status %>
+                              <%= log.placeOfService %>
+                            </td>
+                            <td>
+                              <%= log.signatory.firstName +" "+ log.signatory.lastName %>
                             </td>
                             <td class="text-right">
-                              <a href="/dashboard/appointments/<%= appointment._id %>" class="btn btn-link btn-info btn-just-icon like show-details"><i class="material-icons">description</i></a>
+                              <a href="/dashboard/applications" rel="tooltip" data-original-title="View Form"  class="btn btn-link btn-info btn-just-icon like show-details"><i class="material-icons">description</i></a>
+                              <a href="#" rel="tooltip" data-original-title="Edit Form" class="btn btn-link btn-warning btn-just-icon remove"><i class="material-icons">edit</i></a>
+                              <a href="#" rel="tooltip"  class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a>
                             </td>
                           </tr>
                         <% } %>
@@ -81,8 +83,8 @@
 
 
   <!-- Bottom footer -->
-  <%- include('../../partials/bottombar'); -%>
+  <%- include('../../../../partials/bottombar'); -%>
 </div>
 
 <!-- page footer -->
-<%- include('../../partials/footer'); -%>
+<%- include('../../../../partials/footer'); -%>
