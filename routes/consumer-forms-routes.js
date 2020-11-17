@@ -2,6 +2,8 @@ const express = require('express');
 const consumerFormsController = require('../controllers/consumer-forms-controller');
 const auth = require('../middlewares/auth-middlewares');
 
+const DayHabilitationForm = require('../models/delivery-log/day-habilitation-service-form');
+
 const router = express.Router();
 
 router.post('/dental-exam', auth.authenticate, consumerFormsController.createDentalExam);
@@ -26,5 +28,21 @@ router.post(
   consumerFormsController.getConsumerFromLcNum,
   consumerFormsController.addStaffToRecords,
   consumerFormsController.createSupportedEmploymentForm);
+
+router.post(
+  '/rss-sl-service-forms',
+  auth.authenticate,
+  consumerFormsController.getConsumerFromLcNum,
+  consumerFormsController.createRSSSLServiceWeek,
+  consumerFormsController.createRSSSLServiceForm
+);
+
+router.post(
+  '/day-habilitation-forms',
+  auth.authenticate,
+  consumerFormsController.getConsumerFromLcNum,
+  consumerFormsController.uniqueForms(DayHabilitationForm),
+  consumerFormsController.createDayHabilitationForm
+)
 
 module.exports = router;

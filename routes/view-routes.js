@@ -37,6 +37,8 @@ router.get('/dashboard/consumers/legal-assessment-form', auth.authenticate, view
 router.get('/dashboard/consumers/respite-service-delivery', auth.authenticate, viewController.respiteServiceDeliveryPage);
 router.get('/dashboard/consumers/supported-home-living', auth.authenticate, viewController.supportedHomeLivingPage);
 router.get('/dashboard/consumers/supported-employment', auth.authenticate, viewController.supportedEmploymentPage);
+router.get('/dashboard/consumers/rss-sl-service', auth.authenticate, viewController.rssSLServicePage);
+router.get('/dashboard/consumers/day-habilitation-service', auth.authenticate, viewController.dayHabilitationServicePage);
 
 router.get('/dashboard/applications', auth.authenticate, auth.authorize('director'), viewController.getAllApplicationsPage);
 router.get('/dashboard/applications/:id', auth.authenticate, auth.authorize('director'), viewController.getApplicationDetailsPage);

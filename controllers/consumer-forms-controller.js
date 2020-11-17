@@ -9,6 +9,9 @@ const RespiteServiceForm = require('../models/delivery-log/respite-service-form'
 const supportedHomeForm = require('../models/delivery-log/supported-home-living-form');
 const supportedHomeRecordForm = require('../models/delivery-log/supported-home-living-record');
 const SupportedEmploymentForm = require('../models/delivery-log/supported-employment-form');
+const RssSLServiceForm = require('../models/delivery-log/rss-sl-service-form');
+const RssSLServiceWeekForm = require('../models/delivery-log/rss-sl-service-week-form');
+const DayHabilitationForm = require('../models/delivery-log/day-habilitation-service-form');
 
 const Consumer = require('../models/consumer');
 const factory = require('./handler-factory');
@@ -62,6 +65,34 @@ exports.addStaffToRecords = async(req, res, next) =>{
       record.staffSignature = `${req.user.firstName} ${req.user.lastName}`;
     });
     req.body.records = records;
+    next();
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err
+    });
+  }
+}
+
+exports.createRSSSLServiceWeek = async(req, res, next) =>{
+  try {
+    const form = await RssSLServiceForm.findOne({lcNumber:req.body.lcNumber});
+    if(form) return next(new AppError('Consumer already has a record, please click edit on the forms list to update a record instead'));
+    const week = await RssSLServiceWeekForm.create(req.body.week);
+    req.body.week = week._id;
+    next();
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err
+    });
+  }
+}
+
+exports.uniqueForms = Model => async(req, res, next) =>{
+  try {
+    const form = await Model.findOne({lcNumber:req.body.lcNumber});
+    if(form) return next(new AppError('Consumer already has a record, please click edit on the forms list to update a record instead'));
     next();
   } catch (err) {
     res.status(400).json({
@@ -260,3 +291,7 @@ exports.createRespiteServiceDeliveryForm = factory.createOne(RespiteServiceForm)
 exports.createSupportedHomeForm = factory.createOne(supportedHomeForm);
 
 exports.createSupportedEmploymentForm = factory.createOne(SupportedEmploymentForm);
+
+exports.createRSSSLServiceForm = factory.createOne(RssSLServiceForm);
+
+exports.createDayHabilitationForm = factory.createOne(DayHabilitationForm);

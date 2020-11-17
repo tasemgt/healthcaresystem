@@ -12,9 +12,14 @@ const Appointment = require('../models/appointment');
 const RespiteServiceForm = require('../models/delivery-log/respite-service-form');
 const SupportedHomeLivingForm = require('../models/delivery-log/supported-home-living-form');
 const SupportedEmploymentForm = require('../models/delivery-log/supported-employment-form');
+const RssSLServiceForm = require('../models/delivery-log/rss-sl-service-form');
+const DayHabilitationForm = require('../models/delivery-log/day-habilitation-service-form');
 
 const EnvChecklistData = require('../models/data/environmental-checklist-data');
 const respiteActivities = require('../models/data/respite-activities');
+const rssActivities = require('../models/data/rss-activities');
+const habilitationAreas = require('../models/data/habilitation-areas');
+
 
 const AppError  = require('../utils/app-error');
 const fileUpload = require('../utils/file_upload');
@@ -377,7 +382,6 @@ exports.respiteServiceDeliveryPage =  async (req, res) =>{
   const title = 'Respite Service Delivery Log'
   if(req.query.all){
     const logs = await getDocuments(RespiteServiceForm);
-    console.log(logs);
     return res.status(200).render('dashboard/consumers/delivery-logs-form-views/respite-service/respite-service-table', {
       title,
       logs
@@ -397,7 +401,6 @@ exports.supportedHomeLivingPage =  async (req, res) =>{
   const title = 'Supported Home Living / CS / CFC-PAS / Habilitation Log'
   if(req.query.all){
     const forms = await getDocuments(SupportedHomeLivingForm);
-    console.log(forms);
     return res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-home-living/supported-home-living-table', {
       title,
       forms
@@ -416,7 +419,6 @@ exports.supportedEmploymentPage =  async (req, res) =>{
   const title = 'Supported Employment / Employment Assistance Delivery Log'
   if(req.query.all){
     const forms = await getDocuments(SupportedEmploymentForm);
-    console.log(forms);
     return res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-employment/supported-employment-table', {
       title,
       forms
@@ -425,6 +427,46 @@ exports.supportedEmploymentPage =  async (req, res) =>{
   if(req.query.new){
     return res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-employment/supported-employment-form', {
       title
+    });
+  }
+  //Fetch data to porpulate view
+}
+
+// RSS - SL Service Delivery Log Form
+exports.rssSLServicePage =  async (req, res) =>{
+  const title = 'Residential Support Services (RSS) and Supervised Living (SL) Service Delivery Log'
+  const week = 1;
+  if(req.query.all){
+    const logs = await getDocuments(RssSLServiceForm);
+    return res.status(200).render('dashboard/consumers/delivery-logs-form-views/rss-sl-service/rss-sl-service-table', {
+      title,
+      logs
+    });
+  }
+  if(req.query.new){
+    return res.status(200).render('dashboard/consumers/delivery-logs-form-views/rss-sl-service/rss-sl-service-form', {
+      title,
+      week,
+      sections: rssActivities
+    });
+  }
+  //Fetch data to porpulate view
+}
+
+// Day Habilitation Service Delivery Log Form
+exports.dayHabilitationServicePage =  async (req, res) =>{
+  const title = 'Day Habilitation Service Delivery Log'
+  if(req.query.all){
+    const logs = await getDocuments(DayHabilitationForm);
+    return res.status(200).render('dashboard/consumers/delivery-logs-form-views/day-habilitation-service/day-habilitation-service-table', {
+      title,
+      logs
+    });
+  }
+  if(req.query.new){
+    return res.status(200).render('dashboard/consumers/delivery-logs-form-views/day-habilitation-service/day-habilitation-service-form', {
+      title,
+      sections: habilitationAreas
     });
   }
   //Fetch data to porpulate view

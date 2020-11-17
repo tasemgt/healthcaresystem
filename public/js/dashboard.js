@@ -1,9 +1,8 @@
 /* eslint-disable */
 
 const baseURL = '';
-const baseURLAPI = '/api/v1';
-
-
+const baseURLAPI = '/api/v1';        
+      
 //INITIALIZE DATATABLES
 $(document).ready( function () {
   $('.data-table').DataTable({
@@ -18,6 +17,24 @@ $(document).ready( function () {
     "pageLength": 5
   });
 });
+
+function reFormatDate(dateArr){
+  return new Date(dateArr[2]+'-'+dateArr[1]+'-'+dateArr[0]);
+}
+
+function chunkArray(myArray, chunk_size){
+  var index = 0;
+  var arrayLength = myArray.length;
+  var tempArray = [];
+  
+  for (index = 0; index < arrayLength; index += chunk_size) {
+      myChunk = myArray.slice(index, index+chunk_size);
+      // Do something if you want with the group
+      tempArray.push(myChunk);
+  }
+
+  return tempArray;
+}
 
 //Modals for consumer forms
 $(document).on("click", ".show-details", function (e) {
@@ -861,12 +878,14 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
 })(createResource);
 
 
-//Consumer Delivery Service Logs
+//------------------Consumer Delivery Service Logs ---------------------//
 (function(doCreate, doUpdate){
 
   const respiteServiceForm = document.getElementById('respite-service-form');
   const supportedHomeForm = document.getElementById('supported-home-form');
   const supportedEmploymentForm = document.getElementById('supported-employment-form');
+  const rssSLServiceForm = document.getElementById('rss-sl-service-form');
+  const dayHabilitationServiceForm = document.getElementById('day-habilitation-service-form');
 
   const btn = $('#submit-btn');
 
@@ -1097,6 +1116,141 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
 
     });
 
+  }
+
+  if(rssSLServiceForm){
+    rssSLServiceForm.addEventListener('submit', e =>{
+      e.preventDefault();
+
+      const dateArr = (document.getElementById('dateOfWeek').value).split('/');
+      const dateArr2 = (document.getElementById('dateOfComment').value).split('/');
+
+      const payload = {
+        lcNumber: document.getElementById('lcNumber').value,
+        placeOfService: document.getElementById('placeOfService').value,
+        week: {
+          weekNumber: document.getElementById('week').value,
+          logType: document.getElementById('rss').checked ? 'rss':'sl',
+          day:{
+            dayOfWeek: document.getElementById('dayOfWeek').value.toLowerCase(),
+            dateOfWeek: reFormatDate(dateArr),
+            comment: {
+              date: reFormatDate(dateArr2),
+              staffInitials: document.getElementById('staffInitials').value,
+              commentText: document.getElementById('commentText').value,
+            },
+            signature: {
+              employeeName: document.getElementById('employeeName').value,
+              initials: document.getElementById('initials').value,
+              staffID: document.getElementById('staffID').value,
+            },
+            records: []
+          }
+        }
+      }
+
+      if(!payload.week.day.dayOfWeek) return md.showNotification('Please select the day of the week', 'danger', 'error_outline');
+
+      let checkArea = document.getElementById('check-area');
+      sections = chunkArray(Array.from(checkArea.children), 4);
+
+      for(section of sections){
+        const record = { title: section[0].innerHTML };
+        const checks = [];
+        for(col of section[1].children){
+          const check = { 
+            item: col.firstElementChild.firstElementChild.innerHTML,
+            checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+          }
+          checks.push(check);
+          record.checks = checks;
+        }
+        payload.week.day.records.push(record);
+      }
+
+      console.log(payload);
+      doCreate(payload, 
+        `${baseURLAPI}/consumer-forms/rss-sl-service-forms`, 
+        'Form Submitted Successfully!',
+        '/dashboard/consumers/rss-sl-service?all=true'
+        );
+    });
+  }
+
+
+  //Day Habilitation Service Delivery Section
+  if(dayHabilitationServiceForm){
+    dayHabilitationServiceForm.addEventListener('submit', e =>{
+      e.preventDefault();
+
+      const dateArr = (document.getElementById('dateOfWeek').value).split('/');
+      const dateArr2 = (document.getElementById('dateOfComment').value).split('/');
+
+      const payload = {
+        lcNumber : document.getElementById('lcNumber').value,
+        placeOfService: document.getElementById('placeOfService').value,
+        days: {
+          dayName: document.getElementById('dayName').value.toLowerCase(),
+          dateOfWeek : reFormatDate(dateArr),
+          records: [],
+          comment: {
+            date: reFormatDate(dateArr2),
+            staffInitials: document.getElementById('staffInitials').value,
+            commentText: document.getElementById('commentText').value,
+          },
+          signature: {
+            employeeName: document.getElementById('employeeName').value,
+            initials: document.getElementById('initials').value
+          }
+        }
+      }
+
+      let timesSections = document.getElementsByClassName('times-section');
+      timesSections = Array.from(timesSections);
+
+      const sections = timesSections[0].children;
+
+      payload.days.times = {
+        morningTimes : {
+          timeIn: sections[0].firstElementChild.lastElementChild.value,
+          timeOut: sections[1].firstElementChild.children[1].value,
+        },
+        afternoonTimes : {
+          timeIn: sections[2].firstElementChild.lastElementChild.value,
+          timeOut: sections[3].firstElementChild.children[1].value,
+        },
+        eveningTimes : {
+          timeIn: sections[4].firstElementChild.lastElementChild.value,
+          timeOut: sections[5].firstElementChild.children[1].value,
+        }
+      };
+
+      if(!payload.days.dayName) return md.showNotification('Please select the day of the week', 'danger', 'error_outline');
+
+      let checkArea = document.getElementById('check-area');
+      const checkSections = chunkArray(Array.from(checkArea.children), 4); // For all elements including hr and br
+
+      for(section of checkSections){
+        const record = { title: section[0].innerHTML };
+        const checks = [];
+        for(col of section[1].children){
+          const check = { 
+            item: col.firstElementChild.firstElementChild.innerHTML,
+            checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+          }
+          checks.push(check);
+          record.checks = checks;
+        }
+        payload.days.records.push(record);
+      }
+
+      console.log(payload);
+      doCreate(payload, 
+        `${baseURLAPI}/consumer-forms/day-habilitation-forms`, 
+        'Form Submitted Successfully!',
+        '/dashboard/consumers/day-habilitation-service?all=true'
+        );
+    });
   }
 
 })(createResource, updateResource);
