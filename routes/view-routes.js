@@ -40,6 +40,9 @@ router.get('/dashboard/consumers/supported-employment', auth.authenticate, viewC
 router.get('/dashboard/consumers/rss-sl-service', auth.authenticate, viewController.rssSLServicePage);
 router.get('/dashboard/consumers/day-habilitation-service', auth.authenticate, viewController.dayHabilitationServicePage);
 
+// Nurses section
+router.get('/dashboard/nurses/nursing-service-delivery', auth.authenticate, viewController.nursingServicesDeliveryPage);
+
 router.get('/dashboard/applications', auth.authenticate, auth.authorize('director'), viewController.getAllApplicationsPage);
 router.get('/dashboard/applications/:id', auth.authenticate, auth.authorize('director'), viewController.getApplicationDetailsPage);
 

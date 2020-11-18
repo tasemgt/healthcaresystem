@@ -1254,3 +1254,60 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
   }
 
 })(createResource, updateResource);
+
+
+//------------------ Nursing Service Logs ---------------------//
+(function(doCreate, doUpdate){
+
+  const nursingServicesDeliveryForm = document.getElementById('nursing-services-delivery-form');
+
+  if(nursingServicesDeliveryForm){
+    nursingServicesDeliveryForm.addEventListener('submit', e =>{
+      e.preventDefault();
+
+      const dateArr = (document.getElementById('serviceDate').value).split('/');
+
+      const payload = {
+        lcNumber : document.getElementById('lcNumber').value,
+        serviceDate: reFormatDate(dateArr),
+        individualName : document.getElementById('individualName').value,
+        location : document.getElementById('location').value,
+        beginTime : document.getElementById('beginTime').value,
+        endTime : document.getElementById('endTime').value,
+        unitsOfService : document.getElementById('unitsOfService').value,
+        nurseName : document.getElementById('nurseName').value,
+        title : document.getElementById('title').value,
+        nurseSignature : document.getElementById('nurseSignature').value,
+        staffID : document.getElementById('staffID').value,
+        nursingComponent: [
+          {item: 'Registered Nurse (RN)', checked: document.getElementById('rn').checked},
+          {item: 'Licensed Vocational Nurse (LVN)', checked: document.getElementById('lvn').checked},
+          {item: 'Specialized RN', checked: document.getElementById('srn').checked},
+          {item: 'Specialized LVN', checked: document.getElementById('slvn').checked}
+        ],
+        descriptions: []
+      }
+
+      const checkSection = document.getElementById('check-section');
+      const cols = Array.from(checkSection.children);
+
+      for(col of cols){
+        const desc = { 
+          item: col.firstElementChild.firstElementChild.innerHTML,
+          checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+        }
+        payload.descriptions.push(desc);
+      }
+
+      console.log(payload);
+      doCreate(payload, 
+        `${baseURLAPI}/nurse-forms/nurse-services-delivery-forms`, 
+        'Form Submitted Successfully!',
+        '/dashboard/nurses/nursing-service-delivery?all=true'
+        );
+      
+    });
+  }
+
+
+})(createResource, updateResource);

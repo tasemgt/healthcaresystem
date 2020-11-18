@@ -19,6 +19,9 @@ const EnvChecklistData = require('../models/data/environmental-checklist-data');
 const respiteActivities = require('../models/data/respite-activities');
 const rssActivities = require('../models/data/rss-activities');
 const habilitationAreas = require('../models/data/habilitation-areas');
+const nursingServiceDescriptions = require('../models/data/nursing-service-description');
+
+const NursingServiceDeliveryForm = require('../models/nurse-form/nursing-service-delivery-form');
 
 
 const AppError  = require('../utils/app-error');
@@ -467,6 +470,27 @@ exports.dayHabilitationServicePage =  async (req, res) =>{
     return res.status(200).render('dashboard/consumers/delivery-logs-form-views/day-habilitation-service/day-habilitation-service-form', {
       title,
       sections: habilitationAreas
+    });
+  }
+  //Fetch data to porpulate view
+}
+
+
+// ------------------------------ NURSING SERVICES FORMS -------------------------------//
+// Nursing Services Delivery Log Form
+exports.nursingServicesDeliveryPage =  async (req, res) =>{
+  const title = 'Nursing Services Delivery Log - Billable Activities'
+  if(req.query.all){
+    const forms = await getDocuments(NursingServiceDeliveryForm);
+    return res.status(200).render('dashboard/nurses/nursing-service-delivery/nursing-service-delivery-table', {
+      title,
+      forms
+    });
+  }
+  if(req.query.new){
+    return res.status(200).render('dashboard/nurses/nursing-service-delivery/nursing-service-delivery-form', {
+      title,
+      descriptions: nursingServiceDescriptions
     });
   }
   //Fetch data to porpulate view

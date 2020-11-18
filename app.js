@@ -12,6 +12,7 @@ const compression = require('compression');
 const userRouter = require('./routes/user-routes');
 const consumerRouter = require('./routes/consumer-routes');
 const consumerFormsRouter = require('./routes/consumer-forms-routes');
+const nurseFormsRouter = require('./routes/nurse-forms-routes');
 const appointmentRouter = require('./routes/appointment-routes');
 const viewRouter = require('./routes/view-routes');
 
@@ -82,6 +83,7 @@ app.use('/', viewRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/consumers', consumerRouter);
 app.use('/api/v1/consumer-forms', consumerFormsRouter);
+app.use('/api/v1/nurse-forms', nurseFormsRouter);
 app.use('/api/v1/appointments', appointmentRouter);
 
 app.all('*', (req, res, next) =>{
