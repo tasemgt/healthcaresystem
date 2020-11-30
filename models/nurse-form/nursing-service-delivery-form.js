@@ -16,7 +16,7 @@ const nursingServiceDeliverySchema = new mongoose.Schema({
   },
   descriptions: [{
     item: { type:String },
-    checked: { type:String }
+    checked: { type:Boolean }
   }],
   serviceDate: {
     type: Date,
@@ -52,7 +52,7 @@ const nursingServiceDeliverySchema = new mongoose.Schema({
   },
   nursingComponent: [{
     item: { type: String },
-    checked: { type: String }
+    checked: { type: Boolean }
   }]
 }, {
   toJSON: { virtuals: true },

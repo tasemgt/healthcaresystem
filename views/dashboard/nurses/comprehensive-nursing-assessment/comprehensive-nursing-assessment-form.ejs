@@ -1,0 +1,460 @@
+<%- include('../../../partials/header'); -%>
+
+<%- include('../../../partials/sidebar'); -%>
+
+
+<div class="main-panel">
+  <!-- Navbar area -->
+  <%- include('../../../partials/navbar'); -%>
+
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-primary">
+              <h4 class="card-title"><%= title %></h4>
+              <p class="card-category">Please fill in all  fields</p>
+               <a href="/dashboard/nurses/comprehensive-nursing-assessment?all=true" type="button" id="add-btn" class="btn btn-light pull-right btn-sm">View all Forms</a>
+            </div>
+            <div class="card-body">
+              <form id="comprehensive-nursing-assessment-form">
+                <br>
+                <div class="row">
+                  <div class="col-md-3 col-sm-12">
+                    <div class="form-group controls">
+                      <label class="bmd-label-floating">Name of Individual</label>
+                      <input type="text" class="form-control" id="individualName" >
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-sm-12">
+                    <div class="form-group controls">
+                      <label class="label-control">Date of Birth </label>
+                      <input type="text" class="form-control datepicker" id="date" >
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-sm-12">
+                    <div class="form-group controls">
+                      <label class="label-control">Today's Date </label>
+                      <input type="text" class="form-control datepicker" id="todaysDate" >
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <div class="row" style="padding-left: 2rem">
+                  <div class="col-md-3 checkbox" >
+                    <div class="form-check form-check-inline">
+                      <label class="col-form-label label-checkbox">I. Review</label>
+                      <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                        <input class="form-check-input" type="checkbox" id="review-check" checked>
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-3 checkbox" >
+                    <div class="form-check form-check-inline">
+                      <label class="col-form-label label-checkbox">II. Current Status</label>
+                      <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                        <input class="form-check-input" type="checkbox" id="status-check">
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-3 checkbox" >
+                    <div class="form-check form-check-inline">
+                      <label class="col-form-label label-checkbox">III. Review of Systems</label>
+                      <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                        <input class="form-check-input" type="checkbox" id="systems-check">
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-3 checkbox" >
+                    <div class="form-check form-check-inline">
+                      <label class="col-form-label label-checkbox">IV. Additional Health Status Info</label>
+                      <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                        <input class="form-check-input" type="checkbox" id="additional-check">
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-3 checkbox" >
+                    <div class="form-check form-check-inline">
+                      <label class="col-form-label label-checkbox">V. Implementation Assessment</label>
+                      <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                        <input class="form-check-input" type="checkbox" id="assessment-check">
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-3 checkbox" >
+                    <div class="form-check form-check-inline">
+                      <label class="col-form-label label-checkbox">VI. Summary</label>
+                      <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                        <input class="form-check-input" type="checkbox" id="summary-check">
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <div id="review-section">
+                  <h3 style="text-decoration:underline; display:inline-block">I. Review</h3>
+                  <div id="review-subsection">
+                    <br>
+                    <h4 id="healthcare-title">Review of Health Care Team</h4>
+                    <% for(review of data.review.healthCareTeam) { %>
+                      <div class="row healthcare-row">
+                        <h6 class="col-md-2 col-sm-12" style="margin-top:1rem"><%= review %></h6>
+                        <div class="col-md-3 col-sm-12">
+                          <div class="form-group controls">
+                            <label class="bmd-label-floating">Health Care Practitioners</label>
+                            <input type="text" class="form-control">
+                          </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                          <div class="form-group controls">
+                            <label class="label-control">Date Last Seen </label>
+                            <input type="text" class="form-control datepicker">
+                          </div>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                          <div class="form-group controls">
+                            <label class="bmd-label-floating">Comments</label>
+                            <input type="text" class="form-control">
+                          </div>
+                        </div>
+                      </div>
+                    <% } %>
+                    <% for(support of data.review.support) { %>
+                      <div class="row support-row">
+                        <h6 class="col-md-2 col-sm-12" style="margin-top:1rem"><%= support %></h6>
+                        <div class="col-md-3 col-sm-12">
+                          <div class="form-group controls">
+                            <label class="bmd-label-floating">Relationship</label>
+                            <input type="text" class="form-control">
+                          </div>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                          <div class="form-group controls">
+                            <label class="bmd-label-floating">Telephone No</label>
+                            <input type="tel" class="form-control">
+                          </div>
+                        </div>
+                      </div>
+                    <% } %>
+                    <br>
+                    <h4 id="history-title">Health History: Psychiatric and Medical Diagnosis</h4>
+                    <% for(health of data.review.healthHistory) { %>
+                      <div class="row history-row">
+                        <h6 class="col-md-2 col-sm-12" style="margin-top:1rem"><%= health %></h6>
+                        <div class="col-md-9 col-sm-12">
+                          <div class="form-group controls">
+                            <label class="bmd-label-floating">Diagnosis</label>
+                            <input type="text" class="form-control">
+                          </div>
+                        </div>
+                      </div>
+                    <% } %>
+                    <br>
+                    <h4 id="medication-title">Review of Current Medications (Include OTCs, vitamins and herbs)</h4>
+                    <br><hr><br>
+                    <div class="row signature-row">
+                      <div class="col-md-4 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Registered Nurse </label>
+                          <input type="text" class="form-control" id="review-rn">
+                        </div>
+                      </div>
+                      <div class="col-md-4 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Individual </label>
+                          <input type="text" class="form-control" id="review-individual">
+                        </div>
+                      </div>
+                      <div class="col-md-4 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="label-control">Date </label>
+                          <input type="text" class="form-control datepicker" id="review-date">
+                        </div>
+                      </div>
+                    </div>
+                    <button type="button" id="add-row-btn" style="margin-right: 1rem" class="btn btn-primary pull-right">Add Medication</button>
+                    <br><br>
+                  </div>
+                  <hr>
+                </div>
+                <br>
+                <div id="status-section">
+                  <h3 style="text-decoration:underline; display:inline-block">II. Current Status</h3>
+                  <div id="status-subsection">
+                    <br>
+                    <h4 id="status-title">Current medical and psychiatric history</h4>
+                    <div class="row" id="medical-history-row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Briefly describe recent changes in health or behavioral status, hospitalizations, falls, seizure activity, restraints, etc., within the past year</label>
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>What is of primary concern/greatest expressed needs of the individual, legally authorized representative (LAR) or client's responsible adult (CRA) from their own perspective?</label>
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <h4 id="vital-title">Vital Signs</h4>
+                    <div class="row vital-row">
+                      <div class="col-md-2 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Blood Pressure </label>
+                          <input type="text" class="form-control" id="bloodPressure">
+                        </div>
+                      </div>
+                      <div class="col-md-5 col-sm-12">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group controls">
+                              <label class="bmd-label-floating">Pulse Rate </label>
+                              <input type="text" class="form-control" id="pulseRate">
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group controls">
+                              <label class="bmd-label-floating">Pulse Rhythm </label>
+                              <input type="text" class="form-control" id="pulseRhythm">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-5 col-sm-12">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group controls">
+                              <label class="bmd-label-floating">Respirations Rate </label>
+                              <input type="text" class="form-control" id="respirationsRate">
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group controls">
+                              <label class="bmd-label-floating">Respirations Rhythm </label>
+                              <input type="text" class="form-control" id="respirationsRhythm">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-2 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Temperature </label>
+                          <input type="text" class="form-control" id="vitalTemperature">
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Pain Level </label>
+                          <input type="text" class="form-control" id="painLevel">
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Blood Sugar </label>
+                          <input type="text" class="form-control" id="bloodSugar" >
+                        </div>
+                      </div>
+                      <div class="col-md-2 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Weight </label>
+                          <input type="text" class="form-control" id="vitalWeight" >
+                        </div>
+                      </div>
+                      <div class="col-md-2 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Height </label>
+                          <input type="text" class="form-control" id="vitalHeight" >
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Comments</label>
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="vitalComments"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <h4 id="lab-title">Labs</h4>
+                    <div class="row labs-row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Briefly review ordered labs, dates and abnormal values within the past year.</label>
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="vitalLabs"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row vital-signature-row">
+                      <div class="col-md-4 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Registered Nurse </label>
+                          <input type="text" class="form-control"  id="vital-rn">
+                        </div>
+                      </div>
+                      <div class="col-md-4 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Individual </label>
+                          <input type="text" class="form-control"  id="vital-individual">
+                        </div>
+                      </div>
+                      <div class="col-md-4 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="label-control">Date </label>
+                          <input type="text" class="form-control datepicker"  id="vital-date">
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <h4 id="assessment-title">Fall Risk Assessment</h4>
+                    <div class="row">
+                      <div class="col-md-8 checkbox-radios inline-options">
+                        <p>Has a fall risk assessment been completed?</p>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="radio-1" value="no" id="risk-assessment-check" checked> No
+                            <span class="circle"> <span class="check"></span></span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="radio-1" value="yes"> Yes (attached). Fall risk due to:
+                            <span class="circle"><span class="check"></span></span>
+                          </label>
+                          <div class="row">
+                            <div class="col-md-2">
+                              <div class="form-check form-check-inline">
+                                <label class="col-form-label label-checkbox">Neurological</label>
+                                <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                                  <input class="form-check-input" type="checkbox" id="assessment-neurological">
+                                  <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-md-3">
+                              <div class="form-check form-check-inline">
+                                <label class="col-form-label label-checkbox">Musculoskeletal</label>
+                                <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                                  <input class="form-check-input" type="checkbox" id="assessment-musculoskeletal">
+                                  <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-md-2">
+                              <div class="form-check form-check-inline">
+                                <label class="col-form-label label-checkbox">Unknown</label>
+                                <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                                  <input class="form-check-input" type="checkbox" id="assessment-unknown">
+                                  <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label>Comments</label>
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="vitalComments"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                 <br>
+                  <div id="systems-section">
+                    <h3 style="text-decoration:underline; display:inline-block">III. Review of Systems</h3>
+                    <div id="systems-subsection">
+                      <div class="row">
+                        <div class="col-md-8 checkbox-radios inline-options">
+                          <p>Abnormal Involuntary Movement Scale (AIMS) Assessment:</p>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="radio" name="radio-1" value="attached" checked> Attached
+                              <span class="circle"> <span class="check"></span></span>
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="radio" name="radio-1" value="deferred"> Deferred
+                              <span class="circle"><span class="check"></span></span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <% for(const [i, illness] of data.systems.neurological.entries()) { %>
+                          <div class="col-md-4 checkbox-radios inline-options">
+                            <p><%= illness %></p>
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="radio" name="illness-<%= i %>" value="yes" checked> Yes
+                                <span class="circle"> <span class="check"></span></span>
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="radio" name="illness-<%= i %>" value="no"> No
+                                <span class="circle"><span class="check"></span></span>
+                              </label>
+                            </div>
+                          </div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                <button type="submit" id="submit-btn" class="btn btn-primary pull-right">Submit</button>
+                <div class="clearfix"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div style="margin-bottom: 11rem;"></div>
+
+  <!-- Bottom footer -->
+  <%- include('../../../partials/bottombar'); -%>
+</div>
+
+<!-- page footer -->
+<%- include('../../../partials/footer'); -%>

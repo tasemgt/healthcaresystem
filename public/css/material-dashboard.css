@@ -20035,6 +20035,10 @@ h5.section-header{
   text-transform: uppercase;
 }
 
+h4,h5{
+  font-weight: bold
+}
+
 /* TABLES */
 .table>tbody>tr>td{
   padding: .25rem;

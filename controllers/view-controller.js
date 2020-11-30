@@ -15,13 +15,24 @@ const SupportedEmploymentForm = require('../models/delivery-log/supported-employ
 const RssSLServiceForm = require('../models/delivery-log/rss-sl-service-form');
 const DayHabilitationForm = require('../models/delivery-log/day-habilitation-service-form');
 
+// Static Data for use in pages
 const EnvChecklistData = require('../models/data/environmental-checklist-data');
 const respiteActivities = require('../models/data/respite-activities');
 const rssActivities = require('../models/data/rss-activities');
 const habilitationAreas = require('../models/data/habilitation-areas');
 const nursingServiceDescriptions = require('../models/data/nursing-service-description');
+const nursingServiceChecklistData = require('../models/data/nursing-service-checklist-data');
+const nursingTasksScreeningData = require('../models/data/nursing-tasks-screening-data');
+const rnDelegationChecklistData = require('../models/data/rn-delegation-checklist-data');
+const comprehensiveNursingAssessmentData = require('../models/data/comprehensive-nursing-assessment-data');
 
+// Nurse Models
 const NursingServiceDeliveryForm = require('../models/nurse-form/nursing-service-delivery-form');
+const NursingServiceChecklistForm = require('../models/nurse-form/nursing-service-checklist-form');
+const NursingTasksScreeningForm = require('../models/nurse-form/nursing-tasks-screening-form');
+const ExclusionHostForm = require('../models/nurse-form/exclusion-form');
+const RNDelegationChecklistForm = require('../models/nurse-form/rn-delegation-checklist-form');
+const ComprehensiveNursingAssessmentForm = require('../models/nurse-form/comprehensive-nursing-assessment-form');
 
 
 const AppError  = require('../utils/app-error');
@@ -494,4 +505,107 @@ exports.nursingServicesDeliveryPage =  async (req, res) =>{
     });
   }
   //Fetch data to porpulate view
+}
+
+// Nursing Services Checklist Form
+exports.nursingServicesChecklistPage =  async (req, res) =>{
+  const title = 'Nursing Services Checklist';
+  const subtitle = 'Waiver Survey and Certification';
+  if(req.query.all){
+    const forms = await getDocuments(NursingServiceChecklistForm);
+    return res.status(200).render('dashboard/nurses/nursing-service-checklist/nursing-service-checklist-table', {
+      title,
+      subtitle,
+      forms
+    });
+  }
+  if(req.query.new){
+    return res.status(200).render('dashboard/nurses/nursing-service-checklist/nursing-service-checklist-form', {
+      title,
+      subtitle,
+      descriptions: nursingServiceChecklistData
+    });
+  }
+  //Fetch data to porpulate view
+}
+
+// Nursing Services Checklist Form
+exports.nursingTasksScreeningPage =  async (req, res) =>{
+  const title = 'Nursing Tasks Screening Tool Form';
+  if(req.query.all){
+    const forms = await getDocuments(NursingTasksScreeningForm);
+    return res.status(200).render('dashboard/nurses/nursing-tasks-screening/nursing-tasks-screening-table', {
+      title,
+      forms
+    });
+  }
+  if(req.query.new){
+    return res.status(200).render('dashboard/nurses/nursing-tasks-screening/nursing-tasks-screening-form', {
+      title,
+      data: nursingTasksScreeningData
+    });
+  }
+  //Fetch data to porpulate view
+}
+
+// Exclusion of Host Home
+exports.nursingExclusionOfHostHomePage =  async (req, res) =>{
+  const title = `Exclusion of Host Home/Companion Care (HH/CC) Provider from the
+                  Board of Nursing (BON) Definition of Unlicensed Person`;
+  if(req.query.all){
+    const forms = await getDocuments(ExclusionHostForm);
+    return res.status(200).render('dashboard/nurses/exclusion-host-home/exclusion-host-home-table', {
+      title,
+      forms
+    });
+  }
+  if(req.query.new){
+    return res.status(200).render('dashboard/nurses/exclusion-host-home/exclusion-host-home-form', {
+      title
+    });
+  }
+  //Fetch data to populate view
+}
+
+// RN Delegation Checklist Form
+exports.rnDelegationChecklistPage =  async (req, res) =>{
+  const title = `RN Delegation Checklist`;
+  const subtitle = `Waiver Survey and Certification | Home and Community-based Services (HCS)/Texas
+  Home Living (TxHmL) Program` 
+  if(req.query.all){
+    const forms = await getDocuments(RNDelegationChecklistForm);
+    return res.status(200).render('dashboard/nurses/rn-delegation-checklist/rn-delegation-checklist-table', {
+      title,
+      forms
+    });
+  }
+  if(req.query.new){
+    return res.status(200).render('dashboard/nurses/rn-delegation-checklist/rn-delegation-checklist-form', {
+      title,
+      subtitle,
+      datas: rnDelegationChecklistData
+    });
+  }
+  //Fetch data to populate view
+}
+
+// Comprehensive Nursing Assessment Form
+exports.comprehensiveNursingAssessmentPage =  async (req, res) =>{
+  const title = `Comprehensive Nursing Assessment Form`;
+  const subtitle = `To be performed by a Registered Nurse` 
+  if(req.query.all){
+    const forms = await getDocuments(ComprehensiveNursingAssessmentForm);
+    return res.status(200).render('dashboard/nurses/comprehensive-nursing-assessment/comprehensive-nursing-assessment-table', {
+      title,
+      forms
+    });
+  }
+  if(req.query.new){
+    return res.status(200).render('dashboard/nurses/comprehensive-nursing-assessment/comprehensive-nursing-assessment-form', {
+      title,
+      subtitle,
+      data: comprehensiveNursingAssessmentData
+    });
+  }
+  //Fetch data to populate view
 }

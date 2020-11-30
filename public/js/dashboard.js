@@ -1260,6 +1260,11 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
 (function(doCreate, doUpdate){
 
   const nursingServicesDeliveryForm = document.getElementById('nursing-services-delivery-form');
+  const nursingServicesChecklistForm = document.getElementById('nursing-services-checklist-form');
+  const nursingTasksScreeningForm = document.getElementById('nursing-tasks-screening-form');
+  const exclusionHostHomeForm = document.getElementById('exclusion-of-hhcc-form');
+  const rnDelegationChecklistForm = document.getElementById('rn-delegation-checklist-form');
+  const comprehensiveNursingAssessmentForm = document.getElementById('comprehensive-nursing-assessment-form');
 
   if(nursingServicesDeliveryForm){
     nursingServicesDeliveryForm.addEventListener('submit', e =>{
@@ -1309,5 +1314,453 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
     });
   }
 
+
+  if(nursingServicesChecklistForm){
+    nursingServicesChecklistForm.addEventListener('submit', e =>{
+      e.preventDefault();
+
+      const payload = {
+        descriptions: []
+      };
+
+      const checkSection = document.getElementsByClassName('check-area');
+      const sections = Array.from(checkSection);
+
+      for(section of sections){
+        const desc = { title: section.firstElementChild.innerHTML , items: []};
+        const cols = section.children[1].children;
+        for(let i=0; i < cols.length; i++){
+          if(cols[i].className === 'row'){
+            for(col of cols[i].children){
+              const kid = {title: col.firstElementChild.firstElementChild.innerHTML};
+              kid.checked = col.firstElementChild.lastElementChild.firstElementChild.checked;
+              desc.items[i-1] ? desc.items[i-1].kids.push(kid) : desc.items[i-2].kids.push(kid); // Takes care of final value of 'i' after loop
+            }
+            continue;
+          }
+          const item = { title: cols[i].lastElementChild.firstElementChild.innerHTML, kids: []};
+          item.checked = cols[i].lastElementChild.lastElementChild.firstElementChild.checked;
+          desc.items.push(item);
+        }
+        payload.descriptions.push(desc);
+      }
+
+      console.log(payload);
+      doCreate(payload, 
+        `${baseURLAPI}/nurse-forms/nurse-services-checklist-forms`, 
+        'Form Submitted Successfully!',
+        '/dashboard/nurses/nursing-service-checklist?all=true'
+        );
+
+    }); 
+  }
+
+  if(nursingTasksScreeningForm){
+    
+    const sectionACheckYes = document.getElementById('section-a-check-yes');
+    const sectionACheckNo = document.getElementById('section-a-check-no');
+
+    sectionACheckYes.addEventListener('change', e =>{
+      $('#section-administration').css('display','none');
+    });
+    sectionACheckNo.addEventListener('change', e =>{
+      $('#section-administration').css('display', 'block');
+    });
+
+    nursingTasksScreeningForm.addEventListener('submit', e =>{
+      e.preventDefault();
+
+      const dateArr = (document.getElementById('date').value).split('/');
+      const dateArr2 = (document.getElementById('finalDate').value).split('/');
+
+      const payload = {
+        programParticipant : document.getElementById('programParticipant').value,
+        date: reFormatDate(dateArr),
+        physicianDelegation: sectionACheckYes.checked ? 'Yes': 'No',
+        individualSignature: {
+          individual: document.getElementById('individualSignature').value,
+          date: reFormatDate(document.getElementById('individualDate').value.split('/'))
+        },
+        programProviderSignature: {
+          providerSignature: document.getElementById('providerSignature').value,
+          date: reFormatDate(document.getElementById('providerDate').value.split('/'))
+        },
+        signature: {
+          sign: document.getElementById('finalSignature').value,
+          title: document.getElementById('finalTitle').value,
+          date: reFormatDate(dateArr2)
+        },
+        medicalAdministration: {},
+        programProviderReview: {}
+      }
+
+      //If section B exists, then get data from form
+      if(sectionACheckNo.checked){
+        const sectionAdministration = document.getElementById('section-administration');
+        const row = sectionAdministration.children[1];
+        payload
+        .medicalAdministration
+        .requiresAdministration = row.firstElementChild.children[1].firstElementChild.firstElementChild.checked ?
+        'Yes': 'No';
+
+        const row2 = sectionAdministration.children[4];
+        const routes = [];
+        for(col of row2.children){
+          const route = { route: col.firstElementChild.firstElementChild.innerHTML };
+          route.checked = col.firstElementChild.lastElementChild.firstElementChild.checked;
+          routes.push(route);
+        }
+        //Set routes to playload
+        payload.medicalAdministration.routes = routes;
+        
+        const subSections = document.getElementsByClassName('sub-section');
+        const subTitles = document.getElementsByClassName('sub-titles');
+
+        const subSectionsArr = Array.from(subSections);
+        const titles = Array.from(subTitles).map(el => el.innerHTML);
+
+        const sections = [];
+        for(const [i, subSect] of subSectionsArr.entries()){
+          const section = { title: titles[i] };
+          section.questions = [];
+          for(col of subSect.children[0].children){
+            const question = { 
+              question: col.firstElementChild.firstElementChild.innerHTML,
+              answer: col.firstElementChild.lastElementChild.firstElementChild.checked
+            }
+            section.questions.push(question);
+          }
+          sections.push(section);
+        }
+        //Set sections to payload
+        payload.medicalAdministration.sections = sections;
+      }
+
+      const reviewSection = document.querySelector('#section-review .row');
+      const reviews = [];
+      for(col of reviewSection.children){
+        const review = { 
+          reviewText: col.firstElementChild.lastElementChild.innerHTML,
+          checked: col.firstElementChild.firstElementChild.firstElementChild.checked
+        }
+        reviews.push(review);
+      }
+      
+      //Add reviews to payload
+      payload.programProviderReview.reviews = reviews;
+      console.log(payload);
+      doCreate(payload, 
+        `${baseURLAPI}/nurse-forms/nursing-tasks-screening-forms`, 
+        'Form Submitted Successfully!',
+        '/dashboard/nurses/nursing-tasks-screening?all=true'
+        );
+    });
+  }
+
+  if(exclusionHostHomeForm){
+    exclusionHostHomeForm.addEventListener('submit', e =>{
+      e.preventDefault();
+
+      const payload = {
+        individualName: document.getElementById('individualName').value,
+        hhccProviderName: document.getElementById('hhccProviderName').value,
+        nurseSignature: document.getElementById('nurseSignature').value,
+        date: reFormatDate(document.getElementById('date').value.split('/'))
+      }
+
+      console.log(payload);
+      doCreate(payload, 
+        `${baseURLAPI}/nurse-forms/exclusion-host-home-forms`, 
+        'Form Submitted Successfully!',
+        '/dashboard/nurses/exclusion-of-hhcc?all=true'
+        );
+
+    });
+  }
+
+  if(rnDelegationChecklistForm){
+    rnDelegationChecklistForm.addEventListener('submit', e =>{
+      e.preventDefault();
+
+      const payload = {
+        providerName: document.getElementById('providerName').value,
+        reviewerIndividual: document.getElementById('reviewerIndividual').value,
+        contractComponentCode: document.getElementById('contractComponentCode').value,
+        date: reFormatDate(document.getElementById('date').value.split('/')),
+        sections: []
+      }
+
+      const sections = document.getElementsByClassName('section');
+      const sectionTitles = document.getElementsByClassName('section-title');
+
+      const sects = Array.from(sections);
+      const titles = Array.from(sectionTitles).map(el => el.innerHTML);
+
+      console.log(titles);
+      console.log(sects[4].children[1].children.length);
+
+      for(const [i, sect] of sects.entries()){
+        const section = { title: titles[i] }
+        section.items = [];
+        for(row of sect.children){
+          if(row.children.length >= 3){
+            const item = {
+              item: row.children[0].innerHTML.trim().replace(/  +/g, ' '),
+              response: getResponse(row.children[1].children[0].firstElementChild.firstElementChild.checked, row.children[1].children[1].firstElementChild.firstElementChild.checked),
+              issues: row.children[2].firstElementChild.lastElementChild.value
+            }
+            section.items.push(item);
+          }
+        }
+        payload.sections.push(section);
+      }
+
+      function getResponse(first, second){
+        if(first) return 'yes';
+        else if(second) return 'no';
+        else return 'n/a';
+      }
+
+      console.log(payload);
+      doCreate(payload, 
+        `${baseURLAPI}/nurse-forms/rn-delegation-checklist-forms`, 
+        'Form Submitted Successfully!',
+        '/dashboard/nurses/rn-delegation-checklist?all=true'
+        );
+
+    });
+  }
+
+  if(comprehensiveNursingAssessmentForm){
+
+    const reviewCheck = document.getElementById('review-check');
+    const statusCheck = document.getElementById('status-check');
+    const systemsCheck = document.getElementById('systems-check');
+
+    $('#status-section').toggle();
+    $('#review-section').toggle();
+
+    reviewCheck.addEventListener('change', e =>{
+      $('#review-section').toggle();
+    });
+
+    statusCheck.addEventListener('change', e =>{
+      $('#status-section').toggle();
+    });
+
+    statusCheck.addEventListener('change', e =>{
+      $('#systems-section').toggle();
+    });
+
+    const addRowButton = document.getElementById('add-row-btn');
+      let counter1 = 0;
+
+      addRowButton.addEventListener('click', () =>{
+        addRow(counter1, 'medication');
+        counter1++;
+      });
+
+      function addRow(id, type){
+        let html; 
+        switch(type){
+          case 'medication':
+            html = `
+            <div class="card" id="card-${id}" style="background:#f8f7f7;">
+              <div class="card-header">
+                <button class="btn btn-link btn-danger btn-just-icon" id="close-${id}"><i class="material-icons">close</i></button>
+              </div>
+              <div class="card-body medication-area">
+                <div class="row">
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label class="bmd-label-floating">Medication *</label>
+                      <input type="text" class="form-control" required>
+                    </div>
+                  </div>
+                  <div class="col-md-1">
+                    <div class="form-group">
+                      <label class="bmd-label-floating">Dose *</label>
+                      <input type="text" class="form-control" required>
+                    </div>
+                  </div>
+                  <div class="col-md-1">
+                    <div class="form-group">
+                      <label class="bmd-label-floating">Freq *</label>
+                      <input type="text" class="form-control" required>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label class="bmd-label-floating">Route *</label>
+                      <input type="text" class="form-control" required>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label class="bmd-label-floating">Purpose / Rationale *</label>
+                      <input type="text" class="form-control" required>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label class="bmd-label-floating">Side Effects / Labs*</label>
+                      <input type="text" class="form-control" required>
+                    </div>
+                  </div>
+                </div><br>
+              </div>
+            </div>
+            `;
+            break;
+        }
+        $('.signature-row').before(html);
+
+        $(`#close-${id}`).click(() =>{
+          $(`#card-${id}`).remove();
+        });
+      }
+
+    comprehensiveNursingAssessmentForm.addEventListener('submit', e =>{
+      e.preventDefault();
+
+      const payload = {
+        providerName: document.getElementById('individualName').value,
+        dob: reFormatDate(document.getElementById('date').value.split('/')),
+        todaysDate: reFormatDate(document.getElementById('todaysDate').value.split('/'))
+      }
+
+      //Handle review section if not hidden
+      if($('#review-section').css('display') === 'block'){
+        payload.review = {
+          title: document.querySelector('#review-section h3').innerHTML,
+          rn: document.getElementById('review-rn').value,
+          individual: document.getElementById('review-individual').value,
+          date: reFormatDate(document.getElementById('review-date').value.split('/')),
+          healthCareTeam: {
+            title: document.querySelector('#review-section #healthcare-title').innerHTML,
+            content: []
+          },
+          supports: { content: [] },
+          healthHistory: {
+            title: document.querySelector('#review-section #history-title').innerHTML,
+            content: []
+          },
+          currentMedications:[]
+        }
+        let container = document.getElementsByClassName('healthcare-row');
+        let container2 = document.getElementsByClassName('support-row');
+        let container3 = document.getElementsByClassName('history-row');
+
+        container = Array.from(container);
+        container2 = Array.from(container2);
+        container3 = Array.from(container3);
+
+        for(el of container){
+          let content = { 
+            title: el.firstElementChild.innerHTML,
+            practitioner: el.children[1].firstElementChild.lastElementChild.value,
+            lastSeen: reFormatDate(el.children[2].firstElementChild.lastElementChild.value.split('/')),
+            comment: el.children[3].firstElementChild.lastElementChild.value
+          };
+          payload.review.healthCareTeam.content.push(content);
+        }
+        for(el of container2){
+          let content = { 
+            title: el.firstElementChild.innerHTML,
+            relationship: el.children[1].firstElementChild.lastElementChild.value,
+            telephoneNo: el.children[2].firstElementChild.lastElementChild.value,
+          };
+          payload.review.supports.content.push(content);
+        }
+        for(el of container3){
+          let content = { 
+            title: el.firstElementChild.innerHTML,
+            diagnosis: el.children[1].firstElementChild.lastElementChild.value
+          };
+          payload.review.healthHistory.content.push(content);
+        }
+
+        //Medications area
+        let areas = document.getElementsByClassName('medication-area');
+        areas = Array.from(areas);
+        if(areas){
+          for(area of areas){
+            let row = area.firstElementChild;
+            let medication = {
+              medication: row.children[0].firstElementChild.lastElementChild.value,
+              dose: row.children[1].firstElementChild.lastElementChild.value,
+              freq: row.children[2].firstElementChild.lastElementChild.value,
+              route: row.children[3].firstElementChild.lastElementChild.value,
+              purpose: row.children[4].firstElementChild.lastElementChild.value,
+              sideEffects: row.children[5].firstElementChild.lastElementChild.value
+            }
+            payload.review.currentMedications.push(medication);
+          }
+        }
+      }
+
+      //
+      if($('#status-section').css('display') === 'block'){
+        const currentStatus = {
+          title: document.querySelector('#status-section h3').innerHTML,
+          currentHistory: [],
+          vitalSigns: {
+            bloodPressure: document.getElementById('bloodPressure').value,
+            pulse: {
+              rate: document.getElementById('pulseRate').value,
+              rhythm: document.getElementById('pulseRhythm').value
+            },
+            respirations: {
+              rate: document.getElementById('respirationsRate').value,
+              rhythm: document.getElementById('respirationsRhythm').value
+            },
+            temperature: document.getElementById('vitalTemperature').value,
+            painLevel: document.getElementById('painLevel').value,
+            bloodSugar: document.getElementById('bloodSugar').value,
+            weight: document.getElementById('vitalWeight').value,
+            height: document.getElementById('vitalHeight').value,
+            comments: document.getElementById('vitalComments').value,
+          },
+          labs: document.getElementById('vitalLabs').value,
+          rn: document.getElementById('vital-rn').value,
+          individual: document.getElementById('vital-individual').value,
+          date: reFormatDate(document.getElementById('vital-date').value.split('/'))
+        };
+
+        //Current status area 
+        const historyRow = document.getElementById('medical-history-row');
+        for(col of historyRow.children){
+          const history = { 
+            history: col.firstElementChild.firstElementChild.innerHTML,
+            response: col.firstElementChild.lastElementChild.firstElementChild.value
+          }
+          currentStatus.currentHistory.push(history);
+        }
+        payload.currentStatus = currentStatus;
+
+        //Fall Risk Assessment Area
+        // const assessment = {
+        //   response: document.getElementById('risk-assessment-check').checked,
+        //   types: {
+        //     neurological: document.getElementById('assessment-neurological').checked,
+        //     neurological: document.getElementById('assessment-musculoskeletal').checked,
+        //     neurological: document.getElementById('assessment-unknown').checked
+        //   },
+        //   comments: document.getElementById('vitalComments').value
+        // }
+        // payload.currentStatus.assessment = assessment;
+      }
+
+
+
+      console.log(payload);
+      // doCreate(payload, 
+      //   `${baseURLAPI}/nurse-forms/rn-delegation-checklist-forms`, 
+      //   'Form Submitted Successfully!',
+      //   '/dashboard/nurses/rn-delegation-checklist?all=true'
+      //   );
+
+    });
+  }
 
 })(createResource, updateResource);

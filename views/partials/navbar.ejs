@@ -45,16 +45,25 @@
             <a class="dropdown-item" href="/dashboard/consumers/legal-assessment-form">Individual Plan of Care (IPC)</a>
           </div>
         </li>
-        <% if(user.role === 'director'){ %>
-          <li class="nav-item dropdown">
-            <a class="nav-link" href="#" id="nurseservices" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Nurse Services <i class="material-icons">keyboard_arrow_down</i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="nurseservices">
-              <a class="dropdown-item" href="/dashboard/nurses/nursing-service-delivery?all=true">Nursing Services Delivery Log</a>
-            </div>
-          </li>
-        <% } %>
+        
+        <li class="nav-item dropdown">
+          <a class="nav-link" href="#" id="nurseservices" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Nurse Services <i class="material-icons">keyboard_arrow_down</i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="nurseservices">
+          <% if(user.role === 'director'){ %>
+            <a class="dropdown-item" href="/dashboard/nurses/nursing-service-delivery?all=true">Nursing Services Delivery Log</a>
+            <a class="dropdown-item" href="/dashboard/nurses/nursing-service-checklist?all=true">Nursing Services Checklist</a>
+            <a class="dropdown-item" href="/dashboard/nurses/rn-delegation-checklist?all=true">RN Delegation Checklist</a>
+            <a class="dropdown-item" href="/dashboard/nurses/nursing-tasks-screening?all=true">Nursing Tasks Screening Tool</a>
+            <a class="dropdown-item" href="/dashboard/nurses/comprehensive-nursing-assessment?all=true">Comprehensive Nursing Assessment</a>
+          <% } %>
+          <% if(user.role === 'nurse'){ %>
+            <a class="dropdown-item" href="/dashboard/nurses/exclusion-of-hhcc?all=true">Exclusion of (HH/CC) Provider from the (BON) Definition of Unlicensed Person</a>
+          <% } %>
+          </div>
+        </li>
+        
         <li class="nav-item dropdown">
           <a class="nav-link" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="material-icons">notifications</i>
