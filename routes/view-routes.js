@@ -44,7 +44,7 @@ router.get('/dashboard/consumers/day-habilitation-service', auth.authenticate, v
 router.get('/dashboard/nurses/nursing-service-delivery', auth.authenticate, viewController.nursingServicesDeliveryPage);
 router.get('/dashboard/nurses/nursing-service-checklist', auth.authenticate, viewController.nursingServicesChecklistPage);
 router.get('/dashboard/nurses/nursing-tasks-screening', auth.authenticate, viewController.nursingTasksScreeningPage);
-router.get('/dashboard/nurses/exclusion-of-hhcc', auth.authenticate, auth.authorize('nurse'), viewController.nursingExclusionOfHostHomePage);
+router.get('/dashboard/nurses/exclusion-of-hhcc', auth.authenticate, auth.authorize('nurse', 'director'), viewController.nursingExclusionOfHostHomePage);
 router.get('/dashboard/nurses/rn-delegation-checklist', auth.authenticate, viewController.rnDelegationChecklistPage);
 router.get('/dashboard/nurses/comprehensive-nursing-assessment', auth.authenticate, viewController.comprehensiveNursingAssessmentPage);
 
