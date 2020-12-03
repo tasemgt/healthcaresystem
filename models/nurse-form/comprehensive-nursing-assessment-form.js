@@ -111,10 +111,16 @@ const comprehensiveNursingAssessmentSchema = new mongoose.Schema({
       normalRange: String, comments: String
     },
     respiratory: {
-      breathing: String,
+      breathing: [
+        {type: String, checked: Boolean}
+      ],
       others: [{
         name: String, response: String
       }],
+      oxygen:{
+        response: String,
+        type: String
+      },
       comments: String
     },
     gastrointestinal: {
@@ -139,31 +145,133 @@ const comprehensiveNursingAssessmentSchema = new mongoose.Schema({
       comments: String,
       others: [{
         name: String, response: String
-      }]
+      }],
+      menopausal: {
+        response: String,
+        date: Date
+      },
+      menstrualDate: Date
     },
     integumentary: {
+      comments: String,
       skinAssessment: String,
       skin: [{
         name: String, checked: Boolean
       }],
-      others: String
+      others: [{ name: String, response: String}]
     },
-    endocrine: {
-      type: [{
+    endocrine: { 
+      management: [{ name: String, checked: Boolean}],
+      bSRange: String,
+      types: [{
         name: String, 
-        response: String, 
-        type: String, 
-        management: [{ name: String, checked: Boolean}], 
-        other: { name: String, response: String}
+        response: String
       }], 
+      diabetesType: String,
       comments: String
     },
     rn: String,
     individual: String,
     date: Date
   },
-  statusInfo: {
-    
+  healthStatus: {
+    immunizationDates: {
+      dates: [{
+        title: String,
+        date: Date
+      }],
+      comments: String
+    },
+    nutritional: {
+      methods: [{
+        method: String,
+        checked: Boolean
+      }],
+      gain:{
+        checked: Boolean,
+        lbs: String
+      },
+      lossOver: {
+        checked: Boolean,
+        text: String
+      },
+      liquid: String,
+      foodTexture: String,
+      therapeuticDiet: String,
+      reason: String,
+      weightRange: String,
+      numberOfMeals: String,
+      assessment: [{
+        item: String,
+        response: String
+      }],
+      comments: String
+    },
+    sleepPatterns: String,
+    activityLevel: String,
+    substanceUse: String,
+    homeLife: String,
+    dayActivity: String,
+    socialLife: String,
+    spiritualLife: String,
+    copingSkills: String,
+    mentalStatus: {
+      appearance: [{
+        title: String,
+        items: [{ item: String, checked: Boolean }],
+        other: String
+      }],
+      mood:{
+        items: [{
+          item: String,
+          checked: Boolean
+        }],
+        other: String
+      },
+      cognition: [{
+        title: String,
+        items: [{ item: String, response: String }]
+      }],
+      thoughts: {
+        checks: [{
+          title: { name: String, response: String},
+          items: [{ item: String, response: String }]
+        }],
+        comments: String
+      },
+      behavior: {
+        headers: [{ question: String, response: String }],
+        behaviors: [{
+          item: String,
+          frequency: String,
+          severity: String,
+          lastExhibited: String
+        }],
+        comments: String
+      },
+      communication: {
+        language: String,
+        normalMethods:{
+          methods: [{
+            method: String,
+            response: String
+          }],
+          communicationDeviceType: String,
+          otherBehaviors: String
+        },
+        painMethods:{
+          methods: [{
+            method: String,
+            response: String
+          }],
+          communicationDeviceType: String,
+          otherBehaviors: String,
+          painScaleUse: String,
+          painScaleType: String,
+          comments: String
+        } 
+      }
+    }
   }
 });
 

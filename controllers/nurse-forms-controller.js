@@ -3,6 +3,7 @@ const NursingServiceChecklistForm = require('../models/nurse-form/nursing-servic
 const NursingTasksScreeningForm = require('../models/nurse-form/nursing-tasks-screening-form');
 const ExclusionHostForm = require('../models/nurse-form/exclusion-form');
 const RnDelegationChecklistForm = require('../models/nurse-form/rn-delegation-checklist-form');
+const ComprehensiveNursingAssessmentForm = require('../models/nurse-form/comprehensive-nursing-assessment-form');
 
 const factory = require('./handler-factory');
 const AppError  = require('../utils/app-error');
@@ -27,3 +28,4 @@ exports.createNursingServiceChecklistForm = factory.createOne(NursingServiceChec
 exports.createNursingTasksScreeningForm = factory.createOne(NursingTasksScreeningForm);
 exports.createExclusionHostForm = factory.createOne(ExclusionHostForm);
 exports.createRNDelegationChecklistForm = factory.createOne(RnDelegationChecklistForm);
+exports.createComprehensiveNursingAssessmentForm = factory.createOne(ComprehensiveNursingAssessmentForm);

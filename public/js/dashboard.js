@@ -19,6 +19,9 @@ $(document).ready( function () {
 });
 
 function reFormatDate(dateArr){
+  if(dateArr.length <=1 ){
+    return '';
+  }
   return new Date(dateArr[2]+'-'+dateArr[1]+'-'+dateArr[0]);
 }
 
@@ -1531,6 +1534,7 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
     });
   }
 
+  //Comprehensive Nursing Assessment Form
   if(comprehensiveNursingAssessmentForm){
 
     const reviewCheck = document.getElementById('review-check');
@@ -1538,7 +1542,7 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
     const systemsCheck = document.getElementById('systems-check');
 
     $('#status-section').toggle();
-    $('#review-section').toggle();
+    $('#systems-section').toggle();
 
     reviewCheck.addEventListener('change', e =>{
       $('#review-section').toggle();
@@ -1548,7 +1552,7 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
       $('#status-section').toggle();
     });
 
-    statusCheck.addEventListener('change', e =>{
+    systemsCheck.addEventListener('change', e =>{
       $('#systems-section').toggle();
     });
 
@@ -1574,37 +1578,37 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
                   <div class="col-md-2">
                     <div class="form-group">
                       <label class="bmd-label-floating">Medication *</label>
-                      <input type="text" class="form-control" required>
+                      <input type="text" class="form-control">
                     </div>
                   </div>
                   <div class="col-md-1">
                     <div class="form-group">
                       <label class="bmd-label-floating">Dose *</label>
-                      <input type="text" class="form-control" required>
+                      <input type="text" class="form-control">
                     </div>
                   </div>
                   <div class="col-md-1">
                     <div class="form-group">
                       <label class="bmd-label-floating">Freq *</label>
-                      <input type="text" class="form-control" required>
+                      <input type="text" class="form-control">
                     </div>
                   </div>
                   <div class="col-md-2">
                     <div class="form-group">
                       <label class="bmd-label-floating">Route *</label>
-                      <input type="text" class="form-control" required>
+                      <input type="text" class="form-control">
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
                       <label class="bmd-label-floating">Purpose / Rationale *</label>
-                      <input type="text" class="form-control" required>
+                      <input type="text" class="form-control">
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
                       <label class="bmd-label-floating">Side Effects / Labs*</label>
-                      <input type="text" class="form-control" required>
+                      <input type="text" class="form-control">
                     </div>
                   </div>
                 </div><br>
@@ -1624,7 +1628,7 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
       e.preventDefault();
 
       const payload = {
-        providerName: document.getElementById('individualName').value,
+        individualName: document.getElementById('individualName').value,
         dob: reFormatDate(document.getElementById('date').value.split('/')),
         todaysDate: reFormatDate(document.getElementById('todaysDate').value.split('/'))
       }
@@ -1739,26 +1743,287 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
         payload.currentStatus = currentStatus;
 
         //Fall Risk Assessment Area
-        // const assessment = {
-        //   response: document.getElementById('risk-assessment-check').checked,
-        //   types: {
-        //     neurological: document.getElementById('assessment-neurological').checked,
-        //     neurological: document.getElementById('assessment-musculoskeletal').checked,
-        //     neurological: document.getElementById('assessment-unknown').checked
-        //   },
-        //   comments: document.getElementById('vitalComments').value
-        // }
-        // payload.currentStatus.assessment = assessment;
+        const assessment = {
+          response: document.getElementById('risk-assessment-check').checked,
+          types: {
+            neurological: document.getElementById('assessment-neurological').checked,
+            musculoskeletal: document.getElementById('assessment-musculoskeletal').checked,
+            unknown: document.getElementById('assessment-unknown').checked
+          },
+          comments: document.getElementById('vitalComments').value
+        }
+        payload.currentStatus.assessment = assessment;
+      }
+
+
+      if($('#systems-section').css('display') === 'block'){
+        const systemsReview = {
+          title: document.querySelector('#systems-section h3').innerHTML,
+          rn: document.getElementById('systems-rn').value,
+          individual: document.getElementById('systems-individual').value,
+          date: reFormatDate(document.getElementById('systems-date').value.split('/'))
+        }
+
+        //Neurological Area
+        const neurological = {
+          aims: {
+            title: document.querySelector('#neuro-aims-row div p').innerHTML,
+            response: document.querySelector('#neuro-aims-row div').children[1].firstElementChild.firstElementChild.checked ? 'Attached':'Deferred'
+          },
+          illness: [],
+          seizures: {}
+        }
+
+        const row = document.getElementById('neuro-illness-row');
+        for(let i=0; i<row.children.length -2; i++){
+          const illness = {
+            title: row.children[i].firstElementChild.innerHTML,
+            response: row.children[i].children[1].firstElementChild.firstElementChild.checked ? 'yes': 'no'
+          }
+          neurological.illness.push(illness);
+        }
+
+        neurological.seizures.response = document.getElementById('seizures-check').checked ? 'yes': 'no';
+        neurological.seizures.frequency = document.getElementById('seizures-freq').value;
+        neurological.seizures.duaration = document.getElementById('seizures-duration').value;
+
+        neurological.comments = document.getElementById('seizuresComments').value;
+
+        systemsReview.neurological = neurological;
+        // End neurological
+
+        //EENT Area
+        const eens = [];
+        let rows = document.getElementsByClassName('eent-row');
+        let titles = document.getElementsByClassName('eent-section-title');
+        rows = Array.from(rows); titles = Array.from(titles);
+
+        titles = titles.map(title => title.innerHTML);
+        const throat = { checks: []};
+
+        for(let i=0; i< rows.length; i++){
+          if(i === rows.length - 1){
+            //Handle throat
+            for(col of rows[rows.length -1].children){
+              const throatCheck = {
+                name: col.firstElementChild.firstElementChild.innerHTML,
+                checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+              }
+              throat.checks.push(throatCheck);
+            }
+          }
+          else{
+            //Other een
+            const een = { title: titles[i], checks: [] };
+            for(col of rows[i].children){
+              const check = { 
+                name: col.firstElementChild.firstElementChild.innerHTML,
+                checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+              }
+              een.checks.push(check);
+            }
+            eens.push(een);
+          }
+        }
+
+        throat.swallowStudy = document.getElementById('swallow-study').checked ? 'yes': 'no';
+        throat.results = document.getElementById('throatResults').value;
+        throat.comments = document.getElementById('throatComments').value;
+        throat.date = reFormatDate(document.getElementById('swallowDate').value.split('/'));
+
+        systemsReview.throat = throat;
+        systemsReview.een = eens;
+
+        //Cardiovascular Area
+        const cardiovascular = {};
+        const cardioRow = document.getElementById('cardio-row');
+        const questions = [];
+        for(let i=0; i< cardioRow.children.length; i++){
+          const question = { 
+            name: cardioRow.children[i].firstElementChild.innerHTML,
+            response: cardioRow.children[i].children[1].firstElementChild.firstElementChild.checked ? 'yes': 'no'
+          }
+          questions.push(question);
+        }
+        cardiovascular.questions = questions;
+        cardiovascular.normalRange = document.getElementById('cardioRange').value;
+        cardiovascular.comments = document.getElementById('cardioComments').value;
+
+        systemsReview.cardiovascular = cardiovascular;
+
+        //Respiratory Area
+        const respiratory = {};
+        const breathingRow = document.getElementById('breathing-row');
+        const breathingIllnessRow = document.getElementById('breathing-illness-row');
+        const breathing = []; const breathingOthers = [];
+        for(col of breathingRow.children){
+          const item = { 
+            type: col.firstElementChild.firstElementChild.innerHTML,
+            checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+          }
+          breathing.push(item);
+        }
+        respiratory.breathing = breathing;
+
+        for(let i=0; i< breathingIllnessRow.children.length -2; i++){
+          const illness = { 
+            name: breathingIllnessRow.children[i].firstElementChild.innerHTML,
+            response: breathingIllnessRow.children[i].children[1].firstElementChild.firstElementChild.checked ? 'yes': 'no'
+          }
+          breathingOthers.push(illness);
+        }
+        respiratory.others = breathingOthers;
+        const oxygen = {
+          response: document.getElementById('respiratory-oxygen').checked ? 'yes': 'no',
+          type: document.getElementById('oxygen-type').value
+        }
+        respiratory.oxygen = oxygen;
+        respiratory.comments = document.getElementById('respiratoryComments').value;
+
+        systemsReview.respiratory = respiratory;
+
+        //Gastrointestinal Area
+        const gastrointestinal = {};
+        const gastroTypeRow = document.getElementById('gastro-type-row');
+        const gastroBowelRow = document.getElementById('gastro-bowel-row');
+        const gastroOthersRow = document.getElementById('gastro-others-row');
+
+        const gastroTypes = []; const gastroBowel = []; const gastroOthers = [];
+        for(col of gastroTypeRow.children){
+          const type = { 
+            name: col.firstElementChild.firstElementChild.innerHTML,
+            checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+          }
+          gastroTypes.push(type);
+        }
+        for(col of gastroBowelRow.children){
+          const bowel = { 
+            name: col.firstElementChild.firstElementChild.innerHTML,
+            desc: col.firstElementChild.lastElementChild.value
+          }
+          gastroBowel.push(bowel);
+        }
+        for(col of gastroOthersRow.children){
+          const other = { 
+            name: col.firstElementChild.innerHTML,
+            response: col.children[1].firstElementChild.firstElementChild.checked ? 'yes':'no'
+          }
+          gastroOthers.push(other);
+        }
+
+        gastrointestinal.type = gastroTypes;
+        gastrointestinal.bowel = gastroBowel;
+        gastrointestinal.others = gastroOthers;
+        gastrointestinal.comments = document.getElementById('gastroComments').value;
+
+        systemsReview.gastrointestinal = gastrointestinal;
+
+        //Musculoskeletal Area
+        const musculo = {};
+        const musculoRow = document.getElementById('musculo-row');
+        const musculoOthers = [];
+        for(let i=0; i < musculoRow.children.length - 1; i++){
+          const item = {
+            name: musculoRow.children[i].firstElementChild.innerHTML,
+            response: musculoRow.children[i].children[1].firstElementChild.firstElementChild.checked ? 'yes':'no'
+          }
+          musculoOthers.push(item);
+        }
+        musculo.others = musculoOthers;
+        musculo.comments = document.getElementById('muscloskeletalComments').value;
+
+        systemsReview.musculoskeletal = musculo;
+
+        //Genitourinary Area
+        const genitourinary = {};
+        const genitoRow = document.getElementById('genito-row');
+        const genitoOthers = [];
+        for(let i=0; i < genitoRow.children.length - 3; i++){
+          const item = {
+            name: genitoRow.children[i].firstElementChild.innerHTML,
+            response: genitoRow.children[i].children[1].firstElementChild.firstElementChild.checked ? 'yes':'no'
+          }
+          genitoOthers.push(item);
+        }
+        const menopausal = {
+          response: document.getElementById('menopausal-check').checked ? 'yes':'no',
+          date: reFormatDate(document.getElementById('menopausalDate').value.split('/'))
+        }
+
+        genitourinary.others = genitoOthers;
+        genitourinary.menopausal = menopausal;
+        genitourinary.menstrualDate = reFormatDate(document.getElementById('menstrualDate').value.split('/'));
+        genitourinary.comments = document.getElementById('genitoComments').value;
+
+        systemsReview.genitourinary = genitourinary;
+
+        //Integumentary Area
+        const integumentary = {};
+        const integumentarySkinRow = document.getElementById('integumentary-skin-row');
+        const integumentarySkinIllness = document.getElementById('integumentary-skin-illness');
+
+        const skins = []; const others = [];
+        for(col of integumentarySkinRow.children){
+          const skin = {
+          name: col.firstElementChild.firstElementChild.innerHTML,
+          checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+          }
+          skins.push(skin);
+        }
+        for(col of integumentarySkinIllness.children){
+          const other = {
+            name: col.firstElementChild.innerHTML,
+            response: col.children[1].firstElementChild.firstElementChild.checked ? 'yes':'no'
+          }
+          others.push(other);
+        }
+
+        integumentary.skin = skins;
+        integumentary.others = others;
+        integumentary.skinAssessment = document.getElementById('skin-assessment-check').checked ? 'Attached':'Deferred';
+        integumentary.comments = document.getElementById('integumentaryComments').value;
+
+        systemsReview.integumentary = integumentary;
+
+        //Endocrine Area
+        const endocrine = [];
+        const endocrineTypes = document.getElementById('endocrine-types');
+        const diabMgtRow = document.getElementById('diabetes-management-row');
+        const endoTypes = []; const endoManagement = [];
+        for(col of endocrineTypes.children){
+          const type = {
+            name: col.firstElementChild.innerHTML,
+            response: col.children[1].firstElementChild.firstElementChild.checked ? 'yes':'no'
+          }
+          endoTypes.push(type);
+        }
+        for(col of diabMgtRow.children){
+          const item = {
+            name: col.firstElementChild.firstElementChild.innerHTML,
+            checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+          }
+          endoManagement.push(item);
+        }
+
+        endocrine.management = endoManagement;
+        endocrine.types = endoTypes;
+        endocrine.bSRange = document.getElementById('bloodSugarRange').value;
+        endocrine.diabetesType = document.getElementById('diabetesType').value;
+        endocrine.comments = document.getElementById('endocrineComments').value;
+
+        systemsReview.endocrine = endocrine;
+
+        payload.systemsReview = systemsReview;
       }
 
 
 
       console.log(payload);
-      // doCreate(payload, 
-      //   `${baseURLAPI}/nurse-forms/rn-delegation-checklist-forms`, 
-      //   'Form Submitted Successfully!',
-      //   '/dashboard/nurses/rn-delegation-checklist?all=true'
-      //   );
+      doCreate(payload, 
+        `${baseURLAPI}/nurse-forms/comprehensive-nursing-assessment-forms`, 
+        'Form Submitted Successfully!',
+        '/dashboard/nurses/comprehensive-nursing-assessment?all=true'
+        );
 
     });
   }

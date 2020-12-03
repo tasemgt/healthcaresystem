@@ -31,15 +31,28 @@
                     <th class="text-bold">
                       Today's date
                     </th>
-                    <th class="text-bold">
-                      Date
-                    </th>
                     <th class="text-bold text-right">
                       Actions
                     </th>
                   </thead>
                   <tbody>
-                    
+                    <% for(form of forms){ %>
+                    <tr>
+                      <td>
+                        <%= form.individualName %>
+                      </td>
+                      <td class="formatted-date">
+                        <%= form.dob%>
+                      </td>
+                      <td class="formatted-date">
+                        <%= form.todaysDate%>
+                      </td>
+                      <td class="text-right">
+                        <a href="/dashboard/applications" data-id="<%= JSON.stringify(form) %>" data-toggle="modal" data-target="#myModal" class="btn btn-link btn-info btn-just-icon like show-details"><i class="material-icons">description</i></a>
+                        <a href="#" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a>
+                      </td>
+                    </tr>
+                    <% } %>
                   </tbody>
                 </table>
               </div>

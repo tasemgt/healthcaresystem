@@ -397,48 +397,552 @@
                     </div>
                   </div>
                 </div>
-                 <br>
-                  <div id="systems-section">
-                    <h3 style="text-decoration:underline; display:inline-block">III. Review of Systems</h3>
-                    <div id="systems-subsection">
-                      <div class="row">
-                        <div class="col-md-8 checkbox-radios inline-options">
-                          <p>Abnormal Involuntary Movement Scale (AIMS) Assessment:</p>
+                <br>
+                <!-- Review of Systems section begin -->
+                <div id="systems-section">
+                  <h3 style="text-decoration:underline; display:inline-block">III. Review of Systems</h3>
+                  <div id="systems-subsection">
+                    <br>
+                    <h4 id="neuro-title">Neurological</h4>
+                    <div class="row" id="neuro-aims-row">
+                      <div class="col-md-8 checkbox-radios inline-options">
+                        <p>Abnormal Involuntary Movement Scale (AIMS) Assessment:</p>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="radio-1" value="attached" checked> Attached
+                            <span class="circle"> <span class="check"></span></span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="radio-1" value="deferred"> Deferred
+                            <span class="circle"><span class="check"></span></span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" id="neuro-illness-row">
+                      <% for(const [i, illness] of data.systems.neurological.entries()) { %>
+                        <div class="col-md-4 checkbox-radios inline-options">
+                          <p><%= illness %></p>
                           <div class="form-check">
                             <label class="form-check-label">
-                              <input class="form-check-input" type="radio" name="radio-1" value="attached" checked> Attached
+                              <input class="form-check-input" type="radio" name="illness-<%=i%>" value="yes" checked> Yes
                               <span class="circle"> <span class="check"></span></span>
                             </label>
                           </div>
                           <div class="form-check">
                             <label class="form-check-label">
-                              <input class="form-check-input" type="radio" name="radio-1" value="deferred"> Deferred
+                              <input class="form-check-input" type="radio" name="illness-<%=i%>" value="no"> No
                               <span class="circle"><span class="check"></span></span>
                             </label>
                           </div>
                         </div>
-                      </div>
-                      <div class="row">
-                        <% for(const [i, illness] of data.systems.neurological.entries()) { %>
-                          <div class="col-md-4 checkbox-radios inline-options">
-                            <p><%= illness %></p>
-                            <div class="form-check">
-                              <label class="form-check-label">
-                                <input class="form-check-input" type="radio" name="illness-<%= i %>" value="yes" checked> Yes
-                                <span class="circle"> <span class="check"></span></span>
-                              </label>
+                      <% } %>
+                      <div class="col-md-6 checkbox-radios inline-options">
+                        <p>Seizures</p>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="illness-seizures" value="yes" id="seizures-check" checked> Yes
+                            <span class="circle"> <span class="check"></span></span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="illness-seizures" value="no"> No
+                            <span class="circle"><span class="check"></span></span>
+                          </label>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4 col-sm-12">
+                            <div class="form-group controls">
+                              <label class="bmd-label-floating">Frequency </label>
+                              <input type="text" class="form-control"  id="seizures-freq">
                             </div>
-                            <div class="form-check">
-                              <label class="form-check-label">
-                                <input class="form-check-input" type="radio" name="illness-<%= i %>" value="no"> No
-                                <span class="circle"><span class="check"></span></span>
+                          </div>
+                          <div class="col-md-4 col-sm-12">
+                            <div class="form-group controls">
+                              <label class="bmd-label-floating">Duration </label>
+                              <input type="text" class="form-control"  id="seizures-duration">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label>Comments</label>
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="seizuresComments"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <h4 id="eent-title">Eye, Ear, Nose and Throat</h4>
+                    <% for(section of data.systems.een) { %>
+                      <h5 class="eent-section-title" style="margin-bottom:0px"><%= section.title %></h5>
+                      <div class="row eent-row">
+                        <% for( check of section.checks) { %>
+                          <div class="col-md-3">
+                            <div class="form-check form-check-inline">
+                              <label class="col-form-label label-checkbox"><%= check %></label>
+                              <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                                <input class="form-check-input" type="checkbox">
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
                               </label>
                             </div>
                           </div>
                         <% } %>
                       </div>
+                    <% } %>
+                    <div class="row">
+                      <div class="col-md-12 checkbox-radios inline-options">
+                        <p>Swallow study:</p>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="swallow-study" id="swallow-study" value="yes" checked> Yes
+                            <span class="circle"> <span class="check"></span></span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="swallow-study" value="no"> No
+                            <span class="circle"><span class="check"></span></span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="label-control">Date </label>
+                          <input type="text" class="form-control datepicker" id="swallowDate" >
+                        </div>
+                      </div>
+                      <div class="col-md-5 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Results </label>
+                          <input type="text" class="form-control"  id="throatResults">
+                        </div>
+                      </div>
+                      <div class="col-md-4 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Comments </label>
+                          <input type="text" class="form-control"  id="throatComments">
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <h4 id="cardio-title">Cardiovascular</h4>
+                    <div class="row" id="cardio-row">
+                    <% for(const [i, section] of data.systems.cardiovascular.entries()) { %>
+                      <div class="col-md-3">
+                        <p><%= section %></p>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="cardio-<%=i%>" value="yes" checked> Yes
+                            <span class="circle"> <span class="check"></span></span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="cardio-<%=i%>" value="no"> No
+                            <span class="circle"><span class="check"></span></span>
+                          </label>
+                        </div>
+                      </div>
+                    <% } %>
+                      <div class="col-md-6">
+                        <p>High/Low blood pressure</p>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="illness-bp" id="illness-bp" value="yes" checked> Yes
+                            <span class="circle"> <span class="check"></span></span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="illness-bp" value="no"> No
+                            <span class="circle"><span class="check"></span></span>
+                          </label>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-3 col-sm-12">
+                            <div class="form-group controls">
+                              <label class="bmd-label-floating">Normal range: </label>
+                              <input type="text" class="form-control"  id="cardioRange">
+                            </div>
+                          </div>
+                          <div class="col-md-9 col-sm-12">
+                            <div class="form-group controls">
+                              <label class="bmd-label-floating">Comments </label>
+                              <input type="text" class="form-control"  id="cardioComments">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <h4 id="respiratory-title">Respiratory</h4>
+                    <h5>Breathing:</h5>
+                    <div class="row" id="breathing-row">
+                      <% for( check of data.systems.respiratory.breathing) { %>
+                        <div class="col-md-2">
+                          <div class="form-check form-check-inline">
+                            <label class="col-form-label label-checkbox"><%= check %></label>
+                            <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                              <input class="form-check-input" type="checkbox">
+                              <span class="form-check-sign">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      <% } %>
+                    </div>
+                    <hr>
+                    <div class="row" id="breathing-illness-row">
+                      <% for(const [i, section] of data.systems.respiratory.illness.entries()) { %>
+                      <div class="col-md-3">
+                        <p><%= section %></p>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="respiratory-<%=i%>" value="yes" checked> Yes
+                            <span class="circle"> <span class="check"></span></span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="respiratory-<%=i%>" value="no"> No
+                            <span class="circle"><span class="check"></span></span>
+                          </label>
+                        </div>
+                      </div>
+                    <% } %>
+                      <div class="col-md-3">
+                        <div class="row">
+                          <div class="col-md-3">
+                            <p>Oxygen @</p>
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="radio" name="respiratory-oxygen" id="respiratory-oxygen" value="yes" checked> Yes
+                                <span class="circle"> <span class="check"></span></span>
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input class="form-check-input" type="radio" name="respiratory-oxygen" value="no"> No
+                                <span class="circle"><span class="check"></span></span>
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group controls">
+                              <input type="text" id="oxygen-type" class="form-control">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label>Comments</label>
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="respiratoryComments"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <h4 id="gastro-title">Gastrointestinal</h4>
+                    <div class="row" id="gastro-type-row">
+                      <% for( check of data.systems.gastro.type) { %>
+                        <div class="col-md-2">
+                          <div class="form-check form-check-inline">
+                            <label class="col-form-label label-checkbox"><%= check %></label>
+                            <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                              <input class="form-check-input" type="checkbox">
+                              <span class="form-check-sign">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      <% } %>
+                    </div>
+                    <div class="row" id="gastro-bowel-row">
+                      <% for( field of data.systems.gastro.bowel) { %>
+                        <div class="col-md-4">
+                          <div class="form-group controls">
+                            <label class="bmd-label-floating"><%= field %> </label>
+                            <input type="text" class="form-control">
+                          </div>
+                        </div>
+                      <% } %>
+                    </div>
+                    <div class="row" id="gastro-others-row">
+                      <% for( const [i,other] of data.systems.gastro.others.entries()) { %>
+                        <div class="col-md-3">
+                          <p><%= other %></p>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="radio" name="gastro-<%=i%>" value="yes" checked> Yes
+                              <span class="circle"> <span class="check"></span></span>
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="radio" name="gastro-<%=i%>" value="no"> No
+                              <span class="circle"><span class="check"></span></span>
+                            </label>
+                          </div>
+                        </div>
+                      <% } %>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Comments</label>
+                        <div class="form-group">
+                          <textarea class="form-control" rows="5" id="gastroComments"></textarea>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                  <br>
+                  <h4 id="muscle-title">Musculoskeletal</h4>
+                  <div class="row" id="musculo-row">
+                    <% for( const [i,item] of data.systems.musculoskeletal.entries()) { %>
+                      <div class="col-md-3">
+                        <p><%= item %></p>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="muscle-<%=i%>" value="yes" checked> Yes
+                            <span class="circle"> <span class="check"></span></span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="muscle-<%=i%>" value="no"> No
+                            <span class="circle"><span class="check"></span></span>
+                          </label>
+                        </div>
+                      </div>
+                    <% } %>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label>Comments</label>
+                        <div class="form-group">
+                          <textarea class="form-control" rows="5" id="muscloskeletalComments"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                  <h4 id="genito-title">Genitourinary</h4>
+                  <div class="row" id="genito-row">
+                    <% for( const [i,item] of data.systems.genitourinary.entries()) { %>
+                      <div class="col-md-3">
+                        <p><%= item %></p>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="genito-<%=i%>" value="yes" checked> Yes
+                            <span class="circle"> <span class="check"></span></span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="genito-<%=i%>" value="no"> No
+                            <span class="circle"><span class="check"></span></span>
+                          </label>
+                        </div>
+                      </div>
+                    <% } %>
+                    <div class="col-md-4">
+                      <p>Menopausal</p>
+                      <div class="row">
+                        <div class="col-md-3">
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="radio" name="menopausal-check" id="menopausal-check" value="yes" checked> Yes
+                              <span class="circle"> <span class="check"></span></span>
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="radio" name="menopausal-check" value="no"> No
+                              <span class="circle"><span class="check"></span></span>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group controls">
+                            <label class="label-control">If yes, date of onset: </label>
+                            <input type="text" class="form-control datepicker" id="menopausalDate" >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2" style="padding-top:3rem">
+                      <div class="form-group controls">
+                        <label class="label-control">Date of last menstrual period:</label>
+                        <input type="text" class="form-control datepicker" id="menstrualDate" >
+                      </div>
+                    </div>
+                    <div class="col-md-5" style="padding-top:3rem">
+                      <div class="form-group controls">
+                        <label class="bmd-label-floating">Comments</label>
+                        <input type="text" class="form-control" id="genitoComments" >
+                      </div>
+                    </div>
+                  </div>
+                  <br>
+                  <!-- Begin Intergumentary -->
+                  <h4 id="integumentary-title">Integumentary</h4>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <h5>SkinAssessment:</h5>
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input class="form-check-input" type="radio" name="skin-assessment-check" id="skin-assessment-check" value="attached" checked> Attached
+                          <span class="circle"> <span class="check"></span></span>
+                        </label>
+                        <label class="form-check-label">
+                          <input class="form-check-input" type="radio" name="skin-assessment-check" value="deferred"> Deferred
+                          <span class="circle"><span class="check"></span></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <h5>Skin:</h5>
+                  <div class="row" id="integumentary-skin-row">
+                  <% for( skin of data.systems.integumentary.skin) { %>
+                    <div class="col-md-2">
+                      <div class="form-check form-check-inline">
+                        <label class="col-form-label label-checkbox"><%= skin %></label>
+                        <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                          <input class="form-check-input" type="checkbox">
+                          <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  <% } %> 
+                  </div>
+                  <div class="row" id="integumentary-skin-illness">
+                    <% for( const [i,item] of data.systems.integumentary.illness.entries()) { %>
+                      <div class="col-md-3">
+                        <p style="margin:0px"><%= item %></p>
+                        <div class="form-check" style="margin-bottom:1rem">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="intergumentary-<%=i%>" value="yes" checked> Yes
+                            <span class="circle"> <span class="check"></span></span>
+                          </label>
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="intergumentary-<%=i%>" value="no"> No
+                            <span class="circle"><span class="check"></span></span>
+                          </label>
+                        </div>
+                      </div>
+                    <% } %>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5" style="padding-top:3rem">
+                      <div class="form-group controls">
+                        <label class="bmd-label-floating">Comments</label>
+                        <input type="text" class="form-control" id="integumentaryComments" >
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Intergumentary -->
+                  <br>
+                  <!-- Begin Endocrine -->
+                  <h4 id="endocrine-title">Endocrine</h4>
+                  <div class="row" id="endocrine-types">
+                    <% for( const [i,item] of data.systems.endocrine.types.entries()) { %>
+                      <div class="col-md-3">
+                        <p style="margin:0px"><%= item %></p>
+                        <div class="form-check" style="margin-bottom:1rem">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="endocrine-<%=i%>" value="yes" checked> Yes
+                            <span class="circle"> <span class="check"></span></span>
+                          </label>
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="endocrine-<%=i%>" value="no"> No
+                            <span class="circle"><span class="check"></span></span>
+                          </label>
+                        </div>
+                      </div>
+                    <% } %>
+                      <div class="col-md-3" style="padding-right:0">
+                        <p>Diabetes</p>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="diabetes-type" value="yes" checked> Yes
+                            <span class="circle"> <span class="check"></span></span>
+                          </label>
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="diabetes-type" value="no"> No
+                            <span class="circle"><span class="check"></span></span>
+                          </label>
+                        </div>
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">If yes, type:</label>
+                          <input type="text" class="form-control"  id="diabetesType">
+                        </div>
+                      </div>
+                  </div>
+                  <h5>Diabetes Management:</h5>
+                  <div class="row" id="diabetes-management-row">
+                  <% for( item of data.systems.endocrine.diabetes) { %>
+                    <div class="col-md-3">
+                      <div class="form-check form-check-inline">
+                        <label class="col-form-label label-checkbox"><%= item %></label>
+                        <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                          <input class="form-check-input" type="checkbox">
+                          <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  <% } %> 
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4" style="padding-top:3rem">
+                      <div class="form-group controls">
+                        <label class="bmd-label-floating">Desired blood sugar range:</label>
+                        <input type="text" class="form-control" id="bloodSugarRange" >
+                      </div>
+                    </div>
+                    <div class="col-md-5" style="padding-top:3rem">
+                      <div class="form-group controls">
+                        <label class="bmd-label-floating">Comments</label>
+                        <input type="text" class="form-control" id="endocrineComments" >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row signature-row">
+                    <div class="col-md-4 col-sm-12">
+                      <div class="form-group controls">
+                        <label class="bmd-label-floating">RN </label>
+                        <input type="text" class="form-control" id="systems-rn">
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                      <div class="form-group csystems
+                        <label class="bmd-label-floating">Individual </label>
+                        <input type="text" class="form-control" id="systems-individual">
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                      <div class="form-group controls">
+                        <label class="label-control">Date </label>
+                        <input type="text" class="form-control datepicker" id="systems-date">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Review of Systems section End -->
                 <button type="submit" id="submit-btn" class="btn btn-primary pull-right">Submit</button>
                 <div class="clearfix"></div>
               </form>

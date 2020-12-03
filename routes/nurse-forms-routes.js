@@ -31,4 +31,9 @@ router.post(
   auth.authenticate,
   nurseFormsController.createRNDelegationChecklistForm);
 
+router.post(
+  '/comprehensive-nursing-assessment-forms',
+  auth.authenticate,
+  nurseFormsController.createComprehensiveNursingAssessmentForm);
+
 module.exports = router;
