@@ -1540,9 +1540,12 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
     const reviewCheck = document.getElementById('review-check');
     const statusCheck = document.getElementById('status-check');
     const systemsCheck = document.getElementById('systems-check');
+    const healthCheck = document.getElementById('health-check');
 
     $('#status-section').toggle();
     $('#systems-section').toggle();
+    $('#health-section').toggle();
+    // $('#review-section').toggle();
 
     reviewCheck.addEventListener('change', e =>{
       $('#review-section').toggle();
@@ -1554,6 +1557,10 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
 
     systemsCheck.addEventListener('change', e =>{
       $('#systems-section').toggle();
+    });
+
+    healthCheck.addEventListener('change', e =>{
+      $('#health-section').toggle();
     });
 
     const addRowButton = document.getElementById('add-row-btn');
@@ -2016,7 +2023,219 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
         payload.systemsReview = systemsReview;
       }
 
+      if($('#health-section').css('display') === 'block'){
 
+        const healthStatus = {
+          title: document.querySelector('#health-section h3').innerHTML,
+          rn: document.getElementById('health-rn').value,
+          individual: document.getElementById('health-individual').value,
+          date: reFormatDate(document.getElementById('health-date').value.split('/'))
+        }
+
+        //Immunization area
+        const immunizationDates = {dates:[]};
+        const immunoRow = document.getElementById('immunizations-row');
+        for(col of immunoRow.children){
+          const date = {
+            title: col.firstElementChild.firstElementChild.innerHTML,
+            date: reFormatDate(col.firstElementChild.lastElementChild.value.split('/'))
+          }
+          immunizationDates.dates.push(date);
+        }
+        immunizationDates.comments = document.getElementById('immunoComments').value;
+
+        healthStatus.immunizationDates = immunizationDates;
+
+        //Nutritional Assessment area
+        const nutritional = {methods:[], assessment:[]};
+        const nutTypeRow = document.getElementById('nutritional-type-row');
+        for(col of nutTypeRow.children){
+          const method = {
+            method: col.firstElementChild.firstElementChild.innerHTML,
+            checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+          }
+         nutritional.methods.push(method);
+        }
+        const nutAssRow = document.getElementById('nutritional-assessment-row');
+        for(col of nutAssRow.children){
+          const ass = {
+            item: col.firstElementChild.innerHTML,
+            response: col.children[1].firstElementChild.firstElementChild.checked ? 'yes':'no'
+          }
+          nutritional.assessment.push(ass);
+        }
+        nutritional.liquidConsistency = document.getElementById('liquidConsistency').value;
+        nutritional.foodTexture = document.getElementById('foodTexture').value;
+        nutritional.therapeuticDiet = document.getElementById('therapeuticDiet').value;
+        nutritional.reasonOrderedBy = document.getElementById('reasonOrderedBy').value;
+        nutritional.weightRange = document.getElementById('weightRange').value;
+        nutritional.numberOfMeals = document.getElementById('numberOfMeals').value;
+        nutritional.gain = {
+          checked: document.getElementById('gain-check').checked,
+          lbs: document.getElementById('gain-lbs').value
+        },
+        nutritional.lossOver = {
+          checked: document.getElementById('lossOver-check').checked,
+          text: document.getElementById('loss-over').value
+        }
+        nutritional.comments = document.getElementById('nutritionalComments').value;
+
+        healthStatus.nutritional = nutritional;
+
+        // AREASSS
+        healthStatus.sleepPatterns = document.getElementById('sleepPatterns').value;
+        healthStatus.activityLevel = document.getElementById('activityLevel').value;
+        healthStatus.substanceUse = document.getElementById('substanceUse').value;
+        healthStatus.homeLife = document.getElementById('homeLife').value;
+        healthStatus.socialLife = document.getElementById('socialLife').value;
+        healthStatus.spiritualLife = document.getElementById('spiritualLife').value;
+        healthStatus.copingSkills = document.getElementById('copingSkills').value;
+
+        //MEntal status area
+        const mentalStatus = { appearance: [], mood: []};
+        let appearanceTitles = document.getElementsByClassName('appearance-title');
+        let appearanceRows = document.getElementsByClassName('appearance-row');
+        let moodsRow = document.getElementById('moods-row');
+        appearanceTitles = Array.from(appearanceTitles);
+        appearanceRows = Array.from(appearanceRows);
+
+        appearanceTitles = appearanceTitles.map(title => title.innerHTML);
+
+
+        for(let i=0; i< appearanceRows.length; i++){
+          const appearance = { title: appearanceTitles[i], items: [] };
+          for(col of appearanceRows[i].children){
+            const item = { 
+              item: col.firstElementChild.firstElementChild.innerHTML,
+              checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+            }
+            appearance.items.push(item);
+          }
+          mentalStatus.appearance.push(appearance);
+        }
+        for(col of moodsRow.children){
+          const mood = { 
+            item: col.firstElementChild.firstElementChild.innerHTML,
+            checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+          }
+          mentalStatus.mood.push(mood);
+        }
+
+        healthStatus.mentalStatus = mentalStatus;
+
+        //Cognition Area
+        const cognition = [];
+        let cogAreas = document.getElementsByClassName('cognition-area');
+
+        cogAreas = Array.from(cogAreas);
+        
+        for(area of cogAreas){
+          const cog = {
+            title: area.firstElementChild.innerHTML,
+            items: []
+          }
+          for(col of area.lastElementChild.children){
+            const item = {
+              item: col.firstElementChild.innerHTML,
+              response: col.children[1].firstElementChild.firstElementChild.checked ? 'yes':'no'
+            }
+            cog.items.push(item);
+          }
+          cognition.push(cog);
+        }
+        healthStatus.cognition = cognition;
+
+        //Thoughts area
+        const thoughts = {checks:[]};
+        let thoughtsAreas = document.getElementsByClassName('thoughts-area');
+        
+        thoughtsAreas = Array.from(thoughtsAreas);
+        
+        for(area of thoughtsAreas){
+          const check = {
+            title: {
+              name: area.firstElementChild.innerHTML,
+              response: area.children[1].firstElementChild.firstElementChild.checked ? 'yes':'no'
+            },
+            items: []
+          }
+          for(col of area.children[3].children){
+            const item = {
+              item: col.firstElementChild.innerHTML,
+              response: col.children[1].firstElementChild.firstElementChild.checked ? 'yes':'no'
+            }
+            check.items.push(item);
+          }
+          thoughts.checks.push(check);
+        }
+        thoughts.comments = document.getElementById('thoughtsComments').value;
+
+        healthStatus.thoughts = thoughts;
+
+        //Challenging behaviors area
+        const challengingBehaviors = {headers:[], behaviors: []};
+        const behaviorHeader = document.getElementById('behavior-header');
+        let behaviorRows = document.getElementsByClassName('behavior-items');
+
+        behaviorRows = Array.from(behaviorRows);
+
+        for(col of behaviorHeader.children){
+          const head = {
+            question: col.firstElementChild.innerHTML,
+            response: col.children[1].firstElementChild.firstElementChild.checked ? 'yes':'no'
+          }
+          challengingBehaviors.headers.push(head);
+        }
+
+        for(row of behaviorRows){
+          const behavior = {
+            item: row.children[0].firstElementChild.innerHTML,
+            frequency: row.children[1].firstElementChild.lastElementChild.value,
+            severity: row.children[2].firstElementChild.lastElementChild.value,
+            lastExhibited: row.children[3].firstElementChild.lastElementChild.value
+          }
+          challengingBehaviors.behaviors.push(behavior);
+        }
+
+        challengingBehaviors.comments = document.getElementById('behaviorComments').value;
+
+        healthStatus.challengingBehaviors = challengingBehaviors;
+
+        //Communications area
+        const communication = {normalMethods:{methods:[]}, painMethods:{methods:[]}};
+        const normalCommRow = document.getElementById('normal-communication-row');
+        const painCommRow = document.getElementById('pain-communication-row');
+        
+        for(let i=0; i < normalCommRow.children.length -2; i++){
+          let col = normalCommRow.children[i];
+          const method = {
+            method: col.firstElementChild.innerHTML,
+            response: col.children[1].firstElementChild.firstElementChild.checked ? 'yes':'no'
+          }
+          communication.normalMethods.methods.push(method);
+        }
+        communication.normalMethods.communicationDeviceType = document.getElementById('communicationDeviceType').value;
+        communication.normalMethods.otherBehaviors = document.getElementById('otherBehaviors').value;
+        
+        for(col of painCommRow.children){
+          const method = {
+            method: col.firstElementChild.innerHTML,
+            response: col.children[1].firstElementChild.firstElementChild.checked ? 'yes':'no'
+          }
+          communication.painMethods.methods.push(method);
+        }
+        communication.painMethods.communicationDeviceType = document.getElementById('communicationDeviceTypePain').value;
+        communication.painMethods.otherBehaviors = document.getElementById('otherBehaviorsPain').value;
+        communication.painMethods.painScaleUse = document.getElementById('painScaleUse').checked? 'yes':'no';
+        communication.painMethods.painScaleType = document.getElementById('painScaleType').value;
+        communication.painMethods.comments = document.getElementById('communicationComments').value;
+        communication.primaryLanguage = document.getElementById('primaryLanguage').value;
+
+        healthStatus.communication = communication;
+
+        payload.healthStatus = healthStatus;
+
+      }
 
       console.log(payload);
       doCreate(payload, 
@@ -2029,3 +2248,5 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
   }
 
 })(createResource, updateResource);
+
+

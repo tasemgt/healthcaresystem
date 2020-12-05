@@ -195,10 +195,10 @@ const comprehensiveNursingAssessmentSchema = new mongoose.Schema({
         checked: Boolean,
         text: String
       },
-      liquid: String,
+      liquidConsistency: String,
       foodTexture: String,
       therapeuticDiet: String,
-      reason: String,
+      reasonOrderedBy: String,
       weightRange: String,
       numberOfMeals: String,
       assessment: [{
@@ -227,50 +227,50 @@ const comprehensiveNursingAssessmentSchema = new mongoose.Schema({
           checked: Boolean
         }],
         other: String
-      },
-      cognition: [{
-        title: String,
+      }
+    },
+    cognition: [{
+      title: String,
+      items: [{ item: String, response: String }]
+    }],
+    thoughts: {
+      checks: [{
+        title: { name: String, response: String},
         items: [{ item: String, response: String }]
       }],
-      thoughts: {
-        checks: [{
-          title: { name: String, response: String},
-          items: [{ item: String, response: String }]
+      comments: String
+    },
+    challengingBehaviors: {
+      headers: [{ question: String, response: String }],
+      behaviors: [{
+        item: String,
+        frequency: String,
+        severity: String,
+        lastExhibited: String
+      }],
+      comments: String
+    },
+    communication: {
+      primaryLanguage: String,
+      normalMethods:{
+        methods: [{
+          method: String,
+          response: String
         }],
-        comments: String
+        communicationDeviceType: String,
+        otherBehaviors: String
       },
-      behavior: {
-        headers: [{ question: String, response: String }],
-        behaviors: [{
-          item: String,
-          frequency: String,
-          severity: String,
-          lastExhibited: String
+      painMethods:{
+        methods: [{
+          method: String,
+          response: String
         }],
+        communicationDeviceType: String,
+        otherBehaviors: String,
+        painScaleUse: String,
+        painScaleType: String,
         comments: String
-      },
-      communication: {
-        language: String,
-        normalMethods:{
-          methods: [{
-            method: String,
-            response: String
-          }],
-          communicationDeviceType: String,
-          otherBehaviors: String
-        },
-        painMethods:{
-          methods: [{
-            method: String,
-            response: String
-          }],
-          communicationDeviceType: String,
-          otherBehaviors: String,
-          painScaleUse: String,
-          painScaleType: String,
-          comments: String
-        } 
-      }
+      } 
     }
   }
 });

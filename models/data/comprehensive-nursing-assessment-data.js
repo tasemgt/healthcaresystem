@@ -74,5 +74,103 @@ module.exports = {
         'Diet', 'Oral Medications', 'Insulin', 'Other injectable medication to manage diabetes'
       ]
     }
+  },
+  healthStatus:{
+    immunizations: [
+      'DPT', 'TOPV', 'HIB', 'MMR', 'TD', 'TDS', 'FLU SHOT'
+    ],
+    nutritional: {
+      assessments: [ 'Orally', 'Via jejunostomy tube', 'Via gastrotomy tube', 'Other' ],
+      items: [
+        'Recent weight change', 'Recent changes in appetite/medication', 'Satisfied with current weight', 'Food use as a coping mechanism',
+        'Assistive devices with eating', 'Use of medications that can cause difficulty swallowing (e.g., Abilify, other psychoactives),', 'Knowledge of 4 basic food groups',
+        'Access to healthy/appropriate diet', 'Dietary deficiencies', 'Adequate fluid intake', 'Nutritional supplements', 'Interactions with medications and food'
+      ]
+    },
+    mentalStatus: {
+      appearance: [
+        {
+          title: 'Posture:',
+          items: ['Normal', 'Rigid', 'Slouched']
+        },
+        {
+          title: 'Grooming and Dress:',
+          items: ['Appropriate', 'Inappropriate', 'Disheveled', 'Neat']
+        },
+        {
+          title: 'Facial Expression:',
+          items: ['Calm', 'Alert', 'Stressed', 'Perplexed', 'Tense', 'Dazed']
+        },
+        {
+          title: 'Eye Contact:',
+          items: ['Eyes not open', 'Good contact', 'Avoids contact', 'Stares']
+        },
+        {
+          title: 'Speech Quality:',
+          items: ['Clear', 'Slow', 'Slurred', 'Loud', 'Rapid', 'Incoherent', 'Mute']
+        }
+      ],
+      mood: [
+        'Cooperative', 'Excited', 'Irritable', 'Uncooperative', 'Agitated', 'Scared', 'Depressed', 'Anxious', 'Hostile',
+        'Euphoric', 'Suspicious', 'Angry'
+      ]
+    },
+    cognition: [
+      {
+        title: 'Cognitive impairment',
+        items: ['Mild', 'Moderate', 'Severe', 'Profound']
+      },
+      {
+        title: 'Oriented',
+        items: ['Person', 'Place', 'Time']
+      },
+      {
+        title: 'Attention span',
+        items: ['Easily distracted']
+      },
+      {
+        title: 'Memory',
+        items: ['Remote', 'Recent', 'Immediate recall']
+      },
+      {
+        title: 'Emotions',
+        items: ['Euphoric', 'Happy', 'Apathetic', 'Sadness', 'Depressed', 'Anxious', 'Irritable', 'Hostage feelings', 'Emotional lability',
+          'Inappropriate affect'
+        ]
+      }
+    ],
+    thoughts: [
+      {
+        title: 'Delusions',
+        items: ['Grandeur', 'Persecutory', 'Somatic', 'Other']
+      },
+      {
+        title: 'Hallucinations',
+        items: ['Visual', 'Auditory', 'Tactile', 'Olfactory']
+      },
+      {
+        title: 'Thought process',
+        items: ['Coherent Organized', 'Logical']
+      },
+      {
+        title: 'Thought content',
+        items: ['Phobias', 'Hypochondria', 'Antisocial urges', 'Obsessions', 'Suicidal ideations', 'Homicidal ideations']
+      }
+    ],
+    behaviors: {
+      headers: [
+        'Are medications used to control any behaviors?',
+        'Currently has a formal Behavior Plan?'
+      ],
+      items: [
+        'Hurtful to self', 'Hurtful to others', 'Destructive to property', 'Pica', 'Resists care', 'Socially offensive/Disruptive Behavior',
+        'At risk behavior of Wandering', 'At risk behavior of Elopement', 'At risk behavior of Sexually aggressive behavior', 'History of suicide attempt',
+        'Other serious behavior'
+      ]
+    },
+    communication: [
+      'Verbal', 'Limited verbal', 'Gestures', 'Sign language', 'Facial expressions', 'Eye movement', 'Paralinguistics (sounds)', 
+      'Touch', 'Body language', 'Acting out', 'Head banging', 'Augmented communication device'
+    ]
   }
 }

@@ -79,7 +79,7 @@
                     <div class="form-check form-check-inline">
                       <label class="col-form-label label-checkbox">IV. Additional Health Status Info</label>
                       <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
-                        <input class="form-check-input" type="checkbox" id="additional-check">
+                        <input class="form-check-input" type="checkbox" id="health-check">
                         <span class="form-check-sign">
                           <span class="check"></span>
                         </span>
@@ -197,6 +197,7 @@
                   <hr>
                 </div>
                 <br>
+                <!-- Status section begin -->
                 <div id="status-section">
                   <h3 style="text-decoration:underline; display:inline-block">II. Current Status</h3>
                   <div id="status-subsection">
@@ -397,6 +398,7 @@
                     </div>
                   </div>
                 </div>
+                <!-- Status section End -->
                 <br>
                 <!-- Review of Systems section begin -->
                 <div id="systems-section">
@@ -929,7 +931,7 @@
                       </div>
                     </div>
                     <div class="col-md-4 col-sm-12">
-                      <div class="form-group csystems
+                      <div class="form-group controls">
                         <label class="bmd-label-floating">Individual </label>
                         <input type="text" class="form-control" id="systems-individual">
                       </div>
@@ -943,6 +945,528 @@
                   </div>
                 </div>
                 <!-- Review of Systems section End -->
+                <br>
+                <!-- Additional health status info section begin -->
+                <div id="health-section">
+                  <h3 style="text-decoration:underline; display:inline-block">IV. Additional Health Status Information</h3>
+                  <div id="health-subsection">
+                    <br>
+                    <h4>Immunizations: Date last received</h4>
+                    <div class="row" id="immunizations-row">
+                      <% for(immuno of data.healthStatus.immunizations){ %>
+                      <div class="col-md-3 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="label-control"><%= immuno %></label>
+                          <input type="text" class="form-control datepicker">
+                        </div>
+                      </div>
+                     <% } %>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Comments</label>
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="immunoComments"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <h4>Nutritional Assessment</h4>
+                    <p>How nutrition is received</p>
+                    <div class="row" id="nutritional-type-row">
+                      <% for( assessment of data.healthStatus.nutritional.assessments) { %>
+                        <div class="col-md-3">
+                          <div class="form-check form-check-inline">
+                            <label class="col-form-label label-checkbox"><%= assessment %></label>
+                            <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                              <input class="form-check-input" type="checkbox">
+                              <span class="form-check-sign">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      <% } %>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Liquid consistency</label>
+                          <input type="text" class="form-control" id="liquidConsistency" >
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Therapeutic diet</label>
+                          <input type="text" class="form-control" id="therapeuticDiet" >
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Food texture</label>
+                          <input type="text" class="form-control" id="foodTexture" >
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Reason/date/ordered by:</label>
+                          <input type="text" class="form-control" id="reasonOrderedBy" >
+                        </div>
+                      </div>
+                      <div class="col-md-2 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">lbs.</label>
+                          <input type="text" class="form-control" id="gain-lbs" >
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="form-check form-check-inline">
+                          <label class="col-form-label label-checkbox">gain</label>
+                          <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                            <input class="form-check-input" type="checkbox" id="gain-check">
+                            <span class="form-check-sign">
+                              <span class="check"></span>
+                            </span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="form-check form-check-inline">
+                          <label class="col-form-label label-checkbox">loss over</label>
+                          <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                            <input class="form-check-input" type="checkbox" id="lossOver-check">
+                            <span class="form-check-sign">
+                              <span class="check"></span>
+                            </span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2 col-sm-12">
+                        <div class="form-group controls">
+                          <input type="text" class="form-control" id="loss-over" >
+                        </div>
+                      </div>
+                      <div class="col-md-5 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Desired weight range:</label>
+                          <input type="text" class="form-control" id="weightRange" >
+                        </div>
+                      </div>
+                      <div class="col-md-5 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Number of meals/snacks per day:</label>
+                          <input type="text" class="form-control" id="numberOfMeals" >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" id="nutritional-assessment-row">
+                      <% for(const [i, item] of data.healthStatus.nutritional.items.entries()) { %>
+                        <div class="col-md-4 checkbox-radios inline-options">
+                          <p><%= item %></p>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="radio" name="item-nutritional<%=i%>" value="yes"> Yes
+                              <span class="circle"> <span class="check"></span></span>
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="radio" name="item-nutritional<%=i%>" value="no" checked> No
+                              <span class="circle"><span class="check"></span></span>
+                            </label>
+                          </div>
+                        </div>
+                      <% } %>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Comments</label>
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="nutritionalComments"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h4>Sleep Patterns</h4>
+                        <p>Average number of hours per night; difficulty falling asleep; number of times awake at night; number of naps during a day:</p>
+                        <div class="form-group">
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="sleepPatterns"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <h4>Activity Level/Exercise</h4>
+                        <p>&nbsp;</p>
+                        <div class="form-group">
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="activityLevel"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <h4>Substance Use/Abuse</h4>
+                        <p>Caffeine, tobacco, alcohol, recreational drugs, history of non-compliance with prescribed medications:</p>
+                        <div class="form-group">
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="substanceUse"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <h4>Home Life</h4>
+                        <p>Satisfaction/Desires:</p>
+                        <div class="form-group">
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="homeLife"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <h4>Work/School/Day Activity</h4>
+                        <p>Satisfaction/Desires:</p>
+                        <div class="form-group">
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="dayActivity"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <h4>Social Life</h4>
+                        <p>Satisfaction/Desires:</p>
+                        <div class="form-group">
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="socialLife"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <h4>Spiritual Life</h4>
+                        <p>Satisfaction/Desires:</p>
+                        <div class="form-group">
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="spiritualLife"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <h4>Coping Skills</h4>
+                        <p>&nbsp;</p>
+                        <div class="form-group">
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="copingSkills"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <h4>Mental Status</h4>
+                    <h5>1. Appearance</h5>
+                    <% for(app of data.healthStatus.mentalStatus.appearance) { %>
+                      <h6 class="appearance-title"><%= app.title %></h6>
+                      <div class="row appearance-row">
+                        <% for( item of app.items) { %>
+                          <div class="col-md-3">
+                            <div class="form-check form-check-inline">
+                              <label class="col-form-label label-checkbox"><%= item %></label>
+                              <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                                <input class="form-check-input" type="checkbox">
+                                <span class="form-check-sign">
+                                  <span class="check"></span>
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                        <% } %>
+                      </div>
+                    <% } %>
+                    <br>
+                    <h5>2. Mood</h5>
+                    <div class="row" id="moods-row">
+                      <% for( item of data.healthStatus.mentalStatus.mood) { %>
+                        <div class="col-md-3">
+                          <div class="form-check form-check-inline">
+                            <label class="col-form-label label-checkbox"><%= item %></label>
+                            <label class="form-check-label" style="position:absolute; right:-2rem; bottom:1.6rem">
+                              <input class="form-check-input" type="checkbox">
+                              <span class="form-check-sign">
+                                <span class="check"></span>
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      <% } %>
+                    </div>
+                    <hr><br>
+                    <h5>Cognition</h5>
+                    <% for(const [i, cog] of data.healthStatus.cognition.entries()) { %>
+                      <div class="cognition-area">
+                        <h6><%= cog.title %></h6>
+                        <div class="row">
+                          <% for(const [j, item] of cog.items.entries()) { %>
+                            <div class="col-md-4 checkbox-radios inline-options">
+                              <p><%= item %></p>
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input class="form-check-input" type="radio" name="item-cognition<%=i+''+j%>" value="yes"> Yes
+                                  <span class="circle"> <span class="check"></span></span>
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input class="form-check-input" type="radio" name="item-cognition<%=i+''+j%>" value="no" checked> No
+                                  <span class="circle"><span class="check"></span></span>
+                                </label>
+                              </div>
+                            </div>
+                          <% } %>
+                        </div>
+                      </div>
+                    <% } %>
+                    <hr><br>
+                    <h5>Thoughts</h5>
+                    <% for(const [i, thought] of data.healthStatus.thoughts.entries()) { %>
+                      <div class="thoughts-area">
+                        <h6><%= thought.title %></h6>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="item-thoughts<%=i%>" value="yes"> Yes
+                            <span class="circle"> <span class="check"></span></span>
+                          </label>
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="item-thoughts<%=i%>" value="no" checked> No
+                            <span class="circle"> <span class="check"></span></span>
+                          </label>
+                        </div>
+                        <p style="margin-bottom: 0">If Yes, then:</p>
+                        <div class="row">
+                          <% for(const [j, item] of thought.items.entries()) { %>
+                            <div class="col-md-4 checkbox-radios inline-options">
+                              <p><%= item %></p>
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input class="form-check-input" type="radio" name="item-thoughts<%=i+''+j%>" value="yes"> Yes
+                                  <span class="circle"> <span class="check"></span></span>
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input class="form-check-input" type="radio" name="item-thoughts<%=i+''+j%>" value="no" checked> No
+                                  <span class="circle"><span class="check"></span></span>
+                                </label>
+                              </div>
+                            </div>
+                          <% } %>
+                        </div>
+                      </div>
+                      <br>
+                    <% } %>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Comments</label>
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="thoughtsComments"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr><br>
+                    <h5>Challenging Behaviors</h5>
+                    <div class="row" id="behavior-header">
+                      <% for(const [i, item] of data.healthStatus.behaviors.headers.entries()) { %>
+                        <div class="col-md-4 checkbox-radios inline-options">
+                          <p><%= item %></p>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="radio" name="behavior-header<%=i%>" value="yes"> Yes
+                              <span class="circle"> <span class="check"></span></span>
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="radio" name="behavior-header<%=i%>" value="no" checked> No
+                              <span class="circle"><span class="check"></span></span>
+                            </label>
+                          </div>
+                        </div>
+                      <% } %>
+                    </div>
+                    <p>Use the following scales below for frequency and severity:</p>
+                    <ul>
+                      <li>For frequency: 1 = less than once per month; 2 = 1 to 3 X month; 3 = 1 to 6 X week; 4 = 1 to 10 X day; and 5 = 1 or more X hour.</li>
+                      <li>For severity: 1 = mild; 2 = moderate; 3 = severe; and 4 = critical.</li>
+                    </ul>
+                    <br>
+                    <% for (item of data.healthStatus.behaviors.items) { %>
+                      <div class="row behavior-items">
+                        <div class="col-md-3">
+                          <p style="margin-top:1rem"><%= item %></p>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                          <div class="form-group controls">
+                            <label class="bmd-label-floating">Frequency</label>
+                            <input type="text" class="form-control">
+                          </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                          <div class="form-group controls">
+                            <label class="bmd-label-floating">Severity</label>
+                            <input type="text" class="form-control">
+                          </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                          <div class="form-group controls">
+                            <label class="bmd-label-floating">Last Exhibited</label>
+                            <input type="text" class="form-control">
+                          </div>
+                        </div>
+                      </div>
+                    <% } %>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Comments</label>
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="behaviorComments"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <h4>Communication</h4>
+                    <div class="row">
+                      <div class="col-md-3 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Primary Language:</label>
+                          <input type="text" class="form-control" id="primaryLanguage">
+                        </div>
+                      </div>
+                    </div>
+                    <p>Mark ways the individual commonly communicates.</p>
+                    <div class="row" id="normal-communication-row">
+                      <% for(const [i, item] of data.healthStatus.communication.entries()) { %>
+                        <div class="col-md-4 checkbox-radios inline-options">
+                          <p><%= item %></p>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="radio" name="communication<%=i%>" value="yes"> Yes
+                              <span class="circle"> <span class="check"></span></span>
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="radio" name="communication<%=i%>" value="no" checked> No
+                              <span class="circle"><span class="check"></span></span>
+                            </label>
+                          </div>
+                        </div>
+                      <% } %>
+                      <div class="col-md-6 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Augmented communication device type if present:</label>
+                          <input type="text" class="form-control" id="communicationDeviceType">
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Other behaviors (Describe):</label>
+                          <input type="text" class="form-control" id="otherBehaviors">
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <p>Mark ways that pain is communicated.</p>
+                    <div class="row" id="pain-communication-row">
+                      <% for(const [i, item] of data.healthStatus.communication.entries()) { %>
+                        <div class="col-md-4 checkbox-radios inline-options">
+                          <p><%= item %></p>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="radio" name="communication-pain<%=i%>" value="yes"> Yes
+                              <span class="circle"> <span class="check"></span></span>
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="radio" name="communication-pain<%=i%>" value="no" checked> No
+                              <span class="circle"><span class="check"></span></span>
+                            </label>
+                          </div>
+                        </div>
+                      <% } %>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Augmented communication device type if present:</label>
+                          <input type="text" class="form-control" id="communicationDeviceTypePain">
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Other behaviors (Describe):</label>
+                          <input type="text" class="form-control" id="otherBehaviorsPain">
+                        </div>
+                      </div>
+                      <div class="col-md-4 checkbox-radios inline-options">
+                        <p>Able to use pain scale:</p>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="pain-scale" id="painScaleUse" value="yes"> Yes
+                            <span class="circle"> <span class="check"></span></span>
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="pain-scale" value="no" checked> No
+                            <span class="circle"><span class="check"></span></span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-5 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">If able to use pain scale, list type/name of pain scale:</label>
+                          <input type="text" class="form-control" id="painScaleType">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Comments</label>
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="communicationComments"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row signature-row">
+                      <div class="col-md-4 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">RN </label>
+                          <input type="text" class="form-control" id="health-rn">
+                        </div>
+                      </div>
+                      <div class="col-md-4 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="bmd-label-floating">Individual </label>
+                          <input type="text" class="form-control" id="health-individual">
+                        </div>
+                      </div>
+                      <div class="col-md-4 col-sm-12">
+                        <div class="form-group controls">
+                          <label class="label-control">Date </label>
+                          <input type="text" class="form-control datepicker" id="health-date">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <button type="submit" id="submit-btn" class="btn btn-primary pull-right">Submit</button>
                 <div class="clearfix"></div>
               </form>
