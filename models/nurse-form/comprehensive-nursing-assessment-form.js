@@ -272,7 +272,147 @@ const comprehensiveNursingAssessmentSchema = new mongoose.Schema({
         comments: String
       } 
     }
+  },
+  implementationAssessment:{
+    decisionMaking: [{
+      item: String,
+      checked: Boolean
+    }],
+    supportSystems: [
+      {
+        item: String,
+        checks: {
+          adequate: String, 
+          reliable: String, 
+          available: String, 
+          effectiveCommunicator: String
+        }
+      }
+    ],
+    needToReassess:[{
+      healthTopic: String,
+      longTermNeed: { text: String, response: String },
+      statusChangePossible: {text: String, response: String },
+      frequencyOfReassessment: String
+    }],
+    knowledgeDemonstrations: {
+      demonstrations: [{
+        healthTopic: String,
+        typeOfDem: String,
+        individual: String,
+        cra: String,
+        hhcc: String
+      }],
+      comments: String
+    },
+    sectionA: {
+      check: Boolean,
+      item: String,
+      printedName: String,
+      signature: String,
+      date: Date
+    },
+    sectionB:{
+      check: Boolean,
+      item: String,
+      printedName: String,
+      signature: String,
+      date: Date
+    },
+    sectionC: {
+      check: Boolean,
+      printedName: String,
+      signature: String,
+      date: Date
+    },
+    safeAdministrationOfMedications: {
+      rnDelegationWorksheet: {
+        attached: Boolean,
+        nA: Boolean
+      },
+      items: [{
+        title: String,
+        item: String,
+        checked: Boolean
+      }],
+      unDelegatedRoutes: String,
+      unDelegatedMedications: String
+    },
+    nurseSupervision: {
+      unlicensedPersonnel: String,
+      items: [{
+        item: String,
+        checked: Boolean
+      }],
+      consultantsOtherCheck: Boolean,
+      consultantsOtherValue: String,
+
+      frequencyOfRNMonitoring: {
+        onceWithin: Boolean,
+        onceWithinFirst: String,
+        monthly: Boolean,
+        quarterly: Boolean,
+        onceYearAdditionally: Boolean,
+        annually: Boolean,
+        other: Boolean,
+        otherValue: String
+      },
+      frequencyOfAdditionalRNMonitoring: {
+        notApplicable: Boolean,
+        onceWithin: Boolean,
+        monthly: Boolean,
+        quarterly: Boolean,
+        onceYearAdditionally: Boolean,
+        notes: String
+      }
+    }
+  },
+  summary: {
+    title:String,
+    clinicalImpressions: [{
+      title: String,
+      content: String
+    }],
+    nursingServicePlan:{
+      title: String,
+      content: String
+    },
+    interventionStrategies: {
+      objectives: [{
+        objectives: {title: String, content: String},
+        startDate: {title: String, content: Date},
+        targetCompletion: {title: String, content: Date},
+        units: {title: String, content: String},
+        totalUnits: {title: String, content: String}
+      }],
+      nursingUnitsNeeded: {
+        rn: String,
+        rnSpecialized: String,
+        lvn: String,
+        lvnSpecialized: String,
+        desiredOutcomes: String
+      },
+      printedName: String,
+      signature: String,
+      date: Date
+    },
+    reviewOfAssessment: {
+      reviewDate: Date,
+      purpose: String,
+      descriptionOfReview: String,
+      actionTaken: String,
+      noChangeRequired: Boolean,
+      changesInNursingPlan: String,
+      rnSignature: String,
+      date: String
+    },
+
+    rN: String,
+    individual: String,
+    date: Date
+
   }
+    
 });
 
 

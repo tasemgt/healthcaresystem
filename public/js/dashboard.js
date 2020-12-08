@@ -1541,10 +1541,14 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
     const statusCheck = document.getElementById('status-check');
     const systemsCheck = document.getElementById('systems-check');
     const healthCheck = document.getElementById('health-check');
+    const assessmentCheck = document.getElementById('assessment-check');
+    const summaryCheck = document.getElementById('summary-check');
 
     $('#status-section').toggle();
     $('#systems-section').toggle();
     $('#health-section').toggle();
+    $('#assessment-section').toggle();
+    $('#summary-section').toggle();
     // $('#review-section').toggle();
 
     reviewCheck.addEventListener('change', e =>{
@@ -1561,6 +1565,14 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
 
     healthCheck.addEventListener('change', e =>{
       $('#health-section').toggle();
+    });
+
+    assessmentCheck.addEventListener('change', e =>{
+      $('#assessment-section').toggle();
+    });
+
+    summaryCheck.addEventListener('change', e =>{
+      $('#summary-section').toggle();
     });
 
     const addRowButton = document.getElementById('add-row-btn');
@@ -2237,6 +2249,306 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
 
       }
 
+
+      if($('#assessment-section').css('display') === 'block'){
+
+        const implementationAssessment = {
+          title: document.querySelector('#assessment-section h3').innerHTML,
+          rn: document.getElementById('assessment-rn').value,
+          individual: document.getElementById('assessment-individual').value,
+          date: reFormatDate(document.getElementById('assessment-date').value.split('/'))
+        }
+
+        //Decision making area
+        const decisionMaking = [];
+        const decisionRow = document.getElementById('assessment-decision-row');
+        for(col of decisionRow.children){
+          const decision = {
+            item: col.firstElementChild.firstElementChild.innerHTML,
+            checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+          }
+          decisionMaking.push(decision);
+        }
+        implementationAssessment.decisionMaking = decisionMaking;
+
+        //support Systems area
+        const supportSystems = [];
+        let supportSystitles = document.getElementsByClassName('support-systems-head');
+        let supportSysRows = document.getElementsByClassName('support-systems-row');
+        supportSystitles = Array.from(supportSystitles);
+        supportSysRows = Array.from(supportSysRows);
+        
+        supportSystitles = supportSystitles.map(t => t.innerHTML);
+        
+        for(let i=0; i< supportSysRows.length; i++){
+          const item = { item: supportSystitles[i] }
+          const row = supportSysRows[i];
+          const check = {
+            adequate: row.children[0].children[1].firstElementChild.firstElementChild.checked,
+            reliable: row.children[1].children[1].firstElementChild.firstElementChild.checked,
+            available: row.children[2].children[1].firstElementChild.firstElementChild.checked,
+            effectiveCommunicator: row.children[3].children[1].firstElementChild.firstElementChild.checked
+          }
+          item.checks = check;
+          supportSystems.push(item);
+        }
+        implementationAssessment.supportSystems = supportSystems;
+
+
+        //need To Reassess area
+        const needToReassess = [];
+        let needToReassessRow = document.getElementsByClassName('need-to-reassess-row');
+        needToReassessRow = Array.from(needToReassessRow);
+        for(row of needToReassessRow){
+          cols = row.children;
+          const need = {
+            healthTopic: cols[0].firstElementChild.lastElementChild.value,
+            longTermNeed: {
+              text: cols[1].firstElementChild.innerHTML,
+              response: cols[1].children[1].firstElementChild.firstElementChild.checked? 'yes':'no'
+            },
+            statusChangePossible: {
+              text: cols[2].firstElementChild.innerHTML,
+              response: cols[2].children[1].firstElementChild.firstElementChild.checked? 'yes':'no'
+            },
+            frequencyOfReassessment: cols[3].firstElementChild.lastElementChild.value
+          }
+          needToReassess.push(need);
+        }
+
+        implementationAssessment.needToReassess = needToReassess; 
+
+        //knowledge Demonstrations area
+        const knowledgeDemonstrations = {demonstrations:[]};
+        let knowledgeDemonstrationRow = document.getElementsByClassName('knowledge-demonstrations-row');
+        knowledgeDemonstrationRow = Array.from(knowledgeDemonstrationRow);
+        for(row of knowledgeDemonstrationRow){
+          cols = row.children;
+          const knowledge = {
+            healthTopic: cols[0].firstElementChild.lastElementChild.value,
+            typeOfDem: cols[1].firstElementChild.innerHTML,
+            individual: getResponse(cols[2].children[1].firstElementChild.firstElementChild.checked, cols[2].children[1].children[1].firstElementChild.checked),
+            cra: getResponse(cols[3].children[1].firstElementChild.firstElementChild.checked, cols[2].children[1].children[1].firstElementChild.checked),
+            hhcc: getResponse(cols[2].children[1].firstElementChild.firstElementChild.checked, cols[2].children[1].children[1].firstElementChild.checked)
+          }
+          knowledgeDemonstrations.demonstrations.push(knowledge);
+        }
+
+        knowledgeDemonstrations.comments = document.getElementById('demonstrationsComments').value;
+        implementationAssessment.knowledgeDemonstrations = knowledgeDemonstrations;
+
+
+        //SECTIONSSS
+        //SECTIONA
+        const sectionA = {
+          check: document.getElementById('_section-a').checked,
+          item: 
+          document.getElementById('_section-a-individual').children[0].checked? 
+          document.getElementById('_section-a-individual').children[1].innerHTML:
+          document.getElementById('__section-a-individual').innerHTML,
+          printedName: document.getElementById('printedNameA').value,
+          signature: document.getElementById('sign-individual-a').value,
+          date: reFormatDate(document.getElementById('date-a').value.split('/'))
+        };
+
+        const sectionB = {
+          check: document.getElementById('_section-b').checked,
+          item: 
+          document.getElementById('_section-b-individual').children[0].checked? 
+          document.getElementById('_section-b-individual').children[1].innerHTML:
+          document.getElementById('__section-b-individual').innerHTML,
+          printedName: document.getElementById('printedNameB').value,
+          signature: document.getElementById('sign-individual-b').value,
+          date: reFormatDate(document.getElementById('date-b').value.split('/'))
+        };
+
+        const sectionC = {
+          check: document.getElementById('_section-c').checked,
+          printedName: document.getElementById('printedNameB').value,
+          signature: document.getElementById('sign-individual-c').value,
+          date: reFormatDate(document.getElementById('date-c').value.split('/'))
+        };
+
+        implementationAssessment.sectionA = sectionA;
+        implementationAssessment.sectionB = sectionB;
+        implementationAssessment.sectionC = sectionC;
+
+        //safe Administration Of Medications area
+        const safeAdministrationOfMedications = {
+          rnDelegationWorksheet:{
+            attached: document.getElementById('delegation-attached').checked,
+            nA: document.getElementById('delegation-n/a').checked
+          },
+          items: []
+        };
+
+        const assessmentWorksheetRow = document.getElementById('assessment-worksheet-row');
+        for(col of assessmentWorksheetRow.children){
+          const ass = {
+            title: col.firstElementChild.firstElementChild.firstElementChild.innerHTML,
+            item: col.firstElementChild.firstElementChild.lastElementChild.innerHTML,
+            checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+          }
+          safeAdministrationOfMedications.items.push(ass);
+        }
+
+        safeAdministrationOfMedications.unDelegatedRoutes = document.getElementById('unDelegatedRoutes').checked;
+        safeAdministrationOfMedications.unDelegatedMedications = document.getElementById('unDelegatedMedications').checked;
+
+        //nurse Supervision Area
+        const nurseSupervision = {
+          unlicensedPersonnel: document.getElementById('unlicensedPersonnel').value,
+          items: []
+        };
+        let consultantsCols = document.getElementsByClassName('consultants-cols');
+        consultantsCols = Array.from(consultantsCols);
+        for(col of consultantsCols){
+          const item = {
+            item: col.firstElementChild.firstElementChild.innerHTML,
+            checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+          }
+          nurseSupervision.items.push(item);
+        }
+        
+        nurseSupervision.consultantsOtherCheck = document.getElementById('consultants-other').checked;
+        nurseSupervision.consultantsOtherValue = document.getElementById('consultants-other-value').value;
+        nurseSupervision.frequencyOfRNMonitoring = {
+          onceWithin: document.getElementById('fORNM-onceWithin').checked,
+          onceWithinFirst: document.getElementById('fORNM-onceWithinValue').value,
+          monthly: document.getElementById('fORNM-monthly').checked,
+          quarterly: document.getElementById('fORNM-quarterly').checked,
+          onceYearAdditionally: document.getElementById('fORNM-yearAdd').checked,
+          annually: document.getElementById('fORNM-annually').checked,
+          other: document.getElementById('fORNM-other').checked,
+          otherValue: document.getElementById('fORNM-otherValue').value,
+        }
+
+        nurseSupervision.frequencyOfAdditionalRNMonitoring = {
+          notApplicable: document.getElementById('fOARNM-notApplicable').checked,
+          onceWithin: document.getElementById('fOARNM-onceWithin').checked,
+          onceWithinFirst: document.getElementById('fOARNM-onceWithinValue').value,
+          monthly: document.getElementById('fOARNM-monthly').checked,
+          quarterly: document.getElementById('fORNM-quarterly').checked,
+          onceYearAdditionally: document.getElementById('fOARNM-withinYear').checked,
+          notes: document.getElementById('additionalRNMonitoringNotes').value
+        }
+
+        implementationAssessment.nurseSupervision = nurseSupervision;
+        payload.implementationAssessment = implementationAssessment;
+      
+        function getResponse(first, second){
+          if(first) return 'yes';
+          else if(second) return 'no';
+          else return 'n/a';
+        }
+
+      }
+      
+
+      if($('#summary-section').css('display') === 'block'){
+        
+        const summary = {
+          title: document.querySelector('#summary-section h3').innerHTML,
+          rn: document.getElementById('summary-rn').value,
+          individual: document.getElementById('summary-individual').value,
+          date: reFormatDate(document.getElementById('summary-date').value.split('/'))
+        }
+
+        //Decision making area
+        const clinicalImpressions = [];
+        const clinicalImpressionsRow = document.getElementById('clinicalImpressionsRow');
+        for(col of clinicalImpressionsRow.children){
+          const imp = {
+            title: col.firstElementChild.firstElementChild.innerHTML,
+            content: col.firstElementChild.lastElementChild.firstElementChild.value
+          }
+          clinicalImpressions.push(imp);
+        }
+
+        summary.clinicalImpressions = clinicalImpressions;
+
+        //Nursing service plan area
+        const nursingServicePlan = {
+          title: document.getElementById('concernsAndDiagnoses').firstElementChild.innerHTML,
+          content: document.getElementById('concernsAndDiagnoses').lastElementChild.firstElementChild.value
+        }
+
+        summary.nursingServicePlan = nursingServicePlan;
+
+        //intervention Strategies area
+        const interventionStrategies = {
+          objectives: []
+        }
+        let strategyObjectivesRows = document.getElementsByClassName('strategyObjectivesRow');
+        strategyObjectivesRows = Array.from(strategyObjectivesRows);
+        
+        for(row of strategyObjectivesRows){
+          const objective = {
+            objectives: {
+              title: row.children[0].firstElementChild.firstElementChild.innerHTML,
+              content: row.children[0].firstElementChild.lastElementChild.value
+            },
+            startDate: {
+              title: row.children[1].firstElementChild.firstElementChild.innerHTML,
+              content: reFormatDate(row.children[1].firstElementChild.lastElementChild.value.split('/'))
+            },
+            targetCompletion: {
+              title: row.children[2].firstElementChild.firstElementChild.innerHTML,
+              content: reFormatDate(row.children[2].firstElementChild.lastElementChild.value.split('/'))
+            },
+            units: {
+              title: row.children[3].firstElementChild.firstElementChild.innerHTML,
+              content: row.children[3].firstElementChild.lastElementChild.value
+            },
+            totalUnits: {
+              title: row.children[4].firstElementChild.firstElementChild.innerHTML,
+              content: row.children[4].firstElementChild.lastElementChild.value
+            }
+          }
+          interventionStrategies.objectives.push(objective);
+        }
+
+        interventionStrategies.nursingUnitsNeeded = {
+          rn: document.getElementById('totalNurses-rn').value,
+          rnSpecialized: document.getElementById('totalNurses-rnSpec').value,
+          lvn: document.getElementById('totalNurses-lvn').value,
+          lvnSpecialized: document.getElementById('totalNurses-lvnSpec').value,
+          desiredOutcomes: document.getElementById('totalDesiredOutcomes').value
+        }
+
+        interventionStrategies.printedName = document.getElementById('intervention-printedName').value;
+        interventionStrategies.signature = document.getElementById('intervention-sign').value;
+        interventionStrategies.date = reFormatDate(document.getElementById('intervention-date').value.split('/'));
+
+        summary.interventionStrategies = interventionStrategies;
+
+        //review Of Assessment area
+        const purpose = document.getElementById('reviewPurpose');
+        const reviewOfAssessment = {
+          reviewDate: reFormatDate(document.getElementById('finalReviewDate').value.split('/')),
+          purpose: getReviewPurpose(purpose.children[0].firstElementChild.checked, purpose.children[2].firstElementChild.checked),
+          descriptionOfReview: document.getElementById('finalReviewDesc').value,
+          actionTaken: document.getElementById('actionTakenByRN').value,
+          noChangeRequired: document.getElementById('noChangeRequired').checked,
+          changesInNursingPlan: document.getElementById('nursingServicePlanRevisions').checked?
+          document.getElementById('customPlanRevision').value: null,
+          rnSignature: document.getElementById('finalRNSignature').value,
+          date: reFormatDate(document.getElementById('finalRNDate').value.split('/'))
+        };
+
+        summary.reviewOfAssessment = reviewOfAssessment;
+
+        payload.summary = summary;
+
+        function getReviewPurpose(first, second){
+          const purpose = document.getElementById('reviewPurpose');
+          if(first) return purpose.firstElementChild.textContent.trim();
+          else if(second) return purpose.children[1].textContent.trim();
+          else return purpose.children[2].textContent.trim();;
+        }
+
+      }
+
       console.log(payload);
       doCreate(payload, 
         `${baseURLAPI}/nurse-forms/comprehensive-nursing-assessment-forms`, 
@@ -2248,5 +2560,3 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
   }
 
 })(createResource, updateResource);
-
-

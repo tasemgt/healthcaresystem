@@ -172,5 +172,70 @@ module.exports = {
       'Verbal', 'Limited verbal', 'Gestures', 'Sign language', 'Facial expressions', 'Eye movement', 'Paralinguistics (sounds)', 
       'Touch', 'Body language', 'Acting out', 'Head banging', 'Augmented communication device'
     ]
+  },
+  assessment: {
+    decisions: [
+      `Probably can make higher level decisions (such as whether to undergo or withdraw life sustaining treatments that require understanding the nature, probable consequences, 
+        burdens and risks of proposed treatment).`,
+      `Probably can make limited decisions that require simple understanding, able to direct own health care, including delegated tasks.`,
+      `Probably can express agreement with decisions proposed by someone else.`,
+      `Cannot effectively participate in any kind of health care decision making.`
+    ],
+    supportSystems : [
+      'CRA', 'Host Home or Companion Care (HH/CC) Provider', 'Guardian/Other'
+    ],
+    worksheets: [
+      {
+        title: 'Self-Administration of Medication.',
+        content: `Individual knows hoe to safely take each medication (what, why) dose, route, time of each medication. The individual is competent to safely self-administer medications independently
+        or independently with ancillary aid provided to the individual in the individual's self-administered medication treatment or regimen, such as reminding an individual to take a 
+        medication at the prescribed time, opening and closing a medication container, pouring a predetermined quantity of liquid to be ingested, returning a medication to the proper storing area, 
+        and assisting in reordering medications from a pharmacy. No RN Delegation is necessary. [225.1(a)(3)]`
+      },
+      {
+        title: 'Administration of medication to an indidvidual by a paid unlicensed person(s) to ensure that medications are received safely.',
+        content: `Administration of medications includes removal of an individual/unit dose from a previously dispensed, properly labeled container; verifying it with the medication order; giving the correct
+        medication and the correct dose to the proper individual at the proper time by the proper route; and accurately recording the time and dose given. [TX BON 225.4(2)]. Check the following that apply:`
+      },
+      {
+        title: 'CRA can safely direct as an HMA. No RN delegation is necessary.',
+        content: `The individual has a single identified CRA whose knowledge, abilities and availability qualifies the administration of oral medications (by mouth or through a permanently placed feeding tube)
+        as an HMA exempt from delegation and is appropriate per RN judgment. Medications may be administered for stable and predictable conditions (not initial doses and/or for acute conditions) without RN supervision
+        provided that the CRA is willing, able and agrees in writing to train the unlicensed person(s) in performing the task at least once to assure competence and will be immediately accessible in person or by
+        telecommunications to the unlicensed person(s) when the task is performed. [225.4(8), 225.8]`
+      },
+      {
+        title: 'RN delegation necessary to ensure safe medication administration.',
+        content: `RN can safely authorize unlicensed personnel to administer medications for stable and predictable conditions as defined in 225.4(11) not requiring nursing judgment. Competency of each unlicensed
+        personnel, including the ability to recognize and inform the RN of client changes related to the task must be verified by RN. The six rights of delegation (the right task, the right person to whom the delegation 
+          is made, the right circumstances, the right direction and communication by the RN, the right supervision, and the right documentation) and all criteria at 225.9 must be met. CRA lacks knowledge, abilities and/or
+          availability per 225.8 to direct as an HMA. Individual (if competent), CRA (if one exists) or Provider Advocate Committee (PAC) must approve the decision of the RN to delegate tasks in writing. See delegation
+           criteria at 225.9, 225.10`
+      },
+      {
+        title: 'The RN has determined that delegation is not required because the parent/LAR/foster care provider can assume responsibility and accountability for the individual\'s health care.',
+        content: `The RN has considered the length of time the individual has been living in the home, the relationship of the individual and foster care provider, the supports available to the foster care provider, and has
+        determined that the foster care provider can safely assume this responsibility. The RN will serve as a resource, consultant or educator, and will intervene when necessary to ensure safe and effective care. [225.6(a)(3)]
+        Documentation of subsequent interventions, including when additional follow-up is needed, will be a part of the RN's nursing care plan.`
+      },
+      {
+        title: 'The RN has determined that delegation is not required for oral, topical and metered dose inhalers.',
+        content: `The RN has determined that the medications not being delegated to paid unlicensed personnel are for a stable or predictable condition. The RN or LVN, under the direction of an RN, has trained and determined the
+        paid unlicensed personnel competency. [Human Resources Code, Chapter 161, Subchapter D]`
+      }
+    ],
+    consultants: [
+      'Provider Advocate Committee (PAC)',
+      'Legally Authorized Representative (LAR)',
+      'Client Responsible Adult (CRA)',
+      'Individual'
+    ]
+  },
+  summary: {
+    impressions: [
+      'Strengths as related to health',
+      'Consultations recommended',
+      'Summary'
+    ]
   }
 }
