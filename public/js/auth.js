@@ -73,6 +73,33 @@ const submitEmploymentForm = async (payload, btn) =>{
   
 };
 
+//Makes request to submit agency registration
+const submitAgencyRegistration = async (payload, btn) =>{
+  let text = {normal: 'Submit', loading: 'Submitting...'};
+  toggleSpinner(btn, text, true);
+  try {
+    const res = await axios({
+      method: 'POST',
+      url: `/agency`,
+      data: payload
+    });
+
+    if(res.data.status === 'success'){
+      console.log('success', 'Submission successful');
+      md.showNotification('Success!', 'success', 'thumb_up');
+      window.setTimeout(() =>{
+        location.assign('/');
+      }, 1000);
+   }
+  } 
+  catch (err) {
+    md.showNotification(err.response.data.message, 'danger', 'error_outline');
+    console.log('error', err);
+    toggleSpinner(btn, text, false);
+  }
+  
+};
+
 
 //Logs out user | Clears cookies
 const logout = async() =>{
@@ -98,6 +125,7 @@ const loginForm = document.querySelector('.form');
 const logOutBtn = document.querySelector('#logout_btn');
 const loginBtn = $('#btn-login'); //document.querySelector('#btn-login');
 const employmentForm = document.querySelector('.employment_form');
+const agencyForm = document.querySelector('.agency_form');
 const employmentFormSubmit = document.getElementById('employment_form_submit');
 
 let payload = {};
@@ -199,6 +227,32 @@ if(employmentFormSubmit){
 
     console.log(Array.from(form.values()));
     submitEmploymentForm(form, submitBtn);
+  });
+}
+
+if(agencyForm){
+  const agencyBtn = $('#agency-btn');
+
+  agencyForm.addEventListener('submit', e =>{
+    e.preventDefault();
+    
+    const country = document.getElementById('country-select').value,
+
+    payload = {
+      phone: document.getElementById('phone').value,
+      name : document.getElementById('agencyName').value,
+      location : document.getElementById('agencyLocation').value,
+      description : document.getElementById('agencyDesc').value
+    }
+
+    if(country === '0'){
+      return md.showNotification('Please select a country', 'danger', 'error_outline');
+    }
+
+    payload.phone = `${country}${payload.phone[0] === '0'? payload.phone.substring(1): payload.phone}`;
+
+    console.log(payload);
+    submitAgencyRegistration(payload, agencyBtn);
   });
 }
 

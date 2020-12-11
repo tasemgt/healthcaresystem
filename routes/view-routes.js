@@ -7,6 +7,12 @@ const router = express.Router();
 
 router.get('/', viewController.root);
 router.get('/login', viewController.loginPage);
+
+router.get('/agency', viewController.agencyFormPage);
+router.post('/agency', viewController.submitAgencyReg);
+router.get('/agency/:agencyId', auth.authenticate, auth.authorize('admin'), viewController.getAgencyByAgencyId);
+router.patch('/agency/:id', auth.authenticate, auth.authorize('admin'), viewController.approveAgency);
+
 router.get('/employment', viewController.employmentFormPage);
 router.post('/employment', viewController.uploadDocuments, viewController.setTempID, viewController.submitEmployment);
 router.get('/employment/:applicationId', auth.authenticate, auth.authorize('director'), viewController.getEmployment);
@@ -15,11 +21,18 @@ router.patch('/employment/:id', auth.authenticate, auth.authorize('director'), v
 
 // router.use();
 router.get('/dashboard', auth.authenticate, viewController.dashboardPage);
-router.get('/dashboard/users', auth.authenticate, auth.authorize('director'), viewController.allUsersPage);
+router.get('/dashboard/users', auth.authenticate, auth.authorize('admin'), viewController.allUsersPage);
 router.get('/dashboard/users/add', auth.authenticate, auth.authorize('director'), viewController.addUserPage);
+router.get('/dashboard/users/add-program-director', auth.authenticate, auth.authorize('admin'), viewController.addDirectorPage);
 router.get('/dashboard/appointments', auth.authenticate, viewController.getAllAppointmentsPage);
 router.get('/dashboard/appointments/add', auth.authenticate, viewController.appointmentFormPage);
 router.get('/dashboard/profile', auth.authenticate, viewController.profilePage);
+
+router.get('/dashboard/agency-applications', auth.authenticate, auth.authorize('admin'), viewController.getAllAgencyApplicationsPage);
+router.get('/dashboard/agency-applications/:id', auth.authenticate, auth.authorize('admin'), viewController.getAgencyApplicationDetailsPage);
+
+router.get('/dashboard/applications', auth.authenticate, auth.authorize('director'), viewController.getAllApplicationsPage);
+router.get('/dashboard/applications/:id', auth.authenticate, auth.authorize('director'), viewController.getApplicationDetailsPage);
 
 
 //Consumers section
@@ -41,15 +54,14 @@ router.get('/dashboard/consumers/rss-sl-service', auth.authenticate, viewControl
 router.get('/dashboard/consumers/day-habilitation-service', auth.authenticate, viewController.dayHabilitationServicePage);
 
 // Nurses section
-router.get('/dashboard/nurses/nursing-service-delivery', auth.authenticate, viewController.nursingServicesDeliveryPage);
-router.get('/dashboard/nurses/nursing-service-checklist', auth.authenticate, viewController.nursingServicesChecklistPage);
-router.get('/dashboard/nurses/nursing-tasks-screening', auth.authenticate, viewController.nursingTasksScreeningPage);
-router.get('/dashboard/nurses/exclusion-of-hhcc', auth.authenticate, auth.authorize('nurse', 'director'), viewController.nursingExclusionOfHostHomePage);
-router.get('/dashboard/nurses/rn-delegation-checklist', auth.authenticate, viewController.rnDelegationChecklistPage);
-router.get('/dashboard/nurses/comprehensive-nursing-assessment', auth.authenticate, viewController.comprehensiveNursingAssessmentPage);
+router.get('/dashboard/nurses/nursing-service-delivery', auth.authenticate, auth.authorize('admin', 'director'), viewController.nursingServicesDeliveryPage);
+router.get('/dashboard/nurses/nursing-service-checklist', auth.authenticate, auth.authorize('admin', 'director'), viewController.nursingServicesChecklistPage);
+router.get('/dashboard/nurses/nursing-tasks-screening', auth.authenticate, auth.authorize('admin', 'director'), viewController.nursingTasksScreeningPage);
+router.get('/dashboard/nurses/exclusion-of-hhcc', auth.authenticate, auth.authorize('admin', 'director', 'nurse'), viewController.nursingExclusionOfHostHomePage);
+router.get('/dashboard/nurses/rn-delegation-checklist', auth.authenticate, auth.authorize('admin', 'director'), viewController.rnDelegationChecklistPage);
+router.get('/dashboard/nurses/comprehensive-nursing-assessment', auth.authenticate, auth.authorize('admin', 'director'), viewController.comprehensiveNursingAssessmentPage);
 
 
-router.get('/dashboard/applications', auth.authenticate, auth.authorize('director'), viewController.getAllApplicationsPage);
-router.get('/dashboard/applications/:id', auth.authenticate, auth.authorize('director'), viewController.getApplicationDetailsPage);
+
 
 module.exports = router;

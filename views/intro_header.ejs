@@ -47,18 +47,24 @@ The above copyright notice and this permission notice shall be included in all c
         </button>
       </div>
       <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav ml-auto">  
+        <% if(title === 'Login'){ %>
           <li class="nav-item">
-            <% if(title === 'Login'){ %>
-              <a class="nav-link" href="/employment">
-                <i class="material-icons">description</i> Apply Here
-              </a>
-            <% } else { %>
-              <a class="nav-link" href="/login">
-                <i class="material-icons">login</i> Login
-              </a>
-            <% } %>
+            <a class="nav-link" href="#" id="introNav" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="material-icons">description</i> Apply Here <i class="material-icons">keyboard_arrow_down</i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" style="right:auto" aria-labelledby="introNav">
+              <a class="dropdown-item" href="/employment">Nurse/Caregiver</a>
+              <a class="dropdown-item" href="/agency">Agency</a>
+            </div>
           </li>
+        <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/login">
+              <i class="material-icons">login</i> Login
+            </a>
+          </li>
+        <% } %>
           <li class="nav-item">
             <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="#" target="_blank" data-original-title="Follow us on Twitter" rel="nofollow">
               <i class="fa fa-twitter"></i>

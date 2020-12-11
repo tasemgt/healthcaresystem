@@ -19118,6 +19118,18 @@ footer .pull-center {
 }
 
 
+
+/* Agency register page */
+#country-select{
+  padding: .5rem;
+  margin-top: 1.5rem;
+  background: #222f3e;
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+}
+
+
 /* Loaders */
 .lds-dual-ring {
   display: inline-block;

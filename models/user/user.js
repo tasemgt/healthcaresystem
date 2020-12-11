@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
   bio: String,
   role: {
     type: String,
-    enum: ['director', 'nurse', 'caregiver'],
+    enum: ['admin','director', 'nurse', 'caregiver'],
     required: [true, 'Please provide a user role']
   },
   password: {
@@ -38,11 +38,6 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please provide a password'],
     minlength: 8,
     select: false
-  },
-  employment: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'EmploymentForm',
-    required: [true, 'An Approved Application is required before registering a user'],
   }
 });
 

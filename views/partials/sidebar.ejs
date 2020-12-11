@@ -14,7 +14,7 @@
       </div>
       <div class="user-info">
         <a href="#" class="username collapsed">
-          <span> <%= user.firstName +" "+ user.lastName %> </span>
+          <span> <%= user.firstName +" "+ user.lastName[0] %>. | <span style="font-size:.7rem; font-weight:bold"><%= user.role %></span> </span>
         </a>
       </div>
     </div>
@@ -25,7 +25,7 @@
           <p>Dashboard</p>
         </a>
       </li>
-      <% if(user.role === 'director') {%>
+      <% if(user.role === 'admin') {%>
         <li class="nav-item">
           <a class="nav-link collapsed" data-toggle="collapse" href="#nurses" aria-expanded="false">
             <i class="material-icons">people</i>
@@ -41,6 +41,26 @@
               <li class="nav-item">
                 <a href="/dashboard/users/add" class="nav-link">
                   <span class="sidebar-normal">Add a User</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" data-toggle="collapse" href="#agency" aria-expanded="false">
+            <i class="material-icons">foundation</i>
+            <p>Agency Applications <b class="caret"></b></p>
+          </a>
+          <div class="collapse" id="agency">
+            <ul class="nav">
+              <li class="nav-item">
+                <a href="/dashboard/agency-applications" class="nav-link">
+                  <span class="sidebar-normal">All Applications</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/dashboard/users/add-program-director" class="nav-link">
+                  <span class="sidebar-normal">Add Agency/Program Director</span>
                 </a>
               </li>
             </ul>

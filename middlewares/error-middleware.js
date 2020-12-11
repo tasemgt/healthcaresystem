@@ -34,8 +34,8 @@ const sendErrorDev = (err, req, res) =>{
     }
 
 
-    //EMPLOYMENT (SEPERATE RESOURCE)
-    if(req.originalUrl.startsWith('/employment') && err.statusCode === 404){
+    //EMPLOYMENT & AGENCY APPLICATION (SEPERATE RESOURCE)
+    if((req.originalUrl.startsWith('/employment') || req.originalUrl.startsWith('/agency'))  && err.statusCode === 404){
       res
       .status(err.statusCode).json({
         status: err.status,

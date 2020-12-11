@@ -7,6 +7,7 @@ const Staff = require('../models/user/staff');
 const Consumer = require('../models/consumer');
 const ConsumerForm = require('../models/form/consumer-form');
 const Employment = require('../models/employment');
+const Agency = require('../models/agency');
 const Appointment = require('../models/appointment');
 
 const RespiteServiceForm = require('../models/delivery-log/respite-service-form');
@@ -74,6 +75,7 @@ exports.uploadDocuments = upload.fields([
 ]);
 
 exports.setTempID = (req, res, next)=>{
+  //Sets a temporal identifier for files uploaded to server
   req.body.id_card = req.files.id_card[0].filename;
   req.body.ss_card = req.files.ss_card[0].filename;
   req.body.highSchool_cert = req.files.highSchool_cert[0].filename;
@@ -130,6 +132,112 @@ exports.dashboardPage = async(req, res) =>{
 };
 
 
+//-- Agency Application Handlers --//
+exports.agencyFormPage = (req, res) =>{
+  res.status(200).render('agency', {
+    title: 'Enroll an Agency'
+  });
+}
+
+exports.submitAgencyReg = async(req, res) =>{
+  try {
+    const agency = await Agency.create(req.body);
+    //Send sms
+    await sms.sendSMS(`${req.body.phone}`, process.env.TWILIO_PHONE, 
+    `Hello ${agency.name}, \nThanks for enrolling into our platform. Your enrollment ID is '${agency.agencyId}'.\nThis ID is required to complete your registeration into the system. \nRegards.`)
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        agency
+      }
+    });
+
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err
+    });
+  }
+}
+
+exports.getAllAgencyApplicationsPage = async(req, res, next) =>{
+  try {
+    const agencies = await Agency.find();
+    res.status(200).render('dashboard/agency-applications/all-agency-applications', {
+      title: 'Agency Enrollment Applications',
+      agencies
+    });
+
+  } catch (err) {
+    return next(new AppError(err, 404));
+  }
+}
+
+exports.getAgencyApplicationDetailsPage = async(req, res, next) =>{
+  try {
+    const agency = await Agency.findById(req.params.id);
+    res.status(200).render('dashboard/agency-applications/agency-application-details', {
+      title: `${agency.name}'s Application`,
+      agency
+    });
+
+  } catch (err) {
+    return next(new AppError(err, 404));
+  }
+}
+
+exports.getAgencyByAgencyId = async(req, res, next) =>{
+  try {
+    let agency;
+    if(req.query.approved !== undefined){
+      agency = await Agency.findOne({agencyId: req.params.agencyId, approved: req.query.approved});
+    }
+    else{
+      agency = await Agency.findOne({agencyId: req.params.agencyId});
+    }
+
+    if(!agency){
+      return next(new AppError('Application with provided ID doesn\'t exist or isn\'t approved yet', 404));
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        agency
+      }
+    });
+
+  } catch (err) {
+    return next(new AppError(err, 404));
+  }
+}
+
+exports.approveAgency = async (req, res, next) =>{
+  try{
+    const agency = await Agency.findByIdAndUpdate(req.params.id, {approved: req.body.approved}, {
+      new: true, //To return the updated document
+      // runValidators: true
+    });
+
+    if(!agency){
+      return next(new AppError('No agency with that ID', 404));
+    }
+
+    res
+    .status(200)
+    .json({
+      status: 'success',
+      data: agency
+    });
+  }
+  catch(err){
+    res.status(404).json({
+      status: 'fail',
+      message: err
+    });
+  } 
+}
 
 //-- Employment/Applications Handlers --//
 exports.employmentFormPage = (req, res) =>{
@@ -293,6 +401,12 @@ exports.addUserPage = (req, res) =>{
   });
 };
 
+exports.addDirectorPage = (req, res) =>{
+  res.status(200).render('dashboard/agency-applications/add-agency', {
+    title: 'Add Program Director'
+  });
+};
+
 
 //-- Consumers and Consumer Forms Pages Handlers --//
 
@@ -392,7 +506,10 @@ exports.legalAssessmentFormPage = (req, res) =>{
 
 //--------------------------------------------------------//
 // Respite Service Delivery
-exports.respiteServiceDeliveryPage =  async (req, res) =>{
+exports.respiteServiceDeliveryPage =  async (req, res, next) =>{
+  if(Object.keys(req.query).length === 0 && req.query.constructor === Object){
+    return next(new AppError('A query parameter is required to load page.', 400));
+  }
   const title = 'Respite Service Delivery Log'
   if(req.query.all){
     const logs = await getDocuments(RespiteServiceForm);
@@ -411,7 +528,10 @@ exports.respiteServiceDeliveryPage =  async (req, res) =>{
 }
 
 // Supported Home Living Service Delivery
-exports.supportedHomeLivingPage =  async (req, res) =>{
+exports.supportedHomeLivingPage =  async (req, res, next) =>{
+  if(Object.keys(req.query).length === 0 && req.query.constructor === Object){
+    return next(new AppError('A query parameter is required to load page.', 400));
+  }
   const title = 'Supported Home Living / CS / CFC-PAS / Habilitation Log'
   if(req.query.all){
     const forms = await getDocuments(SupportedHomeLivingForm);
@@ -429,7 +549,10 @@ exports.supportedHomeLivingPage =  async (req, res) =>{
 }
 
 // Supported Home Employment
-exports.supportedEmploymentPage =  async (req, res) =>{
+exports.supportedEmploymentPage =  async (req, res, next) =>{
+  if(Object.keys(req.query).length === 0 && req.query.constructor === Object){
+    return next(new AppError('A query parameter is required to load page.', 400));
+  }
   const title = 'Supported Employment / Employment Assistance Delivery Log'
   if(req.query.all){
     const forms = await getDocuments(SupportedEmploymentForm);
@@ -447,7 +570,10 @@ exports.supportedEmploymentPage =  async (req, res) =>{
 }
 
 // RSS - SL Service Delivery Log Form
-exports.rssSLServicePage =  async (req, res) =>{
+exports.rssSLServicePage =  async (req, res, next) =>{
+  if(Object.keys(req.query).length === 0 && req.query.constructor === Object){
+    return next(new AppError('A query parameter is required to load page.', 400));
+  }
   const title = 'Residential Support Services (RSS) and Supervised Living (SL) Service Delivery Log'
   const week = 1;
   if(req.query.all){
@@ -468,7 +594,10 @@ exports.rssSLServicePage =  async (req, res) =>{
 }
 
 // Day Habilitation Service Delivery Log Form
-exports.dayHabilitationServicePage =  async (req, res) =>{
+exports.dayHabilitationServicePage =  async (req, res, next) =>{
+  if(Object.keys(req.query).length === 0 && req.query.constructor === Object){
+    return next(new AppError('A query parameter is required to load page.', 400));
+  }
   const title = 'Day Habilitation Service Delivery Log'
   if(req.query.all){
     const logs = await getDocuments(DayHabilitationForm);
@@ -489,7 +618,10 @@ exports.dayHabilitationServicePage =  async (req, res) =>{
 
 // ------------------------------ NURSING SERVICES FORMS -------------------------------//
 // Nursing Services Delivery Log Form
-exports.nursingServicesDeliveryPage =  async (req, res) =>{
+exports.nursingServicesDeliveryPage =  async (req, res, next) =>{
+  if(Object.keys(req.query).length === 0 && req.query.constructor === Object){
+    return next(new AppError('A query parameter is required to load page.', 400));
+  }
   const title = 'Nursing Services Delivery Log - Billable Activities'
   if(req.query.all){
     const forms = await getDocuments(NursingServiceDeliveryForm);
@@ -508,7 +640,10 @@ exports.nursingServicesDeliveryPage =  async (req, res) =>{
 }
 
 // Nursing Services Checklist Form
-exports.nursingServicesChecklistPage =  async (req, res) =>{
+exports.nursingServicesChecklistPage =  async (req, res, next) =>{
+  if(Object.keys(req.query).length === 0 && req.query.constructor === Object){
+    return next(new AppError('A query parameter is required to load page.', 400));
+  }
   const title = 'Nursing Services Checklist';
   const subtitle = 'Waiver Survey and Certification';
   if(req.query.all){
@@ -530,7 +665,10 @@ exports.nursingServicesChecklistPage =  async (req, res) =>{
 }
 
 // Nursing Services Checklist Form
-exports.nursingTasksScreeningPage =  async (req, res) =>{
+exports.nursingTasksScreeningPage =  async (req, res, next) =>{
+  if(Object.keys(req.query).length === 0 && req.query.constructor === Object){
+    return next(new AppError('A query parameter is required to load page.', 400));
+  }
   const title = 'Nursing Tasks Screening Tool Form';
   if(req.query.all){
     const forms = await getDocuments(NursingTasksScreeningForm);
@@ -549,7 +687,10 @@ exports.nursingTasksScreeningPage =  async (req, res) =>{
 }
 
 // Exclusion of Host Home
-exports.nursingExclusionOfHostHomePage =  async (req, res) =>{
+exports.nursingExclusionOfHostHomePage =  async (req, res, next) =>{
+  if(Object.keys(req.query).length === 0 && req.query.constructor === Object){
+    return next(new AppError('A query parameter is required to load page.', 400));
+  }
   const title = `Exclusion of Host Home/Companion Care (HH/CC) Provider from the
                   Board of Nursing (BON) Definition of Unlicensed Person`;
   if(req.query.all){
@@ -568,7 +709,10 @@ exports.nursingExclusionOfHostHomePage =  async (req, res) =>{
 }
 
 // RN Delegation Checklist Form
-exports.rnDelegationChecklistPage =  async (req, res) =>{
+exports.rnDelegationChecklistPage =  async (req, res, next) =>{
+  if(Object.keys(req.query).length === 0 && req.query.constructor === Object){
+    return next(new AppError('A query parameter is required to load page.', 400));
+  }
   const title = `RN Delegation Checklist`;
   const subtitle = `Waiver Survey and Certification | Home and Community-based Services (HCS)/Texas
   Home Living (TxHmL) Program` 
@@ -590,7 +734,10 @@ exports.rnDelegationChecklistPage =  async (req, res) =>{
 }
 
 // Comprehensive Nursing Assessment Form
-exports.comprehensiveNursingAssessmentPage =  async (req, res) =>{
+exports.comprehensiveNursingAssessmentPage =  async (req, res, next) =>{
+  if(Object.keys(req.query).length === 0 && req.query.constructor === Object){
+    return next(new AppError('A query parameter is required to load page.', 400));
+  }
   const title = `Comprehensive Nursing Assessment Form`;
   const subtitle = `To be performed by a Registered Nurse` 
   if(req.query.all){

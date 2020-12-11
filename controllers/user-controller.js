@@ -2,22 +2,20 @@ const generatePassword  = require('password-generator');
 
 const User = require('../models/user/user');
 const Staff = require('../models/user/staff');
+const Director = require('../models/user/director');
 const AppError = require('../utils/app-error');
 
 
 exports.createUser = async(req, res) =>{
   const password = generatePassword(12, false);
   console.log("User password: ", password);
-  const { firstName, lastName, email, phone, address, ssn, bio, role, employment} = req.body;
 
-  if(role === 'director'){
-    return
-  }
+  const Model = req.body.role === 'director'? Director : Staff;
+
+  req.body.password = password;
 
   try {
-    const user = await Staff.create({
-      firstName, lastName, email, phone, role, address, bio, ssn, password, employment
-    });
+    const user = await Model.create(req.body);
 
     res.status(201).json({
       status: 'success',

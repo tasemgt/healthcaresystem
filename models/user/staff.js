@@ -7,6 +7,11 @@ const staffSchema = new mongoose.Schema({
   },
   ssn: {
     type: String
+  },
+  employment: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'EmploymentForm',
+    required: [true, 'An Approved Application is required before registering a user'],
   }
 });
 

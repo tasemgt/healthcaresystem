@@ -3,17 +3,30 @@ const jwt = require('jsonwebtoken');
 const AppError = require('../utils/app-error');
 const User = require('../models/user/user');
 
+
+const checkToken = (req) =>{
+  let token;
+  if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
+    token =  req.headers.authorization.split(' ')[1];
+  }
+  else if(req.cookies.jwt){
+    token = req.cookies.jwt;
+  }
+
+  if(!token){
+    return null;
+  }
+
+  return token;
+
+}
+
+
 exports.authenticate = async (req, res, next) =>{
   let token;
   try {
-    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
-      token =  req.headers.authorization.split(' ')[1];
-    }
-
-    else if(req.cookies.jwt){
-      token = req.cookies.jwt;
-    }
-
+    
+    token = checkToken(req);
     if(!token){
       return next(new AppError('You are not logged in!!', 401));
     }
@@ -59,30 +72,10 @@ exports.authorize = (...roles) =>{
 
 // // Only for rendered pages, no errors
 exports.isLoggedIn = async (req, res, next) =>{
-
-  try {
-    if(req.cookies.jwt){
-      //Verify token
-      const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET);
-    
-      //Check if user still exists
-      const currentUser = await User.findById(decoded.id);
-      if(!currentUser) return next();
-    
-    
-      //Check if user changed password after token was created
-      // if(currentUser.changedPasswordAfter(decoded.iat)){
-      //   return next();
-      // }
-  
-      //There is a logged in user
-      res.locals.user = currentUser;
-      return next();
-    
-    }
-    next();
-  } 
-  catch (err) {
-    next();
+  console.log('Called')
+  const token = checkToken(req);
+  if(token){
+    return res.status(200).redirect('/dashboard');
   }
+  return next();
 }

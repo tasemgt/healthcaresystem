@@ -409,6 +409,7 @@ function toggleSpinner(btn, show){
 
 const errorNotifications = (err) =>{
   const errorData = err.response.data;
+  console.log('error', errorData);
   if(typeof errorData.message === 'string'){
     md.showNotification(errorData.message, 'danger', 'error_outline');
   }
@@ -417,7 +418,7 @@ const errorNotifications = (err) =>{
     md.showNotification(`The provided ${field} is already taken. Please try again.`, 'danger', 'error_outline');
   }
   else{
-    console.log('error', errorData);
+    
     if(Object.keys(errorData.message.errors).includes('employment')){
       return md.showNotification('An Approved Application is required before registering a user', 'danger', 'error_outline');
     }
@@ -501,6 +502,7 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
 
   //Get Form Data
   const addUserForm = document.querySelector('#add_user_form');
+  const addDirectorForm = document.getElementById('add_director_form');
 
   if(addUserForm){
     addUserForm.addEventListener('submit', e =>{
@@ -525,6 +527,42 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
       doCreate(payload, `${baseURLAPI}/users`, 'User created successfully', '/dashboard/users');
     });
   }
+
+  if(addDirectorForm){
+    addDirectorForm.addEventListener('submit', e =>{
+      e.preventDefault();
+
+      const payload = {
+        firstName : document.getElementById('firstName').value,
+        lastName : document.getElementById('lastName').value,
+        email : document.getElementById('email').value,
+        phone : document.getElementById('phone').value,
+        ssn : document.getElementById('ssn').value,
+        bio : document.getElementById('bio').value,
+        agency: document.getElementById('agencyId').value,
+      }
+
+      const country = document.getElementById('country').value;
+
+      if(!country){
+        return md.showNotification('Please select a country', 'danger', 'error_outline');
+      }
+
+      payload.phone = `${country}${payload.phone[0] === '0'? payload.phone.substring(1): payload.phone}`;
+
+      payload.role = 'director';
+
+      if(!payload.agency){
+        return md.showNotification('An Approved Agency Application is required before registering a Program Director', 'danger', 'error_outline'); 
+      }
+
+      console.log(payload);
+
+      doCreate(payload, `${baseURLAPI}/users`, 'Program Director Account created successfully', '/dashboard/users');
+    });
+  }
+
+
 })(createResource);
 
 
@@ -538,7 +576,7 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
   if(searchApplicationBtn){
     searchApplicationBtn.addEventListener('click', async () =>{
 
-    const response = await doCreate(`${baseURL}/employment/${applicationId.value}?approved=true`, 'Data obtained...');
+    const response = await doCreate(`${baseURL}/employment/${applicationId.value}?approved=true`, 'Approved Application Found...');
     console.log(response);
     
     if(response){
@@ -561,6 +599,55 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
     });
   }
 })(getResource);
+
+
+//Search Agency Application 
+(function(doGet){
+
+  //Get Form Data
+  const addDirectorForm = document.getElementById('add_director_form');
+
+  if(addDirectorForm){
+    const agencyApplicationId = document.querySelector('#searchAgency');
+    const searchAgencyApplicationBtn = document.querySelector('#searchAgencyApplication');
+
+    if(searchAgencyApplicationBtn){
+      searchAgencyApplicationBtn.addEventListener('click', async () =>{
+  
+      const response = await doGet(`${baseURL}/agency/${agencyApplicationId.value}?approved=true`, 'Approved Agency Found...');
+      console.log(response);
+      
+      if(response){
+        document.getElementById('agency-name').innerHTML = response.agency.name;
+        document.getElementById('agencyId').value = response.agency._id;
+      }
+      else{
+        document.getElementById('agency-name').innerHTML = 'N/A';
+      }
+      });
+    }
+  }
+})(getResource);
+
+//Updating/Approving Agency Application
+(function(doUpdate){
+
+  //Get Form Data
+  const saveAgencyButton = document.querySelector('#save_agency_application_btn');
+  const approvedAgencyCheck = document.getElementById('approvedAgency');
+
+  const id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+
+  if(saveAgencyButton){
+    saveAgencyButton.addEventListener('click', () =>{
+      const payload = {
+        approved : approvedAgencyCheck.checked
+      }
+
+      doUpdate(payload, `${baseURL}/agency/${id}`, 'Successfully Updated', '/dashboard/users/add-program-director');
+    });
+  }
+})(updateResource);
 
 
 //Create Consumer
