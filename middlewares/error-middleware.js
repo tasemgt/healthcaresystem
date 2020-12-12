@@ -96,8 +96,12 @@ module.exports = (err, req, res, next) =>{
 
     let error = {...err};
     
-    if(error.name === 'CastError') error = handleCastErrorDB(error);
-    sendErrorDev(error, req, res);
+    if(error.name === 'CastError'){
+      error = handleCastErrorDB(error);
+    }
+    else{
+      sendErrorDev(error, req, res);
+    }
   }
   
 };
