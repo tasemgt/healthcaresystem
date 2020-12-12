@@ -87,21 +87,22 @@ module.exports = (err, req, res, next) =>{
   err.status = err.status || 'error';
 
   console.log(err);
+  sendErrorDev(err, req, res);
 
-  if(process.env.NODE_ENV === 'development'){
-    console.log('In development.....')
-    sendErrorDev(err, req, res);
-  } 
-  else if(process.env.NODE_ENV === 'production'){
+  // if(process.env.NODE_ENV === 'development'){
+  //   console.log('In development.....')
+  //   sendErrorDev(err, req, res);
+  // } 
+  // else if(process.env.NODE_ENV === 'production'){
 
-    let error = {...err};
+  //   let error = {...err};
     
-    if(error.name === 'CastError'){
-      error = handleCastErrorDB(error);
-    }
-    else{
-      sendErrorDev(error, req, res);
-    }
-  }
+  //   if(error.name === 'CastError'){
+  //     error = handleCastErrorDB(error);
+  //   }
+  //   else{
+  //     sendErrorDev(error, req, res);
+  //   }
+  // }
   
 };
