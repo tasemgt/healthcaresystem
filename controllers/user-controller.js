@@ -20,11 +20,8 @@ exports.createUser = async(req, res) =>{
     const user = await Model.create(req.body);
     //Send sms
     await sms.sendSMS(`${user.phone}`, process.env.TWILIO_PHONE, 
-    `Hello ${user.firstName},
-    Your P.D account has just been created.
-    \nYour Login is:
-    \nEmail --> ${user.email} 
-    Password --> ${password}
+    `Hello ${user.firstName},\nYour P.D account has just been created.
+    \nYour Login is:\nEmail --> ${user.email}\nPassword --> ${password}
     \nRegards.`);
 
     res.status(201).json({

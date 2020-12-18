@@ -16,7 +16,8 @@
               <div class="card">
                 <div class="card-header card-header-primary">
                   <h4 class="card-title ">All Consumers</h4>
-                  <p class="card-category">Lists all Registered Consumers</p>
+                  <p class="card-category">Lists all Registered Consumers under your Agency</p>
+                  <a href="/dashboard/consumers/add" type="button" id="add-btn" class="btn btn-light pull-right btn-sm">Add Consumer</a>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
@@ -50,7 +51,7 @@
                             <td>
                               <%= consumer.lastName %>
                             </td>
-                            <td class="text-danger" style="font-size: 1.2rem">
+                            <td class="text-info" style="font-size: 1.1rem; font-weight:bolder">
                               <%= consumer.lcNumber %>
                             </td>
                             <td class="formatted-date">

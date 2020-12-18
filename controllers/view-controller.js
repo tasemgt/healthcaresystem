@@ -431,7 +431,8 @@ exports.registerConsumerPage = (req, res) =>{
 
 exports.getAllConsumers = async(req, res, next) =>{
   try {
-    const consumers = await getDocuments(Consumer);
+    const agencyID = req.user.agency._id;
+    const consumers = await Consumer.find({agency: agencyID});
     
     res.status(200).render('dashboard/consumers/all-consumers', {
       title: 'All Consumers',

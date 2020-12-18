@@ -45,7 +45,7 @@ router.get('/dashboard/applications/:id', auth.authenticate, auth.authorize('dir
 router.get('/dashboard/consumers', auth.authenticate, viewController.getAllConsumers);
 router.get('/dashboard/consumers/add', auth.authenticate, auth.authorize('director'), viewController.registerConsumerPage);
 router.get('/dashboard/consumers/download', auth.authenticate, auth.authorize('director'), viewController.downloadConsumerDocument);
-router.get('/dashboard/consumers/:id', auth.authenticate, auth.authorize('director'), viewController.getConsumerDetailsPage);
+router.get('/dashboard/consumers/:id', auth.authenticate, auth.authorize('admin','director'), viewController.getConsumerDetailsPage);
 
 
 router.get('/dashboard/consumer-forms', auth.authenticate, viewController.getAllConsumerForms);
