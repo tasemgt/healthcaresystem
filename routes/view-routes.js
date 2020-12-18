@@ -5,6 +5,12 @@ const auth = require('../middlewares/auth-middlewares');
 
 const router = express.Router();
 
+const employmentDocs = [
+  {name: 'id_card', maxCount: 1},
+  {name: 'ss_card', maxCount: 1},
+  {name: 'highSchool_cert', maxCount: 1}
+]
+
 router.get('/', viewController.root);
 router.get('/login', viewController.loginPage);
 
@@ -14,7 +20,7 @@ router.get('/agency/:agencyId', auth.authenticate, auth.authorize('admin'), view
 router.patch('/agency/:id', auth.authenticate, auth.authorize('admin'), viewController.approveAgency);
 
 router.get('/employment', viewController.employmentFormPage);
-router.post('/employment', viewController.uploadDocuments, viewController.setTempID, viewController.submitEmployment);
+//router.post('/employment', viewController.uploadDocs(employmentDocs), viewController.setTempID, viewController.submitEmployment);
 router.get('/employment/:applicationId', auth.authenticate, auth.authorize('director'), viewController.getEmployment);
 router.patch('/employment/:id', auth.authenticate, auth.authorize('director'), viewController.updateEmployment);
 
@@ -37,7 +43,11 @@ router.get('/dashboard/applications/:id', auth.authenticate, auth.authorize('dir
 
 //Consumers section
 router.get('/dashboard/consumers', auth.authenticate, viewController.getAllConsumers);
-router.get('/dashboard/consumers/add', auth.authenticate, viewController.registerConsumerPage);
+router.get('/dashboard/consumers/add', auth.authenticate, auth.authorize('director'), viewController.registerConsumerPage);
+router.get('/dashboard/consumers/download', auth.authenticate, auth.authorize('director'), viewController.downloadConsumerDocument);
+router.get('/dashboard/consumers/:id', auth.authenticate, auth.authorize('director'), viewController.getConsumerDetailsPage);
+
+
 router.get('/dashboard/consumer-forms', auth.authenticate, viewController.getAllConsumerForms);
 router.get('/dashboard/consumers/dental-form', auth.authenticate, viewController.dentalFormPage);
 router.get('/dashboard/consumers/hot-water-form', auth.authenticate, viewController.hotWaterFormPage);

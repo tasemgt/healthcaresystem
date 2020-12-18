@@ -4,6 +4,7 @@ const {promisify} = require('util');
 const generatePassword  = require('password-generator');
 const User = require('../models/user/user');
 const Staff = require('../models/user/staff');
+const Director = require('../models/user/director');
 const Consumer = require('../models/consumer');
 const ConsumerForm = require('../models/form/consumer-form');
 const Employment = require('../models/employment');
@@ -26,6 +27,7 @@ const nursingServiceChecklistData = require('../models/data/nursing-service-chec
 const nursingTasksScreeningData = require('../models/data/nursing-tasks-screening-data');
 const rnDelegationChecklistData = require('../models/data/rn-delegation-checklist-data');
 const comprehensiveNursingAssessmentData = require('../models/data/comprehensive-nursing-assessment-data');
+const addConsumerServices = require('../models/data/add-consumer-services-data');
 
 // Nurse Models
 const NursingServiceDeliveryForm = require('../models/nurse-form/nursing-service-delivery-form');
@@ -40,19 +42,23 @@ const AppError  = require('../utils/app-error');
 const fileUpload = require('../utils/file_upload');
 const sms = require('../utils/sms');
 
-
-
-const multerStorage = multer.diskStorage({
-  destination: (req, file, cb) =>{
-    cb(null, `public/files`);
-  },
-  filename: (req, file, cb) =>{
-    req.tempFileID = `${generatePassword(12, false)}-${Date.now()}`;
-    cb(null, `${req.tempFileID}-${file.originalname}`);
-  }
-});
+// const multerStorage = multer.diskStorage({
+//   destination: (req, file, cb) =>{
+//     cb(null, `public/files`);
+//   },
+//   filename: (req, file, cb) =>{
+//     req.tempFileID = `${generatePassword(12, false)}-${Date.now()}`;
+//     cb(null, `${req.tempFileID}-${file.originalname}`);
+//   }
+// });
 
 // const multerStorage = multer.memoryStorage();
+
+const storage = multer.memoryStorage({
+  destination: (req, file, cb) =>{
+    cb(null, '');
+  }
+});
 
 const multerFilter = (req, file, cb) =>{
   if(file.mimetype.startsWith('application/pdf')){
@@ -64,24 +70,25 @@ const multerFilter = (req, file, cb) =>{
 }
 
 const upload = multer({
-  storage: multerStorage,
+  storage: storage,
   fileFilter: multerFilter
 });
 
-exports.uploadDocuments = upload.fields([
-  {name: 'id_card', maxCount: 1},
-  {name: 'ss_card', maxCount: 1},
-  {name: 'highSchool_cert', maxCount: 1}
-]);
-
-exports.setTempID = (req, res, next)=>{
-  //Sets a temporal identifier for files uploaded to server
-  req.body.id_card = req.files.id_card[0].filename;
-  req.body.ss_card = req.files.ss_card[0].filename;
-  req.body.highSchool_cert = req.files.highSchool_cert[0].filename;
-  console.log(req.body);
-  next();
+//File uploads middleware
+exports.uploadDocs = (docs) =>{
+  return upload.fields(docs);
 }
+
+// exports.uploadDocuments = upload.fields();
+
+// exports.setTempID = (req, res, next)=>{
+//   //Sets a temporal identifier for files uploaded to server
+//   req.body.id_card = req.files.id_card[0].filename;
+//   req.body.ss_card = req.files.ss_card[0].filename;
+//   req.body.highSchool_cert = req.files.highSchool_cert[0].filename;
+//   console.log(req.body);
+//   next();
+// }
 
 const getDocuments = async Model =>{
   try {
@@ -240,9 +247,11 @@ exports.approveAgency = async (req, res, next) =>{
 }
 
 //-- Employment/Applications Handlers --//
-exports.employmentFormPage = (req, res) =>{
+exports.employmentFormPage = async(req, res) =>{
+  const agencies = await Agency.find({});
   res.status(200).render('employment', {
-    title: 'Employment Form'
+    title: 'Employment Form',
+    agencies
   });
 }
 
@@ -250,11 +259,10 @@ exports.submitEmployment = async(req, res) =>{
   try {
     req.body.references = JSON.parse(req.body.references); //Parse to js object after converting from formData
     const employment = await Employment.create(req.body);
-    const phone = employment.phone.substring(1);
-
+    
     //Send sms
-    await sms.sendSMS(`+234${phone}`, process.env.TWILIO_PHONE, 
-    `Hello ${employment.firstName}, \nThanks for your application. Your application ID is '${employment.applicationId}'. Give this ID to your Program Director for your enrollment into the system. \nRegards.`)
+    await sms.sendSMS(`${req.body.phone}`, process.env.TWILIO_PHONE, 
+    `Hello ${employment.firstName}, \nThanks for your application. Your application ID is '${employment.applicationId}'.\nGive this ID to your Program Director for your enrollment into the system. \nRegards.`)
 
     res.status(201).json({
       status: 'success',
@@ -380,8 +388,11 @@ exports.profilePage = async (req, res) =>{
 //-- Users Management page handlers --//
 exports.allUsersPage = async(req, res) =>{
   async.parallel({
+    // directors: function(callback){
+    //   User.find({role:'director'}, callback);
+    // },
     directors: function(callback){
-      User.find({role:'director'}, callback);
+      Director.find({}, callback);
     },
     staff: function(callback){
       Staff.find({}, callback);
@@ -413,7 +424,8 @@ exports.addDirectorPage = (req, res) =>{
 // Consumers Create Form
 exports.registerConsumerPage = (req, res) =>{
   res.status(200).render('dashboard/consumers/add-consumer', {
-    title: 'Register a Consumer'
+    title: 'Register a Consumer',
+    services: addConsumerServices
   });
 }
 
@@ -431,6 +443,46 @@ exports.getAllConsumers = async(req, res, next) =>{
   }
 }
 
+exports.getConsumerDetailsPage = async(req, res, next) =>{
+  try {
+    const consumer = await Consumer.findById(req.params.id);
+    
+    res.status(200).render('dashboard/consumers/consumer-details', {
+      title: 'Consumer Details',
+      consumer
+    });
+
+  } catch (err) {
+    return next(new AppError(err, 404));
+  }
+}
+
+exports.downloadConsumerDocument = async(req, res, next) =>{
+  
+  const s3 = fileUpload.aws();
+
+  try {
+    const filename = req.query.file;
+    if(filename){
+      const params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: filename
+      }
+
+      console.log(params);
+
+      const { Body } = await s3.getObject(params).promise();
+      res.status(200).end(Body, 'utf8');
+
+    }
+    
+  } catch (err) {
+    return next(new AppError(err, 404));
+  }
+}
+
+
+//Gets all Simple Forms
 exports.getAllConsumerForms = async(req, res, next) =>{
   try {
     const forms = await getDocuments(ConsumerForm)
@@ -479,11 +531,9 @@ exports.fireEmergencyFormPage = (req, res) =>{
 //Environmental Checklist Form
 exports.environmentalChecklistFormPage = async (req, res, next) =>{
   try {
-    const datas = await EnvChecklistData.find();
-    console.log(datas);
     res.status(200).render('dashboard/consumers/form-views/environmental-checklist-form', {
       title: 'Environmental Safety Checklist Form',
-      datas
+      datas: EnvChecklistData
     });
   } catch (err) {
     return next(new AppError(err, 404));

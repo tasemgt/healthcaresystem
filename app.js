@@ -33,7 +33,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules/axios')));
 
 //Set security http headers
-app.use(helmet());
+// app.use(helmet({
+//   contentSecurityPolicy: false
+// }));
 
 // Development Logging
 if(process.env.NODE_ENV === 'development'){

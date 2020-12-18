@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const employmentFormSchema = new mongoose.Schema({
-
+  agency: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Agency'
+  },
   firstName: {
     type: String,
     required: [true, 'First name is required']

@@ -18,7 +18,11 @@
               </a>
             </div>
             <div class="card-body">
-              <h6 class="card-category text-gray"><%= user.role %></h6>
+              <h6 class="card-category text-gray"><%= user.role === 'director'? 'Program Director': user.role %>
+                <% if(user.agency){ %>
+                  <span style="text-transform:capitalize">@ <%= user.agency.name %></span>
+                <% } %>
+              </h6>
               <h4 class="card-title"><%= user.firstName + " " + user.lastName %></h4>
               <p class="text-info"><%= user.email %></p>
               <p class="card-description"> <%= user.bio %></p>

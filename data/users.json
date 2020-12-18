@@ -1,12 +1,12 @@
 [
   {
-    "firstName": "Admin",
-    "lastName": "HCS",
+    "firstName": "Administrator",
+    "lastName": "Admin",
     "email": "admin@hcs.com",
     "phone": "08062254916",
     "photo": "admin.jpg",
-    "bio": "I am the program director, with lots of experience in health care delivery and process!",
-    "role": "director",
+    "bio": "Overall Admin",
+    "role": "admin",
     "password": "password"
   }
 ]

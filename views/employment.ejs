@@ -51,16 +51,21 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-md-4 col-sm-12">
+                      <div class="col-md-2 col-sm-12">
                         <div class="form-group">
-                          <label class="bmd-label-floating">Phone number *</label>
-                          <input type="number" class="form-control" id="phone" required>
+                          <select id="country-select" class="custom-select" name="country">
+                            <option value="0">&nbsp;&nbsp;Select a Country *</option>
+                            <option value="+1">U.S +1</option>
+                            <option value="+1">Canada +1</option>
+                            <option value="+44">U.K +44</option>
+                            <option value="+234">NIG. +234</option>
+                          </select>
                         </div>
                       </div>
                       <div class="col-md-4 col-sm-12">
                         <div class="form-group">
-                          <label class="bmd-label-floating">Email Address *</label>
-                          <input type="text" class="form-control" id="email">
+                          <label class="bmd-label-floating">Phone number *</label>
+                          <input type="number" class="form-control" id="phone" required>
                         </div>
                       </div>
                       <div class="col-md-4 col-sm-12">
@@ -71,7 +76,23 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-md-10 col-sm-12">
+                      <div class="col-md-2 col-sm-12">
+                        <div class="form-group">
+                          <select id="agency-select" class="custom-select" name="agency">
+                            <option value="0">&nbsp;Select an Agency *</option>
+                            <% for(agency of agencies) { %>
+                              <option value="<%= agency._id %>"><%= agency.name %></option>
+                            <% } %>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-sm-12">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Email Address *</label>
+                          <input type="text" class="form-control" id="email">
+                        </div>
+                      </div>
+                      <div class="col-md-7 col-sm-12">
                         <div class="form-group">
                           <label class="bmd-label-floating">Home Address *</label>
                           <input type="text" class="form-control" id="address" required>
@@ -92,6 +113,17 @@
                               <input type="text" class="form-control" id="ref1_name" required>
                             </div>
                           </div>
+                          <div class="col-md-2 col-sm-12">
+                            <div class="form-group">
+                              <select id="country-select-1" class="custom-select" name="country1">
+                                <option value="0">&nbsp;&nbsp;Country *</option>
+                                <option value="+1">U.S +1</option>
+                                <option value="+1">Canada +1</option>
+                                <option value="+44">U.K +44</option>
+                                <option value="+234">NIG. +234</option>
+                              </select>
+                            </div>
+                          </div>
                           <div class="col-md-4 col-sm-12">
                             <div class="form-group">
                               <label class="bmd-label-floating">Phone Number *</label>
@@ -106,6 +138,17 @@
                               <input type="text" class="form-control" id="ref2_name" required>
                             </div>
                           </div>
+                          <div class="col-md-2 col-sm-12">
+                            <div class="form-group">
+                              <select id="country-select-2" class="custom-select" name="country2">
+                                <option value="0">&nbsp;&nbsp;Country *</option>
+                                <option value="+1">U.S +1</option>
+                                <option value="+1">Canada +1</option>
+                                <option value="+44">U.K +44</option>
+                                <option value="+234">Nig. +234</option>
+                              </select>
+                            </div>
+                          </div>
                           <div class="col-md-4">
                             <div class="form-group">
                               <label class="bmd-label-floating">Phone Number *</label>
@@ -118,6 +161,17 @@
                             <div class="form-group">
                               <label class="bmd-label-floating">Name *</label>
                               <input type="text" class="form-control" id="ref3_name" required>
+                            </div>
+                          </div>
+                          <div class="col-md-2 col-sm-12">
+                            <div class="form-group">
+                              <select id="country-select-3" class="custom-select" name="country3">
+                                <option value="0">&nbsp;&nbsp;Country *</option>
+                                <option value="+1">U.S +1</option>
+                                <option value="+1">Canada +1</option>
+                                <option value="+44">U.K +44</option>
+                                <option value="+234">Nig. +234</option>
+                              </select>
                             </div>
                           </div>
                           <div class="col-md-4 col-sm-12">
@@ -143,7 +197,7 @@
                         <br>
                       </div>
                     </div>
-                    
+                    <input type="hidden" name="payload1" id="payload1">
                     <button class="btn btn-primary btn-wd btn-md pull-right" id="btn-submit"> Submit Application</button>
                   </form>
                 </div>

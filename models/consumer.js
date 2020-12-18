@@ -10,11 +10,10 @@ const consumerSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A consumer must have a last name']
   },
-  email: {
+  behaviorPlan: {
     type: String,
-    required: [true, 'A consumer must have an email'],
-    lowercase: true,
-    validate: [validator.isEmail, 'Please provide a valid email']
+    required: [true, 'Behavior Plan is required'],
+    enum: ['yes', 'no']
   },
   lcNumber:{
     type: String,
@@ -23,8 +22,54 @@ const consumerSchema = new mongoose.Schema({
   },
   phone: { 
     type: String,
-    required: [true, 'A consumer must have a last name']
+    required: [true, 'Phone number is required']
+  },
+  dob: {
+    type: Date,
+    required: [true, 'Date of Birth is required']
+  },
+  address: {
+    type: String,
+    required: [true, 'Address is required']
+  },
+  directedPlan: {
+    filename: String,
+    expiry: String
+  },
+  ipc: {
+    filename: String,
+    expiry: String
+  },
+  transferPaper: {
+    filename: String,
+    expiry: String
+  },
+  icap: {
+    filename: String,
+    expiry: String
+  },
+  idrc: {
+    filename: String,
+    expiry: String
+  },
+  consumerRights: {
+    filename: String,
+    expiry: String
+  },
+  consumerServices: [{
+    service: String,
+    checked: Boolean
+  }],
+  agency: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Agency',
+    required: [true, 'An Agency is required']
   }
+});
+
+consumerSchema.pre(/^find/, function(next){
+  this.populate({ path: 'agency', select: 'name' });
+  next();
 });
 
 module.exports = mongoose.model('Consumer', consumerSchema);

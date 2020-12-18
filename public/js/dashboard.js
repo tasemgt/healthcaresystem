@@ -1,8 +1,9 @@
 /* eslint-disable */
 
 const baseURL = '';
-const baseURLAPI = '/api/v1';        
-      
+const baseURLAPI = '/api/v1';       
+
+    
 //INITIALIZE DATATABLES
 $(document).ready( function () {
   $('.data-table').DataTable({
@@ -408,21 +409,27 @@ function toggleSpinner(btn, show){
 
 
 const errorNotifications = (err) =>{
-  const errorData = err.response.data;
+  const errorData = err.response ? err.response.data: null;
   console.log('error', errorData);
-  if(typeof errorData.message === 'string'){
-    md.showNotification(errorData.message, 'danger', 'error_outline');
-  }
-  else if(errorData.message.code && errorData.message.code === 11000){
-    const field = Object.keys(errorData.message.keyValue)[0];
-    md.showNotification(`The provided ${field} is already taken. Please try again.`, 'danger', 'error_outline');
+  
+  if(errorData){
+    if(typeof errorData.message === 'string'){
+      md.showNotification(errorData.message, 'danger', 'error_outline');
+    }
+    else if(errorData.message.code && errorData.message.code === 11000){
+      const field = Object.keys(errorData.message.keyValue)[0];
+      md.showNotification(`The provided ${field} is already taken. Please try again.`, 'danger', 'error_outline');
+    }
+    else{
+      
+      if(Object.keys(errorData.message.errors).includes('employment')){
+        return md.showNotification('An Approved Application is required before registering a user', 'danger', 'error_outline');
+      }
+      md.showNotification(errorData.message.message.split(':')[2], 'danger', 'error_outline');
+    }
   }
   else{
-    
-    if(Object.keys(errorData.message.errors).includes('employment')){
-      return md.showNotification('An Approved Application is required before registering a user', 'danger', 'error_outline');
-    }
-    md.showNotification(errorData.message.message.split(':')[2], 'danger', 'error_outline');
+    md.showNotification('Sorry could not complete. Please try again...', 'danger', 'error_outline');
   }
 }
 
@@ -465,8 +472,8 @@ const createResource = async (payload, url, successMessage, redirectURL, btn) =>
    }
   } 
   catch (err) {
-    errorNotifications(err);
     btn ? toggleSpinner(btn, false): null;
+    errorNotifications(err);
   }
 };
 
@@ -659,22 +666,104 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
   const btnService = {
     btn,
     normalText: 'Register Consumer',
-    loadingText: 'Registering...'
+    loadingText: 'Submitting, please wait...'
   }
 
   if(addConsumerForm){
+
+    let directedPlan, ipc, transferPaper, icap, idrc, consumerRights;
+
+    $('#directed-plan').on('change', () =>{ 
+      directedPlan = document.getElementById('directed-plan').files[0];
+      directedPlan ? $('#lab_directed-plan').html(directedPlan.name).css('color', '#222f3e'): '';
+    });
+
+    $('#ipc').on('change', () =>{ 
+      ipc = document.getElementById('ipc').files[0];
+      ipc ? $('#lab_ipc').html(ipc.name).css('color', '#222f3e'): '';
+    });
+
+    $('#transfer-paper').on('change', () =>{ 
+      transferPaper = document.getElementById('transfer-paper').files[0];
+      transferPaper ? $('#lab_transfer-paper').html(transferPaper.name).css('color', '#222f3e'): '';
+    });
+
+    $('#icap').on('change', () =>{ 
+      icap = document.getElementById('icap').files[0];
+      icap ? $('#lab_icap').html(icap.name).css('color', '#222f3e'): '';
+    });
+
+    $('#idrc').on('change', () =>{ 
+      idrc = document.getElementById('idrc').files[0];
+      idrc ? $('#lab_idrc').html(idrc.name).css('color', '#222f3e'): '';
+    });
+
+    $('#consumer-rights').on('change', () =>{ 
+      consumerRights = document.getElementById('consumer-rights').files[0];
+      consumerRights ? $('#lab_consumer-rights').html(consumerRights.name).css('color', '#222f3e'): '';
+    });
+
     addConsumerForm.addEventListener('submit', e =>{
       e.preventDefault();
+
+      const country = document.getElementById('country').value;
+      console.log(country);
 
       const payload = {
         firstName : document.getElementById('firstName').value,
         lastName : document.getElementById('lastName').value,
-        email : document.getElementById('email').value,
+        address : document.getElementById('address').value,
         phone : document.getElementById('phone').value,
-        lcNumber : document.getElementById('lcNumber').value
+        lcNumber : document.getElementById('lcNumber').value,
+        dob: reFormatDate(document.getElementById('dob').value.split('/')),
+        behaviorPlan: document.getElementById('behaviorPlan').checked? 'yes': 'no',
+        exp_directedPlan: document.getElementById('exp-directed-plan').value,
+        exp_ipc: document.getElementById('exp-ipc').value,
+        exp_transferPaper: document.getElementById('exp-transfer-paper').value,
+        exp_icap: document.getElementById('exp-icap').value,
+        exp_idrc: document.getElementById('exp-idrc').value,
+        exp_consumerRights: document.getElementById('exp-consumer-rights').value
       }
+
+      if(!directedPlan || !ipc || !transferPaper || !icap || !idrc || !consumerRights){
+        return md.showNotification('One or more files have\'t been selected', 'danger', 'error_outline');
+      }
+  
+      if(!country.includes('+')){
+        return md.showNotification('Please select a country', 'danger', 'error_outline');
+      }
+
+      payload.phone = `${country}${payload.phone[0] === '0'? payload.phone.substring(1): payload.phone}`;
+
+      const consumerServices = [];
+      const consumerServicesRow = document.getElementById('consumer-services-row');
+      for(col of consumerServicesRow.children){
+        const service = {
+          service: col.firstElementChild.firstElementChild.innerHTML,
+          checked: col.firstElementChild.lastElementChild.firstElementChild.checked
+        };
+        consumerServices.push(service);
+      }
+      payload.consumerServices = consumerServices;
+
+      const form = new FormData();
+
+      form.append('firstName', payload.firstName); form.append('lastName', payload.lastName);
+      form.append('address', payload.address); form.append('phone', payload.phone);
+      form.append('lcNumber', payload.lcNumber); form.append('dob', payload.dob);
+      form.append('behaviorPlan', payload.behaviorPlan); form.append('exp_directedPlan', payload.exp_directedPlan);
+      form.append('exp_ipc', payload.exp_ipc); form.append('exp_transferPaper', payload.exp_transferPaper);
+      form.append('exp_icap', payload.exp_icap); form.append('exp_idrc', payload.exp_idrc);
+      form.append('exp_consumerRights', payload.exp_consumerRights); form.append('consumerServices', JSON.stringify(payload.consumerServices));
+
+      form.append('directedPlan', directedPlan);
+      form.append('ipc', ipc); form.append('transferPaper', transferPaper); form.append('icap', icap); 
+      form.append('idrc', idrc); form.append('consumerRights', consumerRights);
+
       console.log(payload);
-      doCreate(payload, `${baseURLAPI}/consumers`, 'Success!', '/dashboard/consumers', btnService);
+      console.log(Array.from(form.values()));
+
+      doCreate(form, `${baseURLAPI}/consumers`, 'Success!', '/dashboard/consumers', btnService);
     });
   }
 })(createResource);

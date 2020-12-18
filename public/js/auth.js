@@ -129,6 +129,35 @@ const agencyForm = document.querySelector('.agency_form');
 const employmentFormSubmit = document.getElementById('employment_form_submit');
 
 let payload = {};
+let country;
+
+//returns country and payload
+function setPayload(){
+  country = document.getElementById('country-select').value;
+  const agency = document.getElementById('agency-select').value;
+  
+    payload = {
+    firstName : document.getElementById('firstName').value,
+    lastName : document.getElementById('lastName').value,
+    address : document.getElementById('address').value,
+    email: document.getElementById('email').value,
+    phone: document.getElementById('phone').value,
+    phone: document.getElementById('phone').value,
+    ssn : document.getElementById('ssn').value,
+    high_school : document.getElementById('highSchool').value
+  }
+
+  if(country === '0'){
+    return md.showNotification('Please select a country', 'danger', 'error_outline');
+  }
+  payload.phone = `${country}${payload.phone[0] === '0'? payload.phone.substring(1): payload.phone}`;
+
+  if(agency === '0'){
+    return md.showNotification('Please select an agency', 'danger', 'error_outline');
+  }
+
+  payload.agency = agency;
+}
 
 if(loginForm){
     loginForm.addEventListener('submit', e =>{
@@ -139,21 +168,17 @@ if(loginForm){
       login(email, password, loginBtn);
   });
 }
+
 if(employmentForm){
     const navReferences = document.getElementById('nav-references');
 
+    navReferences.addEventListener('click', e =>{
+      setPayload();
+      console.log(payload);
+    });
+
     employmentForm.addEventListener('submit', e =>{
       e.preventDefault();
-      
-      payload = {
-        firstName : document.getElementById('firstName').value,
-        lastName : document.getElementById('lastName').value,
-        address : document.getElementById('address').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        ssn : document.getElementById('ssn').value,
-        high_school : document.getElementById('highSchool').value
-      }
       navReferences.click();
       console.log(payload);
   });
@@ -170,7 +195,7 @@ if(employmentFormSubmit){
     idCard ? $('#lab_id_card').html(idCard.name).css('color', '#222f3e'): '';
   });
 
-  $('#ss_card').on('change', () =>{ 
+  $('#ss_card').on('change', () =>{
     ssCard = document.getElementById('ss_card').files[0];
     ssCard ? $('#lab_ss_card').html(ssCard.name).css('color', '#222f3e'): '';
   });
@@ -180,7 +205,17 @@ if(employmentFormSubmit){
     highSchoolCert? $('#lab_high_school_cert').html(highSchoolCert.name).css('color', '#222f3e'): '';
   });
 
+
   employmentFormSubmit.addEventListener('submit', e =>{
+
+    const country1 = document.getElementById('country-select-1').value;
+    const country2 = document.getElementById('country-select-2').value;
+    const country3 = document.getElementById('country-select-3').value;
+
+    const phone1 = document.getElementById('ref1_phone').value;
+    const phone2 = document.getElementById('ref2_phone').value;
+    const phone3 = document.getElementById('ref3_phone').value
+
     e.preventDefault();
 
     if(
@@ -190,26 +225,35 @@ if(employmentFormSubmit){
       || !payload.email 
       || !payload.ssn 
       || !payload.high_school
+      || !payload.phone
+      || !payload.agency
+      || country === '0'
       ){
         return md.showNotification('Your basic info is incomplete, please check and fill in all required fields', 'danger', 'error_outline');
       }
+
+      console.log(country1, country2, country3);
 
     if(!idCard || !ssCard || !highSchoolCert){
       return md.showNotification('One or more files have\'t been selected', 'danger', 'error_outline');
     }
 
+    if(country1 === '0' || country2 === '0' || country3 === '0'){
+      return md.showNotification('Please select all country fields', 'danger', 'error_outline');
+    }
+
     const references = [
       { 
         name: document.getElementById('ref1_name').value,
-        phone: document.getElementById('ref1_phone').value 
+        phone:`${country1}${phone1[0] === '0'? phone1.substring(1): phone1}` 
       },
       { 
         name: document.getElementById('ref2_name').value,
-        phone: document.getElementById('ref2_phone').value 
+        phone:`${country2}${phone2[0] === '0'? phone2.substring(1): phone2}`
       },
       { 
         name: document.getElementById('ref3_name').value,
-        phone: document.getElementById('ref3_phone').value 
+        phone:`${country3}${phone3[0] === '0'? phone3.substring(1): phone3}`
       }
     ];
 
@@ -220,13 +264,14 @@ if(employmentFormSubmit){
 
     form.append('firstName', payload.firstName); form.append('lastName', payload.lastName);
     form.append('address', payload.address); form.append('email', payload.email);
-    form.append('phone', payload.phone);
+    form.append('phone', payload.phone); form.append('agency', payload.agency);
     form.append('ssn', payload.ssn); form.append('high_school', payload.high_school);
     form.append('references', JSON.stringify(payload.references)); form.append('id_card', idCard);
     form.append('ss_card', ssCard); form.append('highSchool_cert', highSchoolCert);
 
     console.log(Array.from(form.values()));
-    submitEmploymentForm(form, submitBtn);
+    
+    // submitEmploymentForm(form, submitBtn);
   });
 }
 
@@ -236,9 +281,9 @@ if(agencyForm){
   agencyForm.addEventListener('submit', e =>{
     e.preventDefault();
     
-    const country = document.getElementById('country-select').value,
+    const country = document.getElementById('country-select').value;
 
-    payload = {
+    const payload = {
       phone: document.getElementById('phone').value,
       name : document.getElementById('agencyName').value,
       location : document.getElementById('agencyLocation').value,

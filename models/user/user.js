@@ -41,6 +41,11 @@ const userSchema = new mongoose.Schema({
   }
 });
 
+//For Directors
+userSchema.pre(/^find/, function(next){
+  this.populate({ path: 'agency', select: 'name' });
+  next();
+});
 
 userSchema.pre('save', async function(next){
   if(!this.isModified('password')) return next();

@@ -5,6 +5,8 @@ const Staff = require('../models/user/staff');
 const Director = require('../models/user/director');
 const AppError = require('../utils/app-error');
 
+const sms = require('../utils/sms');
+
 
 exports.createUser = async(req, res) =>{
   const password = generatePassword(12, false);
@@ -16,6 +18,14 @@ exports.createUser = async(req, res) =>{
 
   try {
     const user = await Model.create(req.body);
+    //Send sms
+    await sms.sendSMS(`${user.phone}`, process.env.TWILIO_PHONE, 
+    `Hello ${user.firstName},
+    Your P.D account has just been created.
+    \nYour Login is:
+    \nEmail --> ${user.email} 
+    Password --> ${password}
+    \nRegards.`);
 
     res.status(201).json({
       status: 'success',
