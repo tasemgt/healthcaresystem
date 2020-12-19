@@ -33,6 +33,9 @@ router.get('/dashboard/users/add-program-director', auth.authenticate, auth.auth
 router.get('/dashboard/appointments', auth.authenticate, viewController.getAllAppointmentsPage);
 router.get('/dashboard/appointments/add', auth.authenticate, viewController.appointmentFormPage);
 router.get('/dashboard/profile', auth.authenticate, viewController.profilePage);
+router.get('/dashboard/settings/change-password', auth.authenticate, viewController.changeUserPassword);
+router.get('/dashboard/error', auth.authenticate, viewController.getErrorPage);
+
 
 router.get('/dashboard/agency-applications', auth.authenticate, auth.authorize('admin'), viewController.getAllAgencyApplicationsPage);
 router.get('/dashboard/agency-applications/:id', auth.authenticate, auth.authorize('admin'), viewController.getAgencyApplicationDetailsPage);

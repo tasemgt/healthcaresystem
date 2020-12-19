@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user/user');
 const AppError = require('../utils/app-error');
 const sendEmail = require('../utils/email');
-
+const sms = require('../utils/sms');
 
 const signToken = id =>{
   return jwt.sign({id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRES_IN});
@@ -66,3 +66,40 @@ exports.logout = (req, res) =>{
 
   res.status(200).json({status: 'success'});
 };
+
+
+exports.updatePassword = async (req, res, next) =>{
+
+  console.log(req.body);
+  try {
+    const { currentPassword } = req.body;
+
+    //Get user and fetch current password
+    const user = await User.findById(req.user.id).select('+password');
+
+    //Confirm correctness of password
+    if(!user || !(await user.comparePassword(currentPassword, user.password))){
+      return next(new AppError('Password Provided is wrong.', 401));
+    }
+
+    //Update password
+    user.password = req.body.newPassword;
+    user.passwordConfirm = req.body.confirmPassword;
+
+    await user.save();
+
+    //Send sms
+    await sms.sendSMS(user.phone, process.env.TWILIO_PHONE, 
+    `Hello ${user.firstName}! \nYour new updated password is '${req.body.newPassword}'.\nRegards.`);
+
+    //Login user
+    createSendToken(user, 200, res);
+  } 
+  catch (err) {
+    res.status(500).json({
+      status: 'failed',
+      err
+    });
+  }
+
+}

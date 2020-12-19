@@ -419,6 +419,34 @@ exports.addDirectorPage = (req, res) =>{
 };
 
 
+
+//Settings Area -->
+exports.changeUserPassword = (req, res) =>{
+  res.status(200).render('dashboard/settings/change-password', {
+    title: 'Update User Password'
+  });
+};
+
+//Error Page Handler -->
+exports.getErrorPage = (req, res) =>{
+  const { type } = req.query;
+  const render = {};
+  let code;
+
+  if(type === 'not-found'){
+    render.title = `Not Found.`;
+    render.message = `Cannot find what you are looking for, sorry!`;
+    code = 404;
+  }
+  else if(type === 'not-authorized'){
+    render.title = `Not Authorized.`;
+    render.message = `You are not Authorized to view this page, sorry!`;
+    code = 403;
+  }
+  res.status(code).render('dashboard/error', render);
+};
+
+
 //-- Consumers and Consumer Forms Pages Handlers --//
 
 // Consumers Create Form
@@ -431,8 +459,8 @@ exports.registerConsumerPage = (req, res) =>{
 
 exports.getAllConsumers = async(req, res, next) =>{
   try {
-    const agencyID = req.user.agency._id;
-    const consumers = await Consumer.find({agency: agencyID});
+    const docQuery = req.user.role === 'admin'? {}: {agency: req.user.agency._id}; 
+    const consumers = await Consumer.find(docQuery);
     
     res.status(200).render('dashboard/consumers/all-consumers', {
       title: 'All Consumers',

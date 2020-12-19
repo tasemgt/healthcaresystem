@@ -12,6 +12,7 @@ router.post('/login', authController.login);
 router.get('/logout', authController.logout);
 
 router.get('/me', authenticator.authenticate, userController.getMe, userController.getUser);
+router.patch('/change-password', authenticator.authenticate, authController.updatePassword);
 
 
 // User Routes

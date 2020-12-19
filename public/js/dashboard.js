@@ -478,7 +478,8 @@ const createResource = async (payload, url, successMessage, redirectURL, btn) =>
 };
 
 //Makes request to create resource
-const updateResource = async (payload, url, successMessage, redirectURL) =>{
+const updateResource = async (payload, url, successMessage, redirectURL, btn) =>{
+  btn ? toggleSpinner(btn, true): null;
   try {
     const res = await axios({
       method: 'PATCH',
@@ -494,6 +495,7 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
    }
   } 
   catch (err) {
+    btn ? toggleSpinner(btn, false): null;
     errorNotifications(err);
   }
 };
@@ -607,6 +609,38 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
   }
 })(getResource);
 
+//Change/Update User Password
+(function(doUpdate){
+
+  const changeUserPasswordForm = document.getElementById('change-password-form');
+
+  const btn = $('#reset-password-btn');
+
+  const btnService = {
+    btn,
+    normalText: 'Update Password',
+    loadingText: 'Updating pasword, please wait...'
+  }
+
+  if(changeUserPasswordForm){
+    changeUserPasswordForm.addEventListener('submit', e =>{
+      e.preventDefault();
+
+      const payload = {
+        currentPassword : document.getElementById('currentPassword').value,
+        newPassword : document.getElementById('newPassword').value,
+        confirmPassword : document.getElementById('confirmPassword').value
+      }
+
+      if(payload.newPassword !== payload.confirmPassword){
+        return md.showNotification('New Password and Confirm Password must be equal', 'danger', 'error_outline');
+      }
+      console.log(payload);
+
+      doUpdate(payload, `${baseURLAPI}/users/change-password`, 'Password Successfully Updated', '/dashboard/profile', btnService);
+    });
+  }
+})(updateResource);
 
 //Search Agency Application 
 (function(doGet){
@@ -638,7 +672,6 @@ const updateResource = async (payload, url, successMessage, redirectURL) =>{
 
 //Updating/Approving Agency Application
 (function(doUpdate){
-
   //Get Form Data
   const saveAgencyButton = document.querySelector('#save_agency_application_btn');
   const approvedAgencyCheck = document.getElementById('approvedAgency');

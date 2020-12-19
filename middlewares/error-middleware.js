@@ -28,7 +28,7 @@ const sendErrorDev = (err, req, res) =>{
           return res.status(401).redirect('/login');
         case '403':
           return res.status(403).render('dashboard/error', {
-            title: "Error 403",
+            title: `Not Authorized.`,
             message: "You are not authorized"});
         default:
           return res.status(500).json({message:"An Error occured..."});
@@ -47,10 +47,7 @@ const sendErrorDev = (err, req, res) =>{
     }
 
     //FINALLY RENDER 404 PAGE
-    res.status(err.statusCode).render('dashboard/error', {
-      title: `Error ${err.statusCode}`,
-      message: err.message
-    });
+    res.redirect('/dashboard/error?type=not-found');
 
     // res.status(err.statusCode).render('error', {
     //   title: 'Error!',
