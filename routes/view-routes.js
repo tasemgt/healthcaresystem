@@ -46,10 +46,6 @@ router.get('/dashboard/applications/:id', auth.authenticate, auth.authorize('dir
 
 //Consumers section
 router.get('/dashboard/consumers', auth.authenticate, viewController.getAllConsumers);
-router.get('/dashboard/consumers/add', auth.authenticate, auth.authorize('director'), viewController.registerConsumerPage);
-router.get('/dashboard/consumers/download', auth.authenticate, auth.authorize('director'), viewController.downloadConsumerDocument);
-router.get('/dashboard/consumers/:id', auth.authenticate, auth.authorize('admin','director'), viewController.getConsumerDetailsPage);
-
 
 router.get('/dashboard/consumer-forms', auth.authenticate, viewController.getAllConsumerForms);
 router.get('/dashboard/consumers/dental-form', auth.authenticate, viewController.dentalFormPage);
@@ -65,6 +61,10 @@ router.get('/dashboard/consumers/supported-home-living', auth.authenticate, view
 router.get('/dashboard/consumers/supported-employment', auth.authenticate, viewController.supportedEmploymentPage);
 router.get('/dashboard/consumers/rss-sl-service', auth.authenticate, viewController.rssSLServicePage);
 router.get('/dashboard/consumers/day-habilitation-service', auth.authenticate, viewController.dayHabilitationServicePage);
+
+router.get('/dashboard/consumers/add', auth.authenticate, auth.authorize('director'), viewController.registerConsumerPage);
+router.get('/dashboard/consumers/download', auth.authenticate, auth.authorize('director'), viewController.downloadConsumerDocument);
+router.get('/dashboard/consumers/:id', auth.authenticate, auth.authorize('admin','director'), viewController.getConsumerDetailsPage);
 
 // Nurses section
 router.get('/dashboard/nurses/nursing-service-delivery', auth.authenticate, auth.authorize('admin', 'director'), viewController.nursingServicesDeliveryPage);

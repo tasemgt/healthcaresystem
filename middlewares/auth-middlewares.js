@@ -48,7 +48,7 @@ exports.authenticate = async (req, res, next) =>{
 
     //Persist user in locals
     res.locals.user = currentUser;
-    console.log(res.locals.user);
+    // console.log(res.locals.user);
     next();
     
   } catch (err) {

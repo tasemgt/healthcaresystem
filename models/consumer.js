@@ -64,6 +64,10 @@ const consumerSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Agency',
     required: [true, 'An Agency is required']
+  },
+  isActive: {
+    type: Boolean,
+    default: true
   }
 });
 

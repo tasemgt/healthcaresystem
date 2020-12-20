@@ -90,9 +90,9 @@ exports.uploadDocs = (docs) =>{
 //   next();
 // }
 
-const getDocuments = async Model =>{
+const getDocuments = async (Model, query) =>{
   try {
-    const documents = await Model.find({})
+    const documents = query? await Model.find(query) : await Model.find({});
     return documents;
   } 
   catch (err) {
@@ -443,6 +443,11 @@ exports.getErrorPage = (req, res) =>{
     render.message = `You are not Authorized to view this page, sorry!`;
     code = 403;
   }
+  else if(type === 'server-error'){
+    render.title = `Server Error`;
+    render.message = `Sorry an error occured from our end, we'll fix it up so you can try again later!`;
+    code = 500;
+  }
   res.status(code).render('dashboard/error', render);
 };
 
@@ -592,6 +597,7 @@ exports.respiteServiceDeliveryPage =  async (req, res, next) =>{
   const title = 'Respite Service Delivery Log'
   if(req.query.all){
     const logs = await getDocuments(RespiteServiceForm);
+    console.log("LOGS> ",logs);
     return res.status(200).render('dashboard/consumers/delivery-logs-form-views/respite-service/respite-service-table', {
       title,
       logs

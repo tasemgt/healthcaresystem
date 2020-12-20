@@ -21,15 +21,14 @@ const sendErrorDev = (err, req, res) =>{
   
   //RENDER
   else{
-    let statusCode = err.statusCode.toString();
+    const statusCode = err.statusCode.toString();
+
     if(statusCode.startsWith('4') && err.statusCode !== 404){
       switch(statusCode){
         case '401':
           return res.status(401).redirect('/login');
         case '403':
-          return res.status(403).render('dashboard/error', {
-            title: `Not Authorized.`,
-            message: "You are not authorized"});
+          return res.redirect('/dashboard/error?type=not-authorized');
         default:
           return res.status(500).json({message:"An Error occured..."});
       }
@@ -38,7 +37,7 @@ const sendErrorDev = (err, req, res) =>{
 
     //EMPLOYMENT & AGENCY APPLICATION (SEPERATE RESOURCE)
     if((req.originalUrl.startsWith('/employment') || req.originalUrl.startsWith('/agency'))  && err.statusCode === 404){
-      res
+      return res
       .status(err.statusCode).json({
         status: err.status,
         error: err,
@@ -46,6 +45,11 @@ const sendErrorDev = (err, req, res) =>{
       });
     }
 
+    if(err.statusCode === 500){
+      return res.redirect('/dashboard/error?type=server-error');
+    }
+
+    console.log("ERROR> ",err)
     //FINALLY RENDER 404 PAGE
     res.redirect('/dashboard/error?type=not-found');
 
