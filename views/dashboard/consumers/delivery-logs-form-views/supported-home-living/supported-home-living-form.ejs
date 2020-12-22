@@ -21,12 +21,20 @@
               <form id="supported-home-form">
                 <br>
                 <div class="row">
-                  <div class="col-md-3">
-                    <div class="form-group controls">
-                      <label class="bmd-label-floating">Local Case Number *</label>
-                      <input type="text" class="form-control" id="lcNumber" required>
+                  <% if(!form){ %>
+                    <div class="col-md-3">
+                      <div class="form-group controls">
+                        <label class="bmd-label-floating">Local Case Number *</label>
+                        <input type="text" class="form-control" id="lcNumber" required>
+                      </div>
                     </div>
-                  </div>
+                  <% } else { %>
+                    <div class="col-md-3">
+                      <h3>Update Consumer Form</h3>
+                      <h5>Local Care Number: <%= form.lcNumber %></h5>
+                      <h5>Consumer Name: <%= form.consumer.firstName +" "+ form.consumer.lastName %></h5>
+                    </div>
+                  <% } %>
                 </div>
                 <br>
                 <hr id="divider">
@@ -34,6 +42,9 @@
                 <button type="button" id="add-record-btn" style="margin-right: 1rem" class="btn btn-primary pull-right">Add Record</button>
                 <br><br>
                 <hr>
+                <% if(form) {%>
+                  <input type="hidden" id="hidden-form-id" value="<%= form._id %>">
+                <% } %>
                 <button type="submit" id="submit-btn" class="btn btn-primary pull-right">Submit</button>
                 <div class="clearfix"></div>
               </form>

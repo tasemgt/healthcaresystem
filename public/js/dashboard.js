@@ -40,7 +40,7 @@ function chunkArray(myArray, chunk_size){
   return tempArray;
 }
 
-//Modals for consumer forms
+//Modals for initial consumer forms
 $(document).on("click", ".show-details", function (e) {
   e.preventDefault();
 
@@ -281,7 +281,7 @@ const addRecordForm = (id, type) =>{
               <input type="text" class="form-control timepicker" required>
             </div>
           </div>
-          <div class="col-md-2">
+          <div class="col-md-3">
             <div class="form-group">
               <label class="bmd-label-floating">Code for all services provided *</label>
               <input type="text" class="form-control" required>
@@ -1169,7 +1169,13 @@ const updateResource = async (payload, url, successMessage, redirectURL, btn) =>
 
     const addRecordBtn = document.getElementById('add-record-btn');
     const addCommentBtn = document.getElementById('add-comment-btn');
-    const submitBtn = document.getElementById('submit-btn');
+    
+    const btn = $('#submit-btn');
+    const btnService = {
+      btn,
+      normalText: 'Submit',
+      loadingText: 'Please wait...'
+    }
 
     addRecordBtn.addEventListener('click', () =>{
       addRecordForm(counter, 'home');
@@ -1184,11 +1190,12 @@ const updateResource = async (payload, url, successMessage, redirectURL, btn) =>
     supportedHomeForm.addEventListener('submit', e =>{
       e.preventDefault();
 
+      const newEditCheckId = document.getElementById('hidden-form-id')? document.getElementById('hidden-form-id').value: null;
       let sections = document.getElementsByClassName('records-area');
       let commentSections = document.getElementsByClassName('comments-area');
 
       const payload = {
-        lcNumber: document.getElementById('lcNumber').value
+        lcNumber: !newEditCheckId ? document.getElementById('lcNumber').value: null
       }
 
       sections = Array.from(sections);
@@ -1235,11 +1242,24 @@ const updateResource = async (payload, url, successMessage, redirectURL, btn) =>
       }
 
       console.log(payload);
-      doCreate(payload, 
-        `${baseURLAPI}/consumer-forms/supported-home-forms`, 
-        'Form Submitted Successfully!',
-        '/dashboard/consumers/supported-home-living?all=true'
+
+      if(!newEditCheckId){
+        doCreate(payload, 
+          `${baseURLAPI}/consumer-forms/supported-home-forms`, 
+          'Form Submitted Successfully!',
+          '/dashboard/consumers/supported-home-living?all=true',
+          btnService
         );
+      }
+      else{
+        delete payload.lcNumber;
+        doUpdate(payload, 
+          `${baseURLAPI}/consumer-forms/supported-home-forms/${newEditCheckId}`, 
+          'Form Updated Successfully!',
+          '/dashboard/consumers/supported-home-living?all=true',
+          btnService
+        );
+      }
 
     });
 
@@ -1252,6 +1272,13 @@ const updateResource = async (payload, url, successMessage, redirectURL, btn) =>
     const addCommentBtn = document.getElementById('add-comment-btn');
     const submitBtn = document.getElementById('submit-btn');
 
+    const btn = $('#submit-btn');
+    const btnService = {
+      btn,
+      normalText: 'Submit',
+      loadingText: 'Please wait...'
+    }
+
     addRecordBtn.addEventListener('click', () =>{
       addRecordForm(counter, 'employment');
       counter++;
@@ -1262,14 +1289,16 @@ const updateResource = async (payload, url, successMessage, redirectURL, btn) =>
       counter1++;
     });
 
+
     supportedEmploymentForm.addEventListener('submit', e =>{
       e.preventDefault();
 
+      const newEditCheckId = document.getElementById('hidden-form-id')? document.getElementById('hidden-form-id').value: null;
       let sections = document.getElementsByClassName('records-area');
       let commentSections = document.getElementsByClassName('comments-area');
 
       const payload = {
-        lcNumber: document.getElementById('lcNumber').value
+        lcNumber: !newEditCheckId ? document.getElementById('lcNumber').value: null
       }
 
       sections = Array.from(sections);
@@ -1320,12 +1349,24 @@ const updateResource = async (payload, url, successMessage, redirectURL, btn) =>
       }
 
       console.log(payload);
-      doCreate(payload, 
-        `${baseURLAPI}/consumer-forms/supported-employment-forms`, 
-        'Form Submitted Successfully!',
-        '/dashboard/consumers/supported-employment?all=true'
-        );
 
+      if(!newEditCheckId){
+        doCreate(payload, 
+          `${baseURLAPI}/consumer-forms/supported-employment-forms`, 
+          'Form Submitted Successfully!',
+          '/dashboard/consumers/supported-employment?all=true',
+          btnService
+          );
+      }
+      else{
+        delete payload.lcNumber;
+        doUpdate(payload, 
+          `${baseURLAPI}/consumer-forms/supported-employment-forms/${newEditCheckId}`, 
+          'Form Updated Successfully!',
+          '/dashboard/consumers/supported-employment?all=true',
+          btnService
+          );
+      }
     });
 
   }

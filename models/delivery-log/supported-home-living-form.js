@@ -19,26 +19,26 @@ const supportedHomeLivingSchema = new mongoose.Schema({
     {type: mongoose.Schema.Types.ObjectId, ref: 'supportedHomeLivingRecord'}
   ],
   comments : [{
-    commentDate: {type: String},
+    commentDate: {type: Date},
     commentText: {type: String},
   }]
 });
 
-supportedHomeLivingSchema.pre('find', function(next){
+supportedHomeLivingSchema.pre(/^find/, function(next){
   this.populate([
-    { path: 'consumer', select: 'firstName lastName' },
+    { path: 'consumer', select: 'firstName lastName lcNumber' },
     { path: 'staff', select: 'firstName lastName'}
   ]);
   next();
 });
 
-supportedHomeLivingSchema.pre('findOne', function(next){
-  this.populate([
-    { path: 'consumer', select: 'firstName lastName' },
-    { path: 'staff', select: 'firstName lastName'},
-    { path: 'records', select: '-__v -_id'}
-  ]);
-  next();
-});
+// supportedHomeLivingSchema.pre('findOne', function(next){
+//   this.populate([
+//     { path: 'consumer', select: 'firstName lastName lcNumber' },
+//     { path: 'staff', select: 'firstName lastName'},
+//     // { path: 'records', select: '-__v -_id'}
+//   ]);
+//   next();
+// });
 
 module.exports = mongoose.model('SupportedHomeLiving', supportedHomeLivingSchema);

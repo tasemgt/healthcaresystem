@@ -39,16 +39,18 @@ exports.getConsumerFromLcNum = async(req, res, next) =>{
 
 exports.createSupportedHomeRecord = async(req, res, next) =>{
   try{
-    const records = [...req.body.records];
-    const recordIDs = [];
-    records.forEach((item) =>{
-      item.staffSignature = `${req.user.firstName} ${req.user.lastName}`;
-    });
-    const newRecords = await supportedHomeRecordForm.insertMany(records);
-    newRecords.forEach((record) =>{
-      recordIDs.push(record._id);
-    });
-    req.body.records = recordIDs;
+    const { records } = req.body;
+    if(records){
+      const recordIDs = [];
+      records.forEach((item) =>{
+        item.staffSignature = `${req.user.firstName} ${req.user.lastName}`;
+      });
+      const newRecords = await supportedHomeRecordForm.insertMany(records);
+      newRecords.forEach((record) =>{
+        recordIDs.push(record._id);
+      });
+      req.body.records = recordIDs;
+    }
     next();
   }catch (err) {
     res.status(400).json({
@@ -60,11 +62,13 @@ exports.createSupportedHomeRecord = async(req, res, next) =>{
 
 exports.addStaffToRecords = async(req, res, next) =>{
   try {
-    const records = [...req.body.records];
-    records.forEach((record) =>{
-      record.staffSignature = `${req.user.firstName} ${req.user.lastName}`;
-    });
-    req.body.records = records;
+    const {records} = req.body;
+    if(records){
+      records.forEach((record) =>{
+        record.staffSignature = `${req.user.firstName} ${req.user.lastName}`;
+      });
+      req.body.records = records;
+    }
     next();
   } catch (err) {
     res.status(400).json({
@@ -73,6 +77,7 @@ exports.addStaffToRecords = async(req, res, next) =>{
     });
   }
 }
+
 
 exports.createRSSSLServiceWeek = async(req, res, next) =>{
   try {
@@ -90,9 +95,12 @@ exports.createRSSSLServiceWeek = async(req, res, next) =>{
 }
 
 exports.uniqueForms = Model => async(req, res, next) =>{
+  console.log('UNIQUE FORMS');
   try {
     const form = await Model.findOne({lcNumber:req.body.lcNumber});
-    if(form) return next(new AppError('Consumer already has a record, please click edit on the forms list to update a record instead'));
+    if(form){
+      return next(new AppError('Consumer already has a record, please click edit on the forms list to update a record instead', 400));
+    }
     next();
   } catch (err) {
     res.status(400).json({
@@ -295,3 +303,79 @@ exports.createSupportedEmploymentForm = factory.createOne(SupportedEmploymentFor
 exports.createRSSSLServiceForm = factory.createOne(RssSLServiceForm);
 
 exports.createDayHabilitationForm = factory.createOne(DayHabilitationForm);
+
+
+//Update Consumer Forms
+
+exports.updateSupportedEmploymentForm = async(req, res, next) =>{
+  try{
+    const document = await SupportedEmploymentForm.findById(req.params.id);
+    if(!document){
+      return next(new AppError('No resource found with that ID', 404));
+    }
+
+    const {records, comments} = req.body;
+
+    if(records){
+      records.forEach((record) =>{
+        document.records.push(record);
+      });
+    }
+    if(comments){
+      comments.forEach((comment) =>{
+        document.comments.push(comment);
+      });
+    }
+
+    const form = await document.save();
+
+    res
+    .status(200)
+    .json({
+      status: 'success',
+      data: form
+    });
+  }
+  catch(err){
+    res.status(500).json({
+      status: 'fail',
+      message: err
+    });
+  } 
+};
+
+exports.updateSupportedHomeForm = async(req, res, next) =>{
+  try{
+    const document = await supportedHomeForm.findById(req.params.id);
+    if(!document){
+      return next(new AppError('No resource found with that ID', 404));
+    }
+
+    const {records, comments} = req.body;
+    
+    if(records.length){
+      records.forEach((record) =>{
+        document.records.push(record);
+      });
+    }
+    
+    if(comments){
+      comments.forEach((comment) =>{
+        document.comments.push(comment);
+      });
+    }
+    const form = await document.save();
+    res
+    .status(200)
+    .json({
+      status: 'success',
+      data: form
+    });
+  }
+  catch(err){
+    res.status(500).json({
+      status: 'fail',
+      message: err
+    });
+  } 
+};

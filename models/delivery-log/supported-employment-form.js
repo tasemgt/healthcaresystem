@@ -39,7 +39,7 @@ const supportedEmploymentSchema = new mongoose.Schema({
     }
   ],
   comments : [{
-    commentDate: {type: String},
+    commentDate: {type: Date},
     staffInitials: {type: String},
     commentText: {type: String},
   }]

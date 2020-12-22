@@ -62,6 +62,8 @@ router.get('/dashboard/consumers/supported-employment', auth.authenticate, viewC
 router.get('/dashboard/consumers/rss-sl-service', auth.authenticate, viewController.rssSLServicePage);
 router.get('/dashboard/consumers/day-habilitation-service', auth.authenticate, viewController.dayHabilitationServicePage);
 
+router.get('/dashboard/consumers/supported-home-living/:id', auth.authenticate, viewController.supportedHomeLivingDetailsPage);
+
 router.get('/dashboard/consumers/add', auth.authenticate, auth.authorize('director'), viewController.registerConsumerPage);
 router.get('/dashboard/consumers/download', auth.authenticate, auth.authorize('director'), viewController.downloadConsumerDocument);
 router.get('/dashboard/consumers/:id', auth.authenticate, auth.authorize('admin','director'), viewController.getConsumerDetailsPage);

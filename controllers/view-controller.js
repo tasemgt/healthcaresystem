@@ -100,9 +100,9 @@ const getDocuments = async (Model, query) =>{
   }
 }
 
-const getOneDocument = async Model =>{
+const getOneDocument = async (Model, query) =>{
   try {
-    const document = await Model.find({})
+    const document = query? await Model.find(query) : null;
     return document;
   } 
   catch (err) {
@@ -620,17 +620,36 @@ exports.supportedHomeLivingPage =  async (req, res, next) =>{
   const title = 'Supported Home Living / CS / CFC-PAS / Habilitation Log'
   if(req.query.all){
     const forms = await getDocuments(SupportedHomeLivingForm);
-    return res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-home-living/supported-home-living-table', {
+    res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-home-living/supported-home-living-table', {
       title,
       forms
     });
   }
-  if(req.query.new){
-    return res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-home-living/supported-home-living-form', {
-      title
+  else if(req.query.new){
+    res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-home-living/supported-home-living-form', {
+      title,
+      form: null
     });
   }
-  //Fetch data to porpulate view
+  else{
+    //An Update on form
+    const form = await SupportedHomeLivingForm.findById(req.query.id);
+    res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-home-living/supported-home-living-form', {
+      title,
+      form
+    });
+  }
+  
+}
+
+exports.supportedHomeLivingDetailsPage = async (req, res) =>{
+  const form = await SupportedHomeLivingForm.findById(req.params.id).populate({ path: 'records', select: '-__v -_id'});
+  if(form){
+    res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-home-living/supported-home-living-details', {
+      title: 'Supported Home Living / CS / CFC-PAS / Habilitation Form',
+      form
+    });
+  }
 }
 
 // Supported Home Employment
@@ -641,17 +660,25 @@ exports.supportedEmploymentPage =  async (req, res, next) =>{
   const title = 'Supported Employment / Employment Assistance Delivery Log'
   if(req.query.all){
     const forms = await getDocuments(SupportedEmploymentForm);
-    return res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-employment/supported-employment-table', {
+    res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-employment/supported-employment-table', {
       title,
       forms
     });
   }
-  if(req.query.new){
-    return res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-employment/supported-employment-form', {
-      title
+  else if(req.query.new){
+    res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-employment/supported-employment-form', {
+      title,
+      form: null
     });
   }
-  //Fetch data to porpulate view
+  else{
+    //An Update on form
+    const form = await SupportedEmploymentForm.findById(req.query.id);
+    res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-employment/supported-employment-form', {
+      title,
+      form
+    });
+  }
 }
 
 // RSS - SL Service Delivery Log Form
