@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const generalUtils = require('../../utils/generals');
 
 const supportedEmploymentSchema = new mongoose.Schema({
   consumer:{
@@ -43,7 +44,16 @@ const supportedEmploymentSchema = new mongoose.Schema({
     staffInitials: {type: String},
     commentText: {type: String},
   }]
+},{
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true}
 });
+
+// supportedEmploymentSchema.virtual('total_time').get(function(){
+//   return Number((generalUtils.getTimeDifference(this.beginTime.morning, this.endTime.morning)) + 
+//     Number(generalUtils.getTimeDifference(this.beginTime.evening, this.endTime.evening))
+//   );
+// });
 
 supportedEmploymentSchema.pre(/^find/, function(next){
   this.populate({ path: 'consumer', select: 'firstName lastName' });

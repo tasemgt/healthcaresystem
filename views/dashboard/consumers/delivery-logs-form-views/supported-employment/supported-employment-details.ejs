@@ -16,7 +16,7 @@
           <div class="card">
             <div class="card-header card-header-text card-header-primary">
               <div class="card-text">
-                <h4 class="card-title ">Supported Home Living / CS / CFC-PAS / Habilitation Form</h4>
+                <h4 class="card-title ">Supported Employment / Employment Assistance Service Delivery Log Form</h4>
                 <p class="card-category">CONSUMER Local Case Number: <%= form.consumer.lcNumber %></p>
               </div>
             </div>
@@ -25,22 +25,16 @@
               <div class="row">
                 <div class="col-md-12">
                 <div class="row">
-                  <div class="card-header col-md-4">
+                  <div class="card-header col-md-6">
                     <h4 class="card-title" style="font-weight:bold">Consumer Name</h4>
                     <p class="card-category">
                       <%= form.consumer.firstName +' '+ form.consumer.lastName %>
                     </p>
                   </div>
-                  <div class="card-header col-md-4">
+                  <div class="card-header col-md-6">
                     <h4 class="card-title" style="font-weight:bold">Consumer Agency</h4>
                     <p class="card-category">
                       <%= form.consumer.agency.name %>
-                    </p>
-                  </div>
-                  <div class="card-header col-md-4">
-                    <h4 class="card-title" style="font-weight:bold">Staff Signatory</h4>
-                    <p class="card-category">
-                      <%= form.staff.firstName +' '+ form.staff.lastName %>
                     </p>
                   </div>
                 </div>
@@ -59,28 +53,22 @@
                               Date of Service
                             </th>
                             <th class="text-bold">
-                              Begin Time
+                              Begin Time (Morning)
                             </th>
                             <th class="text-bold">
-                              End Time
+                              End Time (Morning)
                             </th>
                             <th class="text-bold">
-                              Total Time
+                              Begin Time (Evening)
+                            </th>
+                            <th class="text-bold">
+                              End Time (Evening)
                             </th>
                             <th class="text-bold">
                               Location
                             </th>
                             <th class="text-bold">
-                              No. of Individuals
-                            </th>
-                            <th class="text-bold">
-                              No. of Staff
-                            </th>
-                            <th class="text-bold">
-                              Code for all services provided
-                            </th>
-                            <th class="text-bold">
-                              Billable Units
+                              Services provided code
                             </th>
                             <th class="text-bold">
                               Attendant Staff
@@ -96,28 +84,22 @@
                                   <%= record.dateOfService %>
                                 </td>
                                 <td>
-                                  <%= record.beginTime %>
+                                  <%= record.beginTime.morning %>
                                 </td>
                                 <td>
-                                  <%= record.endTime %>
+                                  <%= record.endTime.morning %>
                                 </td>
                                 <td>
-                                  <%= record.total_time %> mins
-                                </td> 
+                                  <%= record.beginTime.evening %>
+                                </td>
+                                <td>
+                                  <%= record.endTime.evening %>
+                                </td>
                                 <td>
                                   <%= record.location %>
                                 </td>
                                 <td>
-                                  <%= record.numberOfIndividuals %>
-                                </td>
-                                <td>
-                                  <%= record.numberOfStaff %>
-                                </td> 
-                                 <td>
                                   <%= record.servicesCode %>
-                                </td>
-                                 <td>
-                                  <%= record.billableUnits %>
                                 </td>
                                 <td>
                                   <%= record.staffSignature %>
@@ -129,7 +111,7 @@
                       </div>
                     </div>
                   </br>
-                  <h4 class="card-title">Comments on incidents and special occurrences</h4>
+                  <h4 class="card-title">Comments (Special Events / Occurrences)</h4>
                     <div class="card-body" style="padding:0px">
                       <div class="table-responsive">
                         <table class="table table-hover data-table">
@@ -139,6 +121,9 @@
                             </th>
                             <th class="text-bold">
                               Date
+                            </th>
+                            <th class="text-bold">
+                              Staff Initials
                             </th>
                             <th class="text-bold">
                               Comments
@@ -152,6 +137,9 @@
                                 </td>
                                 <td class="formatted-date">
                                   <%= comment.commentDate %>
+                                </td>
+                                <td>
+                                  <%= comment.staffInitials %>
                                 </td>
                                 <td>
                                   <%= comment.commentText %>

@@ -681,6 +681,17 @@ exports.supportedEmploymentPage =  async (req, res, next) =>{
   }
 }
 
+exports.supportedEmploymentDetailsPage = async (req, res) =>{
+  const form = await SupportedEmploymentForm.findById(req.params.id);
+  console.log(form);
+  if(form){
+    res.status(200).render('dashboard/consumers/delivery-logs-form-views/supported-employment/supported-employment-details', {
+      title: 'Supported Employment / Employment Assistance Delivery Log',
+      form
+    });
+  }
+}
+
 // RSS - SL Service Delivery Log Form
 exports.rssSLServicePage =  async (req, res, next) =>{
   if(Object.keys(req.query).length === 0 && req.query.constructor === Object){
