@@ -1,5 +1,5 @@
 const fs = require('fs');
-const dotenv = require('dotenv').config({path: './config.env'});
+const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 
 const User = require('./models/user/user');
@@ -7,6 +7,8 @@ const Staff = require('./models/user/staff');
 
 //Consumer Forms Data
 const EnvChecklistData = require('./models/data/environmental-checklist-data');
+
+dotenv.config();
 
 const DB = process.env.DATABASE;
 
@@ -66,12 +68,15 @@ const seedFormsData = async () =>{
 switch(process.argv[2]){
   case '--seed':
     seedDB();
+    console.log('Seeding DB');
     break;
   case '--clear':
     clearDB();
+    console.log('Clearing DB');
     break;
   case '--forms':
     seedFormsData();
+    console.log('Seeding Forms Data');
     break;
   default:
     console.log('Done');

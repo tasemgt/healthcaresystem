@@ -6,6 +6,7 @@ const Director = require('../models/user/director');
 const AppError = require('../utils/app-error');
 
 const sms = require('../utils/sms');
+const sendEmail = require('../utils/email');
 
 
 exports.createUser = async(req, res) =>{
@@ -18,11 +19,21 @@ exports.createUser = async(req, res) =>{
 
   try {
     const user = await Model.create(req.body);
+    
+    //Send email
+    sendEmail({
+      email: user.email,
+      subject: 'Account Created',
+      message: `Hello ${user.firstName}, \n\nYour Program Director account has just been created.
+      \n\nHere is your Login detail:\nEmail: ${user.email}\nPassword: ${password}
+      \n\nRegards.\nFree Lot Care Team`
+    });
+    
     //Send sms
-    await sms.sendSMS(`${user.phone}`, process.env.TWILIO_PHONE, 
-    `Hello ${user.firstName},\nYour P.D account has just been created.
-    \nYour Login is:\nEmail --> ${user.email}\nPassword --> ${password}
-    \nRegards.`);
+    // await sms.sendSMS(`${user.phone}`, '-------', //process.env.TWILIO_PHONE, 
+    // `Hello ${user.firstName},\nYour P.D account has just been created.
+    // \nYour Login is:\nEmail --> ${user.email}\nPassword --> ${password}
+    // \nRegards.`);
 
     res.status(201).json({
       status: 'success',

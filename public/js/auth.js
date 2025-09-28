@@ -285,6 +285,7 @@ if(agencyForm){
 
     const payload = {
       phone: document.getElementById('phone').value,
+      email: document.getElementById('agencyEmail').value,
       name : document.getElementById('agencyName').value,
       location : document.getElementById('agencyLocation').value,
       description : document.getElementById('agencyDesc').value

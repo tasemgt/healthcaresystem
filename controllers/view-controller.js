@@ -41,6 +41,7 @@ const ComprehensiveNursingAssessmentForm = require('../models/nurse-form/compreh
 const AppError  = require('../utils/app-error');
 const fileUpload = require('../utils/file_upload');
 const sms = require('../utils/sms');
+const sendEmail = require('../utils/email');
 
 // const multerStorage = multer.diskStorage({
 //   destination: (req, file, cb) =>{
@@ -149,9 +150,19 @@ exports.agencyFormPage = (req, res) =>{
 exports.submitAgencyReg = async(req, res) =>{
   try {
     const agency = await Agency.create(req.body);
+
+    console.log('New Agency: ', agency);
+
+    //Send email
+    sendEmail({
+      email: req.body.email,
+      subject: 'Agency Enrollment Received',
+      message: `Hello ${agency.name}, \n\nThanks for enrolling into our platform. Here is your enrollment ID: ${agency.agencyId}.\n\nKindly note that this ID is required to complete your registration into the system. \n\nBest Regards,\nFree Lot Care Team`
+    });
+
     //Send sms
-    await sms.sendSMS(`${req.body.phone}`, process.env.TWILIO_PHONE, 
-    `Hello ${agency.name}, \nThanks for enrolling into our platform. Your enrollment ID is '${agency.agencyId}'.\nThis ID is required to complete your registeration into the system. \nRegards.`)
+    // await sms.sendSMS(`${req.body.phone}`, '--------', // process.env.TWILIO_PHONE, 
+    // `Hello ${agency.name}, \nThanks for enrolling into our platform. Your enrollment ID is '${agency.agencyId}'.\nThis ID is required to complete your registeration into the system. \nRegards.`)
 
     res.status(201).json({
       status: 'success',

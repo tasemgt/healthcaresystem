@@ -88,9 +88,16 @@ exports.updatePassword = async (req, res, next) =>{
 
     await user.save();
 
+    // Send email
+    sendEmail({
+      email: user.email,
+      subject: 'Password Update',
+      message: `Hello ${user.firstName}, \n\nYour password was updated successfully.\n\nIf you did not perform this action, please contact support immediately.\n\nBest regards,\nFree Lot Care Team`
+    });
+
     //Send sms
-    await sms.sendSMS(user.phone, process.env.TWILIO_PHONE, 
-    `Hello ${user.firstName}! \nYour new updated password is '${req.body.newPassword}'.\nRegards.`);
+    // await sms.sendSMS(user.phone, '------', //process.env.TWILIO_PHONE, 
+    // `Hello ${user.firstName}! \nYour new updated password is '${req.body.newPassword}'.\nRegards.`);
 
     //Login user
     createSendToken(user, 200, res);
