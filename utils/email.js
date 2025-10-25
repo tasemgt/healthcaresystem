@@ -1,6 +1,11 @@
 const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 
-const sendEmail = async options =>{
+// Set API key
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+// Send email using nodemailer (for local development)
+const sendLocal = async options =>{
   //Using gmail service here...
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
@@ -9,10 +14,6 @@ const sendEmail = async options =>{
       pass: process.env.GMAIL_PASS // GMAIL PASSWORD
     }
   });
-
-  console.log('user:', process.env.GMAIL_USER);
-  console.log('pass:', process.env.GMAIL_PASS);
-
   
   const mailOptions = {
     from: process.env.GMAIL_USER,
@@ -20,11 +21,31 @@ const sendEmail = async options =>{
     subject: options.subject,
     text: options.message
   }
-  
-  console.log('Email options:', options);
-
 
   await transporter.sendMail(mailOptions);
 }
+
+//SendGrid, Mailgun
+const sendProd = async options =>{
+  const msg = {
+    from: process.env.FROM_EMAIL,
+    to: options.email,
+    subject: options.subject,
+    text: options.text,
+    html: options.html || `<p>${text}</p>`,
+  };
+
+  try {
+    const response = await sgMail.send(msg);
+    console.log('✅ Email sent successfully');
+    return response;
+  } catch (error) {
+    console.error('❌ Error sending email:', error.response?.body || error.message);
+    throw error;
+  }
+
+}
+
+const sendEmail = process.env.NODE_ENV === 'production' ? sendProd : sendLocal;
 
 module.exports = sendEmail;

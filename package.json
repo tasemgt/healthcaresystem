@@ -13,6 +13,7 @@
     "node": ">=10.6.0"
   },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
     "async": "^3.2.0",
     "aws-sdk": "^2.812.0",
     "axios": "^0.20.0",
