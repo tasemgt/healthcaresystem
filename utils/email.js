@@ -27,12 +27,13 @@ const sendLocal = async options =>{
 
 //SendGrid, Mailgun
 const sendProd = async options =>{
+  const htmlMessage = options.message.replace(/\n/g, '<br>'); // Convert newlines to HTML line breaks
   const msg = {
     from: process.env.FROM_EMAIL,
     to: options.email,
     subject: options.subject,
     text: options.message,
-    html: options.html || `<p>${options.message}</p>`,
+    html: htmlMessage || `<p>${options.message}</p>`,
   };
 
   try {
