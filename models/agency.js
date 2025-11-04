@@ -11,7 +11,7 @@ const agencySchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, 'Agency email is required'],
-    // unique: true,
+    unique: true,
     lowercase: true
   },
   location: {
