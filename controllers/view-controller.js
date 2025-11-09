@@ -80,16 +80,17 @@ exports.uploadDocs = (docs) =>{
   return upload.fields(docs);
 }
 
+
 // exports.uploadDocuments = upload.fields();
 
-// exports.setTempID = (req, res, next)=>{
-//   //Sets a temporal identifier for files uploaded to server
-//   req.body.id_card = req.files.id_card[0].filename;
-//   req.body.ss_card = req.files.ss_card[0].filename;
-//   req.body.highSchool_cert = req.files.highSchool_cert[0].filename;
-//   console.log(req.body);
-//   next();
-// }
+exports.setTempID = (req, res, next)=>{
+  //Sets a temporal identifier for files uploaded to server
+  req.body.id_card = req.files.id_card[0].filename;
+  req.body.ss_card = req.files.ss_card[0].filename;
+  req.body.highSchool_cert = req.files.highSchool_cert[0].filename;
+  console.log(req.body);
+  next();
+}
 
 const getDocuments = async (Model, query) =>{
   try {

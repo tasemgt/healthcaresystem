@@ -271,7 +271,7 @@ if(employmentFormSubmit){
 
     console.log(Array.from(form.values()));
     
-    // submitEmploymentForm(form, submitBtn);
+    submitEmploymentForm(form, submitBtn);
   });
 }
 

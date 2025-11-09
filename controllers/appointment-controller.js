@@ -5,6 +5,7 @@ const sms = require('../utils/sms');
 
 
 exports.bookAppointment = async(req, res) =>{
+  console.log('Booking appointment with data:', req.body);
   try {
     const appointment = await Appointment.create(req.body);
     const director = await User.findOne({role:'director'});

@@ -48,6 +48,10 @@ $(document).on("click", ".show-details", function (e) {
   const formData = _self.data('id');
   console.log(formData);
 
+  if(!formData){
+    return;
+  }
+
   //Populate common fields
   $(".modal-title").html(formData.form_name);
   $(".mod-cons-name ").html(formData.consumer_name);
@@ -394,15 +398,21 @@ if(formatedDate && formatedDate.length > 0){
 }
 
 function toggleSpinner(btn, show){
+  // console.log('BBBBB', btn.innerHTML);
+  // console.log('TOGGLE SPINNER', btn.loadingText);
+  // const text = btn.childNodes[0].nodeValue.trim(); // "Book Appointment"
+  const normalText = btn.firstChild.textContent;
   if(show){
-    btn.btn.text(btn.loadingText);
+    btn.firstChild.textContent = 'Loading....';
+    // btn.btn.text(btn.loadingText);
     // btn.append('<div class="lds-dual-ring"></div>');
-    btn.btn.attr('disabled', true);
+    // btn.attr('disabled', true);
   }
   else{
-    btn.btn.empty();
-    btn.btn.text(btn.normalText);
-    btn.btn.attr('disabled', false);
+    // btn.btn.empty();
+    btn.firstChild.textContent = normalText;
+    // btn.btn.text(btn.normalText);
+    // btn.btn.attr('disabled', false);
   }
 } 
 
@@ -808,6 +818,8 @@ const updateResource = async (payload, url, successMessage, redirectURL, btn) =>
   //Get Form Data
   const bookAppointmentForm = document.querySelector('#book-appointment-form');
   const bookBtn = document.querySelector('#book-appointment-btn');
+
+  console.log('About to book appointment');
 
   if(bookAppointmentForm){
     bookAppointmentForm.addEventListener('submit', e =>{

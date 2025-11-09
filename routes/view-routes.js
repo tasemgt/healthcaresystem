@@ -20,7 +20,7 @@ router.get('/agency/:agencyId', auth.authenticate, auth.authorize('admin'), view
 router.patch('/agency/:id', auth.authenticate, auth.authorize('admin'), viewController.approveAgency);
 
 router.get('/employment', viewController.employmentFormPage);
-//router.post('/employment', viewController.uploadDocs(employmentDocs), viewController.setTempID, viewController.submitEmployment);
+router.post('/employment', viewController.uploadDocs(employmentDocs), viewController.setTempID, viewController.submitEmployment);
 router.get('/employment/:applicationId', auth.authenticate, auth.authorize('director'), viewController.getEmployment);
 router.patch('/employment/:id', auth.authenticate, auth.authorize('director'), viewController.updateEmployment);
 
